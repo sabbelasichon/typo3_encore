@@ -43,3 +43,30 @@ If you have defined multiple entries you can define the desired entryName in the
 <e:renderWebpackLinkTags entryName="secondEntryName"/>
 <e:renderWebpackScriptTags entryName="secondEntryName"/>
 ```
+
+
+Alternatively you can also include the files via TypoScript
+
+```php
+page {
+    1 = USER
+    1 {
+        userFunc = Ssch\Typo3Encore\Integration\IncludeWebPackFiles->addWebpackLinkTags
+        entryName = app
+    }
+    5 = USER
+    5 {
+        userFunc = Ssch\Typo3Encore\Integration\IncludeWebPackFiles->addWebpackScriptTags
+        entryName = app
+        position = footer
+    }
+}
+```
+
+## Additional 
+
+1. If you are in production mode and set enableVersioning(true) then you should set the option 
+
+```php
+$GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
+```
