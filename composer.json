@@ -1,0 +1,66 @@
+{
+  "name": "ssch/typo3-encore",
+  "type": "typo3-cms-extension",
+  "description": "Use smfony encore in TYPO3 Context",
+  "version": "2.0.0",
+  "license": "GPL-2.0+",
+  "homepage": "http://www.schreibersebastian.de",
+  "keywords": [
+    "encore",
+    "webpack"
+  ],
+  "authors": [
+    {
+      "name": "Sebastian Schreiber",
+      "email": "breakpoint@schreibersebastian.de",
+      "role": "Developer",
+      "homepage": "http://www.schreibersebastian.de"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": "^8.7.13|| ^9.5.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.0",
+    "nimut/testing-framework": "^1.0 || ^2.0 || ^3.0 || ^4.0",
+    "phpstan/phpstan": "^0.9 || ^0.10"
+  },
+  "replace": {
+    "typo3_encore": "self.version",
+    "typo3-ter/typo3-encore": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ssch\\Typo3Encore\\": "Classes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ssch\\Typo3Encore\\Tests\\": "Tests"
+    }
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "preferred-install": {
+      "typo3/cms": "source",
+      "typo3/cms-core": "source",
+      "*": "dist"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/Web/typo3conf/ext/",
+      "[ -L .Build/Web/typo3conf/ext/typo3_encore ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/typo3_encore"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    },
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
+}
