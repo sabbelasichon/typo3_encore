@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Asset;
 
@@ -54,7 +53,6 @@ final class TagRenderer
         $files = $this->entrypointLookup->getJavaScriptFiles($entryName);
 
         foreach ($files as $file) {
-
             $attributes = [
                 $file,
                 'text/javascript',

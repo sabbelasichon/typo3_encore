@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Asset;
 
@@ -24,7 +23,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class JsonManifestVersionStrategy implements VersionStrategyInterface
 {
-
     private $manifestPath;
 
     private $manifestData;

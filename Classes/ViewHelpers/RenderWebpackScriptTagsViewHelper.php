@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\ViewHelpers;
 
@@ -48,5 +47,4 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
     {
         $this->tagRenderer->renderWebpackScriptTags($this->arguments['entryName'], $this->arguments['position']);
     }
-
 }

@@ -18,7 +18,6 @@ namespace Ssch\Typo3Encore\Integration;
 
 interface SettingsServiceInterface
 {
-
     public function getSettings(): array;
 
     /**

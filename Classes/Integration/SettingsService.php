@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Integration;
 
@@ -42,7 +41,6 @@ final class SettingsService implements SettingsServiceInterface
     {
         $this->configurationManager = $configurationManager;
     }
-
 
     /**
      * Returns all settings.

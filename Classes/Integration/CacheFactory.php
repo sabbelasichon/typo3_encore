@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Integration;
 
@@ -17,11 +16,9 @@ namespace Ssch\Typo3Encore\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Cache\Backend\NullBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class CacheFactory
 {
@@ -54,5 +51,4 @@ final class CacheFactory
     {
         return $this->cacheManager->getCache(self::CACHE_KEY);
     }
-
 }

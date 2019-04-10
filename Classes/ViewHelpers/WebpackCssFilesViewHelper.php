@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\ViewHelpers;
 
@@ -38,7 +37,6 @@ final class WebpackCssFilesViewHelper extends AbstractViewHelper
         $this->entrypointLookup = $entrypointLookup;
     }
 
-
     public function initializeArguments(): void
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
@@ -48,5 +46,4 @@ final class WebpackCssFilesViewHelper extends AbstractViewHelper
     {
         return $this->entrypointLookup->getCssFiles($this->arguments['entryName']);
     }
-
 }

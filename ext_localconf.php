@@ -3,16 +3,14 @@
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 if (! defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-
 call_user_func(function ($packageKey) {
 
-    # Caching of user requests
+    // Caching of user requests
     if (! is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][CacheFactory::CACHE_KEY])
     ) {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][CacheFactory::CACHE_KEY] = [
@@ -29,5 +27,4 @@ call_user_func(function ($packageKey) {
         \Ssch\Typo3Encore\Aspect\ResourceFactorySlot::class,
         'jsonManifestVersionStrategy'
     );
-
 }, 'typo3_encore');

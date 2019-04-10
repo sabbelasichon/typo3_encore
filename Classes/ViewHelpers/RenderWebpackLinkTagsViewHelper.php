@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\ViewHelpers;
 
@@ -43,10 +42,8 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
         $this->registerArgument('entryName', 'string', 'The entry name', true);
     }
 
-
     public function render(): void
     {
         $this->tagRenderer->renderWebpackLinkTags($this->arguments['entryName']);
     }
-
 }

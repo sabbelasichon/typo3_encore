@@ -36,5 +36,4 @@ interface VersionStrategyInterface
      * @return string|null The versionized path
      */
     public function applyVersion($path): ?string;
-
 }

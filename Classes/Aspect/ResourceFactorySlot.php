@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Aspect;
 
@@ -16,7 +15,6 @@ namespace Ssch\Typo3Encore\Aspect;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 
 use Ssch\Typo3Encore\Asset\JsonManifestVersionStrategy;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -51,5 +49,4 @@ final class ResourceFactorySlot
     {
         return [$resourceFactory, $uid, $recordData, $this->jsonManifestVersionStrategy->getVersion($fileIdentifier)];
     }
-
 }
