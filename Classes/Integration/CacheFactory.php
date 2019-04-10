@@ -20,7 +20,10 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
-final class CacheFactory
+/**
+ * @final
+ */
+class CacheFactory
 {
 
     /**

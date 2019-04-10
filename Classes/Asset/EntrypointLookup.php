@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Asset;
 
@@ -68,15 +68,17 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
      * @param JsonDecoderInterface $jsonDecoder
      * @param FilesystemInterface $filesystem
      * @param CacheFactory $cacheFactory
-     *
-     * @throws NoSuchCacheException
      */
     public function __construct(SettingsServiceInterface $settingsService, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
     {
         $this->entrypointJsonPath = GeneralUtility::getFileAbsFileName($settingsService->getByPath('entrypointJsonPath'));
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
-        $this->cache = $cacheFactory->createInstance();
+        try {
+            $this->cache = $cacheFactory->createInstance();
+        } catch (NoSuchCacheException $e) {
+
+        }
         $this->cacheKey = CacheFactory::CACHE_KEY;
     }
 
@@ -104,7 +106,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     {
         $entriesData = $this->getEntriesData();
 
-        if (!array_key_exists('integrity', $entriesData)) {
+        if ( ! array_key_exists('integrity', $entriesData)) {
             return [];
         }
 
@@ -118,7 +120,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     {
         $entriesData = $this->getEntriesData();
 
-        if (! array_key_exists('integrity', $entriesData)) {
+        if ( ! array_key_exists('integrity', $entriesData)) {
             return [];
         }
 
@@ -131,7 +133,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
         $entriesData = $this->getEntriesData();
         $entryData = $entriesData['entrypoints'][$entryName];
 
-        if (! isset($entryData[$key])) {
+        if ( ! isset($entryData[$key])) {
             // If we don't find the file type then just send back nothing.
             return [];
         }
@@ -147,7 +149,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     private function validateEntryName(string $entryName): void
     {
         $entriesData = $this->getEntriesData();
-        if (! isset($entriesData['entrypoints'][$entryName])) {
+        if ( ! isset($entriesData['entrypoints'][$entryName])) {
             $withoutExtension = substr($entryName, 0, strrpos($entryName, '.'));
 
             if (isset($entriesData['entrypoints'][$withoutExtension])) {
@@ -164,11 +166,11 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             return $this->entriesData;
         }
 
-        if ($this->cache->has($this->cacheKey)) {
+        if ($this->cache && $this->cache->has($this->cacheKey)) {
             return $this->cache->get($this->cacheKey);
         }
 
-        if (! $this->filesystem->exists($this->entrypointJsonPath)) {
+        if ( ! $this->filesystem->exists($this->entrypointJsonPath)) {
             throw new InvalidArgumentException(sprintf('Could not find the entrypoints file from Webpack: the file "%s" does not exist.', $this->entrypointJsonPath));
         }
 
@@ -178,7 +180,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             throw new InvalidArgumentException(sprintf('There was a problem JSON decoding the "%s" file', $this->entrypointJsonPath));
         }
 
-        if (! isset($this->entriesData['entrypoints'])) {
+        if ( ! isset($this->entriesData['entrypoints'])) {
             throw new InvalidArgumentException(sprintf('Could not find an "entrypoints" key in the "%s" file', $this->entrypointJsonPath));
         }
 

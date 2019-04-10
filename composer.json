@@ -18,6 +18,7 @@
     }
   ],
   "require": {
+    "php": "^7.1",
     "typo3/cms-core": "^8.7.13|| ^9.5.0"
   },
   "require-dev": {
