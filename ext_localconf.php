@@ -23,7 +23,7 @@ call_user_func(function ($packageKey) {
         ];
     }
 
-    if (TYPO3_MODE === '') {
+    if (TYPO3_MODE === 'FE') {
         $dispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
         $dispatcher->connect(
             \TYPO3\CMS\Core\Resource\ResourceFactory::class,
