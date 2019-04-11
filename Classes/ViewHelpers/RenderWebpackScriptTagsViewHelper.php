@@ -27,11 +27,6 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
      */
     private $tagRenderer;
 
-    /**
-     * RenderWebpackScriptTagsViewHelper constructor.
-     *
-     * @param TagRenderer $tagRenderer
-     */
     public function __construct(TagRenderer $tagRenderer)
     {
         $this->tagRenderer = $tagRenderer;

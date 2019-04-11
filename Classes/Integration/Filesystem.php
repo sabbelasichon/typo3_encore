@@ -20,18 +20,12 @@ use UnexpectedValueException;
 
 final class Filesystem implements FilesystemInterface
 {
-
-    /**
-     * @param string $pathToFile
-     *
-     * @return false|string
-     */
     public function get(string $pathToFile): string
     {
-        $data = file_get_contents($pathToFile);
+        $data = @file_get_contents($pathToFile);
 
         if (false === $data) {
-            throw new UnexpectedValueException('Data could not be read from file %s', $file);
+            throw new UnexpectedValueException(sprintf('Data could not be read from file %s', $pathToFile));
         }
 
         return $data;

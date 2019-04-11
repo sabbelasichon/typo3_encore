@@ -35,12 +35,6 @@ final class TagRenderer
      */
     private $integrityHashes;
 
-    /**
-     * TagRenderer constructor.
-     *
-     * @param PageRenderer $pageRenderer
-     * @param EntrypointLookupInterface $entrypointLookup
-     */
     public function __construct(PageRenderer $pageRenderer, EntrypointLookupInterface $entrypointLookup)
     {
         $this->pageRenderer = $pageRenderer;

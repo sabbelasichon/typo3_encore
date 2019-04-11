@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined('TYPO3_MODE')) {
+if (! defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
 call_user_func(function ($packageKey) {
 
     // Caching of user requests
-    if ( ! is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY])
+    if (! is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY])
     ) {
         $context = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext();
 

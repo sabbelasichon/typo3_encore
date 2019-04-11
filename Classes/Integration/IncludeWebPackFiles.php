@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Integration;
 
@@ -33,21 +32,20 @@ final class IncludeWebPackFiles implements SingletonInterface
     /**
      * IncludeWebPackFiles constructor.
      *
-     * @param TagRenderer|null|object $tagRenderer
+     * @param object|TagRenderer|null $tagRenderer
      */
     public function __construct(TagRenderer $tagRenderer = null)
     {
-        if ( ! $tagRenderer instanceof TagRenderer) {
+        if (! $tagRenderer instanceof TagRenderer) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             $tagRenderer = $objectManager->get(TagRenderer::class);
         }
         $this->tagRenderer = $tagRenderer;
     }
 
-
     public function addWebpackScriptTags(string $content, array $conf): void
     {
-        if ( ! isset($conf['entryName'])) {
+        if (! isset($conf['entryName'])) {
             throw new \InvalidArgumentException('Please provide an entryName.');
         }
 
@@ -56,13 +54,11 @@ final class IncludeWebPackFiles implements SingletonInterface
         $this->tagRenderer->renderWebpackScriptTags($conf['entryName'], $position);
     }
 
-
     public function addWebpackLinkTags(string $content, array $conf): void
     {
-        if ( ! isset($conf['entryName'])) {
+        if (! isset($conf['entryName'])) {
             throw new \InvalidArgumentException('Please provide an entryName.');
         }
         $this->tagRenderer->renderWebpackLinkTags($conf['entryName']);
     }
-
 }

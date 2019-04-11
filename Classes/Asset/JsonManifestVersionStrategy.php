@@ -36,11 +36,6 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
      */
     private $filesystem;
 
-    /**
-     * @param SettingsServiceInterface $settingsService
-     * @param FilesystemInterface $filesystem
-     * @param JsonDecoderInterface $jsonDecoder
-     */
     public function __construct(SettingsServiceInterface $settingsService, FilesystemInterface $filesystem, JsonDecoderInterface $jsonDecoder)
     {
         $this->manifestPath = GeneralUtility::getFileAbsFileName($settingsService->getByPath('manifestJsonPath'));

@@ -27,11 +27,6 @@ final class WebpackCssFilesViewHelper extends AbstractViewHelper
      */
     private $entrypointLookup;
 
-    /**
-     * WebpackCssFiles constructor.
-     *
-     * @param EntrypointLookupInterface $entrypointLookup
-     */
     public function __construct(EntrypointLookupInterface $entrypointLookup)
     {
         $this->entrypointLookup = $entrypointLookup;

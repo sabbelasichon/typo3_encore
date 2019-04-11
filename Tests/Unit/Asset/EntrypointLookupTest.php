@@ -25,7 +25,6 @@ use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 
 class EntrypointLookupTest extends UnitTestCase
 {
-
     private $subject;
 
     /**
@@ -34,20 +33,19 @@ class EntrypointLookupTest extends UnitTestCase
     private $settingsService;
 
     /**
-     * @var MockObject|JsonDecoderInterface
+     * @var JsonDecoderInterface|MockObject
      */
     private $jsonDecoder;
 
     /**
-     * @var MockObject|FilesystemInterface
+     * @var FilesystemInterface|MockObject
      */
     private $filesystem;
 
     /**
-     * @var MockObject|CacheFactory
+     * @var CacheFactory|MockObject
      */
     private $cacheFactory;
-
 
     protected function setUp()
     {
