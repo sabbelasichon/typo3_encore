@@ -35,6 +35,7 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
+        $this->registerArgument('media', 'string', 'Media type', false, 'all');
     }
 
     public function render(): void

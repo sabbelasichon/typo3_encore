@@ -50,10 +50,10 @@ final class TagRenderer
             $attributes = [
                 $file,
                 'text/javascript',
-                true,
+                false,
                 false,
                 '',
-                false,
+                true,
                 '|',
                 false,
                 $this->integrityHashes[$file] ?? '',
@@ -67,12 +67,22 @@ final class TagRenderer
         }
     }
 
-    public function renderWebpackLinkTags(string $entryName): void
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all'): void
     {
         $files = $this->entrypointLookup->getCssFiles($entryName);
 
         foreach ($files as $file) {
-            $this->pageRenderer->addCssFile($file);
+            $attributes = [
+                $file,
+                'stylesheet',
+                $media,
+                '',
+                false,
+                false,
+                '',
+                false,
+            ];
+            $this->pageRenderer->addCssFile(...$attributes);
         }
     }
 }

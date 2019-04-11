@@ -59,6 +59,9 @@ final class IncludeWebPackFiles implements SingletonInterface
         if (! isset($conf['entryName'])) {
             throw new \InvalidArgumentException('Please provide an entryName.');
         }
-        $this->tagRenderer->renderWebpackLinkTags($conf['entryName']);
+
+        $media = $conf['media'] ?: 'all';
+
+        $this->tagRenderer->renderWebpackLinkTags($conf['entryName'], $media);
     }
 }
