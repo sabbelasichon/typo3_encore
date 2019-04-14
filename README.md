@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sabbelasichon/typo3_encore.png)](https://travis-ci.org/sabbelasichon/typo3_encore)
+
 TYPO3 integration with Webpack Encore!
 ======================================
 
