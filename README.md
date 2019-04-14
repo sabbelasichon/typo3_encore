@@ -69,10 +69,10 @@ page.includeJSFooter {
 }
 ```
 
-You don´t have to care about including it only once. This will not happen during one request cycle unless you want to. 
-=======
 Note the prefix typo3_encore: This is important in order to render the files correctly.
 You can then use all other known settings to include your files.
+
+You don´t have to care about including it only once. This will not happen during one request cycle unless you want to. 
 
 ## Additional 
 
