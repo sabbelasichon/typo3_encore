@@ -13,7 +13,7 @@ call_user_func(function ($packageKey) {
 
         $cacheBackend = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
 
-        if ($context->isProduction()) {
+        if (!$context->isProduction()) {
             $cacheBackend = \TYPO3\CMS\Core\Cache\Backend\NullBackend::class;
         }
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY] = [
