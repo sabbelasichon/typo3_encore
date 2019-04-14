@@ -12,7 +12,7 @@ composer require ssch/typo3-encore
 
 ## How to use
 
-1. First of all install Webpack encore as stated in the [documentation](https://symfony.com/doc/current/frontend.html).
+1. First of all install Webpack Encore as stated in the [documentation](https://symfony.com/doc/current/frontend.html).
 You should really be able to use all of the things described in the documentation.
 Like Sass-Loader, Vue-Loader etc. These things are completely independent from this little extension.
 
