@@ -9,16 +9,10 @@ call_user_func(function ($packageKey) {
     // Caching of user requests
     if (! is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY])
     ) {
-        $context = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext();
 
-        $cacheBackend = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
-
-        if (!$context->isProduction()) {
-            $cacheBackend = \TYPO3\CMS\Core\Cache\Backend\NullBackend::class;
-        }
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY] = [
             'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
-            'backend' => $cacheBackend,
+            'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class,
             'options' => [],
         ];
     }
