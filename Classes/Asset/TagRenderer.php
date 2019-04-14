@@ -30,20 +30,15 @@ final class TagRenderer
      */
     private $entrypointLookup;
 
-    /**
-     * @var array|string[]
-     */
-    private $integrityHashes;
-
     public function __construct(PageRenderer $pageRenderer, EntrypointLookupInterface $entrypointLookup)
     {
         $this->pageRenderer = $pageRenderer;
         $this->entrypointLookup = $entrypointLookup;
-        $this->integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
     }
 
     public function renderWebpackScriptTags(string $entryName, string $position = 'footer'): void
     {
+        $integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
         $files = $this->entrypointLookup->getJavaScriptFiles($entryName);
 
         foreach ($files as $file) {
@@ -56,7 +51,7 @@ final class TagRenderer
                 true,
                 '|',
                 false,
-                $this->integrityHashes[$file] ?? '',
+                $integrityHashes[$file] ?? '',
             ];
 
             if ($position === 'footer') {

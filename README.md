@@ -53,22 +53,26 @@ If you have defined multiple entries you can define the desired entryName in the
 Alternatively you can also include the files via TypoScript
 
 ```php
-page {
-    1 = USER
-    1 {
-        userFunc = Ssch\Typo3Encore\Integration\IncludeWebPackFiles->addWebpackLinkTags
-        entryName = app
-    }
-    5 = USER
-    5 {
-        userFunc = Ssch\Typo3Encore\Integration\IncludeWebPackFiles->addWebpackScriptTags
-        entryName = app
-        position = footer
-    }
+page.includeCSS {
+    # Pattern typo3_encore:entryName
+    app = typo3_encore:app 
+}
+
+page.includeJS {
+    # Pattern typo3_encore:entryName
+    app = typo3_encore:app
+}
+
+page.includeJSFooter {
+    # Pattern typo3_encore:entryName
+    app = typo3_encore:app
 }
 ```
 
 You don´t have to care about including it only once. This will not happen during one request cycle unless you want to. 
+=======
+Note the prefix typo3_encore: This is important in order to render the files correctly.
+You can then use all other known settings to include your files.
 
 ## Additional 
 

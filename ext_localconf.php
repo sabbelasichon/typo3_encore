@@ -31,5 +31,8 @@ call_user_func(function ($packageKey) {
             \Ssch\Typo3Encore\Aspect\ResourceFactorySlot::class,
             'jsonManifestVersionStrategy'
         );
+
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][$packageKey] = \Ssch\Typo3Encore\Integration\PageRendererHooks::class . '->renderPreProcess';
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['addAllowedPaths'] .= ',' . $packageKey;
     }
 }, 'typo3_encore');
