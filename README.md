@@ -68,6 +68,8 @@ page {
 }
 ```
 
+You don´t have to care about including it only once. This will not happen during one request cycle unless you want to. 
+
 ## Additional 
 
 1. If you are in production mode and set enableVersioning(true) then you should set the option 
