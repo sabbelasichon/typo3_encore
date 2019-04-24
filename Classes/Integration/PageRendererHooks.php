@@ -50,7 +50,7 @@ final class PageRendererHooks
     {
         // Add JavaScript Files by entryNames
         foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {
-            if ( ! empty($params[$includeType])) {
+            if (! empty($params[$includeType])) {
                 $integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
                 foreach ($params[$includeType] as $key => $jsFile) {
                     if ($this->isEncoreEntryName($jsFile['file'])) {

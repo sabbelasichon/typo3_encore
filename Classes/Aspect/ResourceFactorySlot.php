@@ -38,15 +38,13 @@ final class ResourceFactorySlot
 
     /**
      * @param ResourceFactory $resourceFactory
-     * @param int $uid
-     * @param array $recordData
      * @param string|null $fileIdentifier
      * @param string|null $slotName
      *
      * @return array
      */
-    public function jsonManifestVersionStrategy(ResourceFactory $resourceFactory, int $uid, array $recordData, string $fileIdentifier = null, string $slotName = null): array
+    public function jsonManifestVersionStrategy(ResourceFactory $resourceFactory, string $fileIdentifier = null, string $slotName = null): array
     {
-        return [$resourceFactory, $uid, $recordData, $this->jsonManifestVersionStrategy->getVersion($fileIdentifier)];
+        return [$resourceFactory, $this->jsonManifestVersionStrategy->getVersion($fileIdentifier)];
     }
 }

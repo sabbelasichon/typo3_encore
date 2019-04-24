@@ -23,8 +23,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class JsonManifestVersionStrategy implements VersionStrategyInterface
 {
+    /**
+     * @var string
+     */
     private $manifestPath;
 
+    /**
+     * @var array
+     */
     private $manifestData;
 
     /**
@@ -71,7 +77,6 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
 
             $this->manifestData = $this->jsonDecoder->decode($this->filesystem->get($this->manifestPath));
         }
-
         return $this->manifestData[$path] ?? null;
     }
 }
