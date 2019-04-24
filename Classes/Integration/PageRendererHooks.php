@@ -49,17 +49,19 @@ final class PageRendererHooks
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
         // Add JavaScript Files by entryNames
-        if (! empty($params['jsFiles'])) {
-            $integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
-            foreach ($params['jsFiles'] as $key => $jsFile) {
-                if ($this->isEncoreEntryName($jsFile['file'])) {
-                    unset($params['jsFiles'][$key]);
+        foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {
+            if ( ! empty($params[$includeType])) {
+                $integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
+                foreach ($params[$includeType] as $key => $jsFile) {
+                    if ($this->isEncoreEntryName($jsFile['file'])) {
+                        unset($params[$includeType][$key]);
 
-                    $attributes = $jsFile;
-                    foreach ($this->entrypointLookup->getJavaScriptFiles($this->resolveEntryName($jsFile['file'])) as $file) {
-                        $attributes['file'] = $file;
-                        $attributes['integrity'] = $integrityHashes[$file] ?? null;
-                        $params['jsFiles'][$file] = $attributes;
+                        $attributes = $jsFile;
+                        foreach ($this->entrypointLookup->getJavaScriptFiles($this->resolveEntryName($jsFile['file'])) as $file) {
+                            $attributes['file'] = $file;
+                            $attributes['integrity'] = $integrityHashes[$file] ?? null;
+                            $params[$includeType][$file] = $attributes;
+                        }
                     }
                 }
             }
