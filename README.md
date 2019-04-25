@@ -118,7 +118,7 @@ Encore
     .setPublicPath('/typo3conf/ext/my_sitepackage/Resources/Public/')
     
     // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
+    // .setManifestKeyPrefix('build/')
     
     // Copy some static images to your -> https://symfony.com/doc/current/frontend/encore/copy-files.html
     .copyFiles({
@@ -155,7 +155,7 @@ Encore
     .enableVersioning(Encore.isProduction())
     
     // uncomment if you use TypeScript -> https://symfony.com/doc/current/frontend/encore/typescript.html
-    //.enableTypeScriptLoader()
+    // .enableTypeScriptLoader()
 
     // uncomment if you are using Sass/SCSS files -> https://symfony.com/doc/current/frontend/encore/css-preprocessors.html
     // .enableSassLoader()
@@ -171,13 +171,13 @@ Encore
     // .enableVueLoader()
     
     // uncomment if you´re want to lint your sources
-    //.enableEslintLoader()
+    // .enableEslintLoader()
     
     // uncomment if you´re want to have integrity hashes for your script tags, the extension takes care of it 
-    //.enableIntegrityHashes()
+    // .enableIntegrityHashes()
     
     // uncomment if you´re want to share general code for the different entries -> https://symfony.com/doc/current/frontend/encore/split-chunks.html 
-    //.splitEntryChunks()
+    // .splitEntryChunks()
     ;
 
 // Uncomment if you are going to use a CDN -> https://symfony.com/doc/current/frontend/encore/cdn.html
@@ -191,4 +191,54 @@ Encore
 // }
 
 module.exports = Encore.getWebpackConfig();
+```
+
+### The realm of Webpack plugins
+
+#### Generating icons and inject them automatically
+
+Install the [webapp-webpack-plugin](https://github.com/brunocodutra/webapp-webpack-plugin) and the [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
+
+```javascript
+const WebappWebpackPlugin = require('webapp-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+Encore.addPlugin(new HtmlWebpackPlugin(
+            {
+                inject: false,
+                minify: false,
+                template: 'public/typo3conf/ext/typo3_encore/Resources/Private/Templates/Favicons.html',
+                filename: 'favicons.html',
+            }
+        ))
+        .addPlugin(new WebappWebpackPlugin({
+            inject: htmlPlugin => htmlPlugin.options.filename === 'favicons.html',
+            logo: './src/images/logo.png',
+            force: true,
+            favicons: {
+                start_url: null,
+                lang: null,
+                icons: {
+                    android: true,
+                    appleIcon: true,
+                    appleStartup: true,
+                    windows: true,
+                    yandex: true,
+                    favicons: true,
+                    coast: true,
+                    firefox: true,
+                    opengraph: false,
+                    twitter: false
+                }
+            }
+        }))
+```
+
+In order to inject the html file in the header of your TYPO3 just include the template file:
+
+```php
+page.headerData.2039 = FLUIDTEMPLATE
+page.headerData.2039 {
+    file = EXT:typo3_encore/Resources/Public/favicons.html
+}
 ```
