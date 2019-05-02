@@ -194,10 +194,12 @@ module.exports = Encore.getWebpackConfig();
 ```
 
 ### The realm of Webpack plugins
+Encore already ships with a lot of useful plugins for the daily work. 
+But someday you are gonna get to the point where you need more.
 
 #### Generating icons and inject them automatically
 
-Install the [webapp-webpack-plugin](https://github.com/brunocodutra/webapp-webpack-plugin) and the [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
+Install [webapp-webpack-plugin](https://github.com/brunocodutra/webapp-webpack-plugin) and [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin).
 
 ```javascript
 const WebappWebpackPlugin = require('webapp-webpack-plugin');
@@ -241,4 +243,37 @@ page.headerData.2039 = FLUIDTEMPLATE
 page.headerData.2039 {
     file = EXT:typo3_encore/Resources/Public/favicons.html
 }
+```
+
+#### Generating a svg sprite
+
+Install [svg-sprite-loader](https://github.com/kisenka/svg-sprite-loader#installation)
+```javascript
+const SpritePlugin = require('svg-sprite-loader/plugin');
+
+Encore.addLoader({
+    test: /\.svg$/,
+    loader: 'svg-sprite-loader',
+    options: {
+        extract: true,
+    }
+}).addPlugin(new SpritePlugin())
+
+```
+
+Now you have to import all your svg files in your javascript 
+
+```
+function requireAll(r) {
+    r.keys().forEach(r);
+}
+requireAll(require.context('./relative-path-to-svg-folder/svg-sprite/', true, /\.svg$/));
+```
+
+The extension ships with a SvgViewHelper in order to simplify the usage of svg in fluid.
+
+```html
+{namespace e = Ssch\Typo3Encore\ViewHelpers}
+
+<e:svg title="Title" description="Description" src="EXT:typo3_encore/Resources/Public/sprite.svg" name="icon-fax-contact"/>
 ```
