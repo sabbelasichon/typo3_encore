@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\ViewHelpers;
 
@@ -17,10 +16,14 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
-final class SvgViewHelper extends AbstractTagBasedViewHelper
+/**
+ * @final
+ */
+class SvgViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * @var string
@@ -38,11 +41,18 @@ final class SvgViewHelper extends AbstractTagBasedViewHelper
     protected $imageService;
 
     /**
-     * @param ImageService $imageService
+     * @var IdGeneratorInterface
      */
+    private $idGenerator;
+
     public function injectImageService(ImageService $imageService): void
     {
         $this->imageService = $imageService;
+    }
+
+    public function injectIdGenerator(IdGeneratorInterface $idGenerator): void
+    {
+        $this->idGenerator = $idGenerator;
     }
 
     public function initializeArguments(): void
@@ -63,15 +73,12 @@ final class SvgViewHelper extends AbstractTagBasedViewHelper
         $image = $this->imageService->getImage($this->arguments['src'], null, null);
         $imageUri = $this->imageService->getImageUri($image, $this->arguments['absolute']);
 
-        $content = [
-            sprintf('<use xlink:href="%s#%s" />', $imageUri, htmlspecialchars($this->arguments['name'])),
-        ];
-
+        $content = [];
         $uniqueId = 'unique';
         $ariaLabelledBy = [];
 
         if ($this->arguments['title'] || $this->arguments['description']) {
-            $uniqueId = uniqid('svg', false);
+            $uniqueId = $this->idGenerator->generate();
         }
 
         if ($this->arguments['title']) {
@@ -86,11 +93,13 @@ final class SvgViewHelper extends AbstractTagBasedViewHelper
             $content[] = sprintf('<desc id="%s">%s</desc>', $descriptionId, htmlspecialchars($this->arguments['description']));
         }
 
-        if ( ! empty($ariaLabelledBy)) {
+        if (! empty($ariaLabelledBy)) {
             $this->tag->addAttribute('aria-labelledby', implode(' ', $ariaLabelledBy));
         }
 
-        $this->tag->setContent(implode("\n", $content));
+        $content[] = sprintf('<use xlink:href="%s#%s" />', $imageUri, htmlspecialchars($this->arguments['name']));
+
+        $this->tag->setContent(implode('', $content));
 
         if ($this->arguments['width']) {
             $this->tag->addAttribute('width', $this->arguments['width']);
@@ -101,8 +110,11 @@ final class SvgViewHelper extends AbstractTagBasedViewHelper
         }
 
         $this->tag->addAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        $this->tag->addAttribute('focusable', false);
-        $this->tag->addAttribute('role', $this->arguments['role']);
+        $this->tag->addAttribute('focusable', 'false');
+
+        if ($this->arguments['role']) {
+            $this->tag->addAttribute('role', $this->arguments['role']);
+        }
 
         return $this->tag->render();
     }
