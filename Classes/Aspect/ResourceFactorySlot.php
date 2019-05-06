@@ -29,11 +29,11 @@ final class ResourceFactorySlot
     /**
      * ResourceFactorySlot constructor.
      *
-     * @param JsonManifestVersionStrategy $JsonManifestVersionStrategy
+     * @param JsonManifestVersionStrategy $jsonManifestVersionStrategy
      */
-    public function __construct(JsonManifestVersionStrategy $JsonManifestVersionStrategy)
+    public function __construct(JsonManifestVersionStrategy $jsonManifestVersionStrategy)
     {
-        $this->jsonManifestVersionStrategy = $JsonManifestVersionStrategy;
+        $this->jsonManifestVersionStrategy = $jsonManifestVersionStrategy;
     }
 
     /**
