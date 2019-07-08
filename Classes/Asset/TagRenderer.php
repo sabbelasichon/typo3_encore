@@ -36,7 +36,7 @@ final class TagRenderer
         $this->entrypointLookup = $entrypointLookup;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer'): void
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer')
     {
         $integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
         $files = $this->entrypointLookup->getJavaScriptFiles($entryName);
@@ -62,7 +62,7 @@ final class TagRenderer
         }
     }
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all'): void
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all')
     {
         $files = $this->entrypointLookup->getCssFiles($entryName);
 

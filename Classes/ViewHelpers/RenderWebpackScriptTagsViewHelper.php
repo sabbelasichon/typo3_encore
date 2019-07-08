@@ -32,13 +32,13 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
         $this->tagRenderer = $tagRenderer;
     }
 
-    public function initializeArguments(): void
+    public function initializeArguments()
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
         $this->registerArgument('position', 'string', 'The position to render the files', false, 'footer');
     }
 
-    public function render(): void
+    public function render()
     {
         $this->tagRenderer->renderWebpackScriptTags($this->arguments['entryName'], $this->arguments['position']);
     }

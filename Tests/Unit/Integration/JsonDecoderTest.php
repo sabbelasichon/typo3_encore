@@ -34,7 +34,7 @@ class JsonDecoderTest extends UnitTestCase
     /**
      * @test
      */
-    public function decodingThrowsException(): void
+    public function decodingThrowsException()
     {
         $this->expectException(JsonDecodeException::class);
         $this->subject->decode('can');
@@ -43,7 +43,7 @@ class JsonDecoderTest extends UnitTestCase
     /**
      * @test
      */
-    public function decodeSuccessfully(): void
+    public function decodeSuccessfully()
     {
         $this->assertEquals(['homepage' => ['js' => ['file.js']]], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
     }

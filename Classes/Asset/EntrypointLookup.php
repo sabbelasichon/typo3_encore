@@ -137,7 +137,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
         return $newFiles;
     }
 
-    private function validateEntryName(string $entryName): void
+    private function validateEntryName(string $entryName)
     {
         $entriesData = $this->getEntriesData();
         if (! isset($entriesData['entrypoints'][$entryName])) {

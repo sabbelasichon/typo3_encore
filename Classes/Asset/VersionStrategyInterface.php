@@ -24,9 +24,9 @@ interface VersionStrategyInterface
      *
      * @param string $path A path
      *
-     * @return string The version string|null
+     * @return string|null The version string|null
      */
-    public function getVersion($path): ?string;
+    public function getVersion($path);
 
     /**
      * Applies version to the supplied path.
@@ -35,5 +35,5 @@ interface VersionStrategyInterface
      *
      * @return string|null The versionized path
      */
-    public function applyVersion($path): ?string;
+    public function applyVersion($path);
 }

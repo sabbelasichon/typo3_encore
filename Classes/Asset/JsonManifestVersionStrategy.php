@@ -58,12 +58,12 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
      *
      * @return string|null
      */
-    public function getVersion($path): ?string
+    public function getVersion($path)
     {
         return $this->applyVersion($path);
     }
 
-    public function applyVersion($path): ?string
+    public function applyVersion($path)
     {
         return $this->getManifestPath($path) ?: $path;
     }

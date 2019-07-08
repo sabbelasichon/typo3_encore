@@ -68,7 +68,7 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
      * @param string $expected
      * @dataProvider renderDataProvider
      */
-    public function render(array $arguments, string $expected): void
+    public function render(array $arguments, string $expected)
     {
         $arguments = array_merge($arguments, ['src' => 'somefile.jpg', 'name' => 'name']);
         $image = $this->getMockBuilder(FileInterface::class)->getMock();

@@ -40,7 +40,7 @@ class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function canNotReadFileContentThrowsException(): void
+    public function canNotReadFileContentThrowsException()
     {
         $pathToFile = 'thisisnotafile';
 
@@ -52,7 +52,7 @@ class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function canReadFileContent(): void
+    public function canReadFileContent()
     {
         $this->assertStringEqualsFile($this->fixtureFile, $this->subject->get($this->fixtureFile));
     }
@@ -60,7 +60,7 @@ class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function fileDoesNotExistsReturnsFalse(): void
+    public function fileDoesNotExistsReturnsFalse()
     {
         $this->assertFalse($this->subject->exists('doesnotexistsfile.txt'));
     }
@@ -68,7 +68,7 @@ class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function fileExistsReturnsTrue(): void
+    public function fileExistsReturnsTrue()
     {
         $this->assertTrue($this->subject->exists($this->fixtureFile));
     }

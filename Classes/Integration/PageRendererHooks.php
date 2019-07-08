@@ -25,7 +25,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 final class PageRendererHooks
 {
-    private const ENCORE_PREFIX = 'typo3_encore:';
+    const ENCORE_PREFIX = 'typo3_encore:';
 
     /**
      * @var EntrypointLookupInterface|object
@@ -46,7 +46,7 @@ final class PageRendererHooks
         $this->entrypointLookup = $entrypointLookup;
     }
 
-    public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
+    public function renderPreProcess(array $params, PageRenderer $pageRenderer)
     {
         // Add JavaScript Files by entryNames
         foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {

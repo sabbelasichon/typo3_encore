@@ -41,7 +41,7 @@ class SettingsServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getExistingSettingByPathReturnsCorrectValue(): void
+    public function getExistingSettingByPathReturnsCorrectValue()
     {
         $settings = [
             'entrypointJsonPath' => 'pathToFile',
@@ -58,7 +58,7 @@ class SettingsServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getNonExistingSettingByPathReturnsNull(): void
+    public function getNonExistingSettingByPathReturnsNull()
     {
         $settings = [];
 

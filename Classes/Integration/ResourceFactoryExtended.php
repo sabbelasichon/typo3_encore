@@ -24,7 +24,7 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 final class ResourceFactoryExtended extends ResourceFactory
 {
-    public const SIGNAL_PreProcessFileIdentifier = 'preProcessFileIdentifier';
+    const SIGNAL_PreProcessFileIdentifier = 'preProcessFileIdentifier';
 
     /**
      * @param int $storageUid

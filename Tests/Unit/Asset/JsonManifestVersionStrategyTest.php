@@ -68,7 +68,7 @@ class JsonManifestVersionStrategyTest extends UnitTestCase
     /**
      * @test
      */
-    public function assetManifestFileDoesNotExistThrowsException(): void
+    public function assetManifestFileDoesNotExistThrowsException()
     {
         $this->expectException(\RuntimeException::class);
         $this->filesystem->expects($this->once())->method('exists')->willReturn(false);
@@ -78,7 +78,7 @@ class JsonManifestVersionStrategyTest extends UnitTestCase
     /**
      * @test
      */
-    public function nonExistingPathInManifestReturnsPathItself(): void
+    public function nonExistingPathInManifestReturnsPathItself()
     {
         $this->filesystem->expects($this->once())->method('exists')->willReturn(true);
         $this->filesystem->expects($this->once())->method('get')->with($this->manifestJsonFilePath)->willReturn('contentoffile');
@@ -89,7 +89,7 @@ class JsonManifestVersionStrategyTest extends UnitTestCase
     /**
      * @test
      */
-    public function existingPathInManifestReturnsThePathDefinedInManifest(): void
+    public function existingPathInManifestReturnsThePathDefinedInManifest()
     {
         $this->filesystem->expects($this->once())->method('exists')->willReturn(true);
         $this->filesystem->expects($this->once())->method('get')->with($this->manifestJsonFilePath)->willReturn('contentoffile');

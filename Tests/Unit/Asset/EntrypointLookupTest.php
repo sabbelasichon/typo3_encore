@@ -60,7 +60,7 @@ class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function integrityDataReturnsEmptyArray(): void
+    public function integrityDataReturnsEmptyArray()
     {
         $this->filesystem->method('exists')->willReturn(true);
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []]]);
@@ -70,7 +70,7 @@ class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function integrityDataReturnsCorrectValues(): void
+    public function integrityDataReturnsCorrectValues()
     {
         $integrity = ['/typo3conf/ext/typo3_encore/Resources/Public/runtime.js' => 'sha384-GRXz+AZB+AWfcuTJbK9EZ+Na2Qa53hmwUKqRNr19Sma1DV1sYa0W7k44N7Y11Whg'];
 
