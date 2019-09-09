@@ -76,6 +76,15 @@ You can then use all other known settings to include your files.
 
 You don´t have to care about including it only once. This will not happen during one request cycle unless you want to. 
 
+It is also possible to use the inclusion via the prefix typo3_encore in backend specific contexts. For example like so:
+
+```html
+<f:be.container includeCssFiles="{0: 'typo3_encore:backend'}" includeJsFiles="{0: 'typo3_encore:backend'}">
+
+</f:be.container>
+``` 
+
+
 ## Additional 
 
 1. If you are in production mode and set enableVersioning(true) then you should set the option 

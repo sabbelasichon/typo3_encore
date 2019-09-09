@@ -4,3 +4,5 @@ plugin.tx_typo3encore {
         manifestJsonPath = {$plugin.tx_typo3encore.settings.manifestJsonPath}
     }
 }
+
+module.tx_typo3encore.settings < plugin.tx_typo3encore.settings
