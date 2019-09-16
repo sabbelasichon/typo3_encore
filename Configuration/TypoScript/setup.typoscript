@@ -2,6 +2,10 @@ plugin.tx_typo3encore {
     settings {
         entrypointJsonPath = {$plugin.tx_typo3encore.settings.entrypointJsonPath}
         manifestJsonPath = {$plugin.tx_typo3encore.settings.manifestJsonPath}
+
+        builds {
+
+        }
     }
 }
 

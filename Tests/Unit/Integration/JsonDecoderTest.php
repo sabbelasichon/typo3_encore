@@ -45,6 +45,6 @@ class JsonDecoderTest extends UnitTestCase
      */
     public function decodeSuccessfully()
     {
-        $this->assertEquals(['homepage' => ['js' => ['file.js']]], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
+        $this->assertEquals(['homepage' => ['js' => ['file.js'], 'css' => ['file.css']]], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
     }
 }

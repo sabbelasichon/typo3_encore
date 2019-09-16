@@ -21,16 +21,10 @@ use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
-use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 
 class EntrypointLookupTest extends UnitTestCase
 {
     private $subject;
-
-    /**
-     * @var MockObject|SettingsServiceInterface
-     */
-    private $settingsService;
 
     /**
      * @var JsonDecoderInterface|MockObject
@@ -49,12 +43,11 @@ class EntrypointLookupTest extends UnitTestCase
 
     protected function setUp()
     {
-        $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
         $this->cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
 
-        $this->subject = new EntrypointLookup($this->settingsService, $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
+        $this->subject = new EntrypointLookup(__DIR__ . '/../Fixtures/entrypoints.json', $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
     }
 
     /**
@@ -77,5 +70,39 @@ class EntrypointLookupTest extends UnitTestCase
         $this->filesystem->method('exists')->willReturn(true);
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []], 'integrity' => $integrity]);
         $this->assertEquals($integrity, $this->subject->getIntegrityData());
+    }
+
+    /**
+     * @test
+     */
+    public function getCssFiles()
+    {
+        $this->filesystem->method('exists')->willReturn(true);
+        $entrypoints = [
+            'app' => [
+                'css' => [
+                    'file.css'
+                ]
+            ],
+        ];
+        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->assertContains('file.css', $this->subject->getCssFiles('app'));
+    }
+
+    /**
+     * @test
+     */
+    public function getJsFiles()
+    {
+        $this->filesystem->method('exists')->willReturn(true);
+        $entrypoints = [
+            'app' => [
+                'js' => [
+                    'file.js'
+                ]
+            ],
+        ];
+        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->assertContains('file.js', $this->subject->getJavaScriptFiles('app'));
     }
 }

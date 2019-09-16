@@ -20,7 +20,6 @@ use InvalidArgumentException;
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
-use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -63,9 +62,9 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
      */
     private $cacheKey;
 
-    public function __construct(SettingsServiceInterface $settingsService, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
+    public function __construct(string $entrypointJsonPath, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
     {
-        $this->entrypointJsonPath = GeneralUtility::getFileAbsFileName($settingsService->getByPath('entrypointJsonPath'));
+        $this->entrypointJsonPath = GeneralUtility::getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
         try {

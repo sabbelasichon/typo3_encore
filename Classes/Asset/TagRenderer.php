@@ -18,7 +18,7 @@ namespace Ssch\Typo3Encore\Asset;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 
-final class TagRenderer
+final class TagRenderer implements TagRendererInterface
 {
     /**
      * @var PageRenderer
@@ -26,20 +26,22 @@ final class TagRenderer
     private $pageRenderer;
 
     /**
-     * @var EntrypointLookupInterface
+     * @var EntrypointLookupCollectionInterface
      */
-    private $entrypointLookup;
+    private $entrypointLookupCollection;
 
-    public function __construct(PageRenderer $pageRenderer, EntrypointLookupInterface $entrypointLookup)
+    public function __construct(PageRenderer $pageRenderer, EntrypointLookupCollectionInterface $entrypointLookupCollection)
     {
         $this->pageRenderer = $pageRenderer;
-        $this->entrypointLookup = $entrypointLookup;
+        $this->entrypointLookupCollection = $entrypointLookupCollection;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer')
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default')
     {
-        $integrityHashes = ($this->entrypointLookup instanceof IntegrityDataProviderInterface) ? $this->entrypointLookup->getIntegrityData() : [];
-        $files = $this->entrypointLookup->getJavaScriptFiles($entryName);
+        $entryPointLookup = $this->getEntrypointLookup($buildName);
+
+        $integrityHashes = ($entryPointLookup instanceof IntegrityDataProviderInterface) ? $entryPointLookup->getIntegrityData() : [];
+        $files = $entryPointLookup->getJavaScriptFiles($entryName);
 
         foreach ($files as $file) {
             $attributes = [
@@ -62,9 +64,10 @@ final class TagRenderer
         }
     }
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all')
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default')
     {
-        $files = $this->entrypointLookup->getCssFiles($entryName);
+        $entryPointLookup = $this->getEntrypointLookup($buildName);
+        $files = $entryPointLookup->getCssFiles($entryName);
 
         foreach ($files as $file) {
             $attributes = [
@@ -79,5 +82,10 @@ final class TagRenderer
             ];
             $this->pageRenderer->addCssFile(...$attributes);
         }
+    }
+
+    private function getEntrypointLookup(string $buildName): EntrypointLookupInterface
+    {
+        return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
     }
 }

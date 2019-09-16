@@ -87,7 +87,38 @@ It is also possible to use the inclusion via the prefix typo3_encore in backend 
 
 ## Additional 
 
-1. If you are in production mode and set enableVersioning(true) then you should set the option 
+1. If you are in production mode and set enableVersioning(true) then you should set the option
+
+2. Defining Multiple Webpack Configurations ([see](https://symfony.com/doc/current/frontend/encore/advanced-config.html#defining-multiple-webpack-configurations)) 
+Then you have to define your builds in your TypoScript-Setup:
+
+```php
+plugin.tx_typo3encore {
+    settings {
+        builds {
+            firstBuild = EXT:typo3_encore/Resources/Public/FirstBuild
+            secondBuild = EXT:typo3_encore/Resources/Public/SecondBuild
+        }
+    }
+}
+```
+
+Finally, you can specify which build to use:
+
+```php
+page.includeCSS {
+    # Pattern typo3_encore:buildName:entryName
+    app = typo3_encore:firstBuild:app 
+}
+```
+
+```html
+{namespace e = Ssch\Typo3Encore\ViewHelpers}
+
+<e:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
+```
+
+
 
 ```php
 $GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''

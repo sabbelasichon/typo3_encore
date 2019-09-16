@@ -1,5 +1,8 @@
 {
   "homepage": {
+    "css": [
+      "file.css"
+    ],
     "js": [
       "file.js"
     ]
