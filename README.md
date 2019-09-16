@@ -93,7 +93,6 @@ It is also possible to use the inclusion via the prefix typo3_encore in backend 
 $GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
 ```
 
-
 ## Getting Started with Webpack Encore
 
 Although the documentation of Webpack Encore is awesome, i am going to provide a minimalistic how to install the frontend related things.

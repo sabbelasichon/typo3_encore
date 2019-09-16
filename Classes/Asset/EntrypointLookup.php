@@ -42,10 +42,12 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
      * @var array
      */
     private $returnedFiles = [];
+
     /**
      * @var JsonDecoderInterface
      */
     private $jsonDecoder;
+
     /**
      * @var FilesystemInterface
      */
