@@ -16,29 +16,31 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
+use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class WebpackCssFilesViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @var EntrypointLookupInterface
+     * @var EntrypointLookupCollectionInterface
      */
-    private $entrypointLookup;
+    private $entrypointLookupCollection;
 
-    public function __construct(EntrypointLookupInterface $entrypointLookup)
+    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection)
     {
-        $this->entrypointLookup = $entrypointLookup;
+        $this->entrypointLookupCollection = $entrypointLookupCollection;
     }
 
     public function initializeArguments()
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
+        $this->registerArgument('entrypointName', 'string', 'The build name', false, '_default');
     }
 
     public function render(): array
     {
-        return $this->entrypointLookup->getCssFiles($this->arguments['entryName']);
+        $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($this->arguments['entrypointName']);
+        return $entryPointLookup->getCssFiles($this->arguments['entryName']);
     }
 }

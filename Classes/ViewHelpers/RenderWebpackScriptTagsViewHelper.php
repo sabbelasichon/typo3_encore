@@ -16,18 +16,18 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Ssch\Typo3Encore\Asset\TagRenderer;
+use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @var TagRenderer
+     * @var TagRendererInterface
      */
     private $tagRenderer;
 
-    public function __construct(TagRenderer $tagRenderer)
+    public function __construct(TagRendererInterface $tagRenderer)
     {
         $this->tagRenderer = $tagRenderer;
     }
@@ -36,10 +36,11 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
         $this->registerArgument('position', 'string', 'The position to render the files', false, 'footer');
+        $this->registerArgument('buildName', 'string', 'The build name', false, '_default');
     }
 
     public function render()
     {
-        $this->tagRenderer->renderWebpackScriptTags($this->arguments['entryName'], $this->arguments['position']);
+        $this->tagRenderer->renderWebpackScriptTags($this->arguments['entryName'], $this->arguments['position'], $this->arguments['buildName']);
     }
 }
