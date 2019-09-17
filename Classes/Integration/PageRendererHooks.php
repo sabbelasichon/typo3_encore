@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Integration;
 
@@ -40,7 +40,7 @@ final class PageRendererHooks
      */
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
     {
-        if ( ! $entrypointLookupCollection instanceof EntrypointLookupCollectionInterface) {
+        if (! $entrypointLookupCollection instanceof EntrypointLookupCollectionInterface) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             $entrypointLookupCollection = $objectManager->get(EntrypointLookupCollectionInterface::class);
         }
@@ -51,7 +51,7 @@ final class PageRendererHooks
     {
         // Add JavaScript Files by entryNames
         foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {
-            if ( ! empty($params[$includeType])) {
+            if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $jsFile) {
                     if ($this->isEncoreEntryName($jsFile['file'])) {
                         $entryPointLookup = $this->getEntrypointLookup($jsFile['file']);
@@ -73,7 +73,7 @@ final class PageRendererHooks
 
         // Add CSS-Files by entryNames
         foreach (['cssFiles'] as $includeType) {
-            if ( ! empty($params[$includeType])) {
+            if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $cssFile) {
                     if ($this->isEncoreEntryName($cssFile['file'])) {
                         $entryPointLookup = $this->getEntrypointLookup($cssFile['file']);

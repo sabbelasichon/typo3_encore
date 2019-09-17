@@ -17,7 +17,6 @@ declare(strict_types = 1);
 namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
@@ -60,7 +59,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     public function getCollection(): array
     {
-        if(static::$collection !== null) {
+        if (static::$collection !== null) {
             return static::$collection;
         }
 
