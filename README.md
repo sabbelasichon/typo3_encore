@@ -89,7 +89,12 @@ It is also possible to use the inclusion via the prefix typo3_encore in backend 
 
 1. If you are in production mode and set enableVersioning(true) then you should set the option
 
+```php
+$GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
+```
+
 2. Defining Multiple Webpack Configurations ([see](https://symfony.com/doc/current/frontend/encore/advanced-config.html#defining-multiple-webpack-configurations)) 
+
 Then you have to define your builds in your TypoScript-Setup:
 
 ```php
@@ -116,12 +121,6 @@ page.includeCSS {
 {namespace e = Ssch\Typo3Encore\ViewHelpers}
 
 <e:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
-```
-
-
-
-```php
-$GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
 ```
 
 ## Getting Started with Webpack Encore
