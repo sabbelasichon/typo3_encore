@@ -35,12 +35,12 @@ final class WebpackJsFilesViewHelper extends AbstractViewHelper
     public function initializeArguments()
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
-        $this->registerArgument('entrypointName', 'string', 'The build name', false, '_default');
+        $this->registerArgument('buildName', 'string', 'The build name', false, '_default');
     }
 
     public function render(): array
     {
-        $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($this->arguments['entrypointName']);
+        $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($this->arguments['buildName']);
         return $entryPointLookup->getJavaScriptFiles($this->arguments['entryName']);
     }
 }
