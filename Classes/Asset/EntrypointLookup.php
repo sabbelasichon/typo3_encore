@@ -110,13 +110,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
      */
     public function reset()
     {
-        $entriesData = $this->getEntriesData();
-
-        if (! array_key_exists('integrity', $entriesData)) {
-            return [];
-        }
-
-        return $entriesData['integrity'];
+        $this->returnedFiles = [];
     }
 
     private function getEntryFiles(string $entryName, string $key): array
