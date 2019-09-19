@@ -22,6 +22,9 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Integration\PageRendererHooks;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
+/**
+ * @covers \Ssch\Typo3Encore\Integration\PageRendererHooks
+ */
 class PageRendererHooksTest extends UnitTestCase
 {
     /**

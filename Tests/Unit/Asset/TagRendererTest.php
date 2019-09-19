@@ -22,6 +22,9 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
+/**
+ * @covers \Ssch\Typo3Encore\Asset\TagRenderer
+ */
 class TagRendererTest extends UnitTestCase
 {
     /**

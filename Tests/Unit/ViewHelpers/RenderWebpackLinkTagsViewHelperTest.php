@@ -19,6 +19,9 @@ use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper;
 
+/**
+ * @covers \Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper
+ */
 class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
 {
     /**

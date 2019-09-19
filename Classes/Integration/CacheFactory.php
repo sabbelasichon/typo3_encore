@@ -29,7 +29,7 @@ class CacheFactory
     /**
      * @var string
      */
-    const CACHE_KEY = 'typo3_encore_entrypoints';
+    const CACHE_KEY = 'typo3_encore';
 
     /**
      * @var CacheManager

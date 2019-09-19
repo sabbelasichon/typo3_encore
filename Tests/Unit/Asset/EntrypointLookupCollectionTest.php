@@ -17,10 +17,14 @@ namespace Ssch\Typo3Encore\Tests\Unit\Asset;
 
 use PHPUnit\Framework\TestCase;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollection;
+use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\UndefinedBuildException;
 use Ssch\Typo3Encore\Integration\EntryLookupFactoryInterface;
 
+/**
+ * @covers \Ssch\Typo3Encore\Asset\EntrypointLookupCollection
+ */
 class EntrypointLookupCollectionTest extends TestCase
 {
     /**
@@ -70,5 +74,15 @@ class EntrypointLookupCollectionTest extends TestCase
     public function getEntrypointLookup()
     {
         $this->assertInstanceOf(EntrypointLookupInterface::class, $this->subject->getEntrypointLookup('existing'));
+    }
+
+    /**
+     * @test
+     * @throws UndefinedBuildException
+     */
+    public function getEntrypointLookupWithDefinedDefaultBuild()
+    {
+        $subject = new EntrypointLookupCollection($this->entryLookupFactory, 'existing');
+        $this->assertInstanceOf(EntrypointLookupInterface::class, $subject->getEntrypointLookup());
     }
 }

@@ -62,7 +62,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
      */
     private $cacheKey;
 
-    public function __construct(string $entrypointJsonPath, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
+    public function __construct(string $entrypointJsonPath, string $cacheKeyPrefix, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
     {
         $this->entrypointJsonPath = GeneralUtility::getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
@@ -71,7 +71,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             $this->cache = $cacheFactory->createInstance();
         } catch (NoSuchCacheException $e) {
         }
-        $this->cacheKey = CacheFactory::CACHE_KEY;
+        $this->cacheKey = sprintf('%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY);
     }
 
     /**
@@ -136,7 +136,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     {
         $entriesData = $this->getEntriesData();
         if (! isset($entriesData['entrypoints'][$entryName])) {
-            $withoutExtension = substr($entryName, 0, strrpos($entryName, '.'));
+            $withoutExtension = substr($entryName, 0, (int)strrpos($entryName, '.'));
 
             if (isset($entriesData['entrypoints'][$withoutExtension])) {
                 throw new EntrypointNotFoundException(sprintf('Could not find the entry "%s". Try "%s" instead (without the extension).', $entryName, $withoutExtension));

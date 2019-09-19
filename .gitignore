@@ -7,3 +7,4 @@ Resources
 !Resources/Private/Templates/*
 TODO.md
 phpunit.xml
+/build

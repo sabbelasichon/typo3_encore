@@ -23,6 +23,9 @@ use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
+/**
+ * @covers \Ssch\Typo3Encore\Integration\EntryLookupFactory
+ */
 class EntryLookupFactoryTest extends UnitTestCase
 {
     /**

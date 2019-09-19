@@ -23,6 +23,9 @@ use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
+/**
+ * @covers \Ssch\Typo3Encore\ViewHelpers\SvgViewHelper
+ */
 class SvgViewHelperTest extends ViewHelperBaseTestcase
 {
     const ID = '2433esds';

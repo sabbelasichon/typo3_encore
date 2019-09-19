@@ -23,6 +23,9 @@ use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * @covers \Ssch\Typo3Encore\Asset\JsonManifestVersionStrategy
+ */
 class JsonManifestVersionStrategyTest extends UnitTestCase
 {
     /**

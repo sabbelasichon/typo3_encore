@@ -21,6 +21,9 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\ViewHelpers\WebpackJsFilesViewHelper;
 
+/**
+ * @covers \Ssch\Typo3Encore\ViewHelpers\WebpackJsFilesViewHelper
+ */
 class WebpackJsFilesViewHelperTest extends ViewHelperBaseTestcase
 {
     /**

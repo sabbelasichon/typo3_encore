@@ -18,6 +18,9 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\Filesystem;
 
+/**
+ * @covers \Ssch\Typo3Encore\Integration\Filesystem
+ */
 class FilesystemTest extends UnitTestCase
 {
 

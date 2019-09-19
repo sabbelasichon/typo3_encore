@@ -19,6 +19,9 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoder;
 
+/**
+ * @covers \Ssch\Typo3Encore\Integration\JsonDecoder
+ */
 class JsonDecoderTest extends UnitTestCase
 {
     /**

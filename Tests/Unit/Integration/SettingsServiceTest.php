@@ -20,6 +20,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\SettingsService;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
+/**
+ * @covers \Ssch\Typo3Encore\Integration\SettingsService
+ */
 class SettingsServiceTest extends UnitTestCase
 {
     /**
