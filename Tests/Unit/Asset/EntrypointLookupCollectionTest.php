@@ -69,6 +69,7 @@ class EntrypointLookupCollectionTest extends TestCase
 
     /**
      * @test
+     * @testdox Get defined EntryPointLookup instance successfully
      * @throws UndefinedBuildException
      */
     public function getEntrypointLookup()

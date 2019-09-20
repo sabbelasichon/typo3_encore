@@ -151,7 +151,7 @@ class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionIfEntryPointsFileDoesNotExist()
+    public function throwsExceptionIfEntrypointsFileDoesNotExist()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->filesystem->method('exists')->willReturn(false);
