@@ -4,7 +4,7 @@ plugin.tx_typo3encore {
         manifestJsonPath = {$plugin.tx_typo3encore.settings.manifestJsonPath}
 
         builds {
-
+            // Define your builds by using BUILD_NAME = PATH_TO_BUILD_FOLDER
         }
     }
 }
