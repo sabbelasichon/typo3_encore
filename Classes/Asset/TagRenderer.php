@@ -22,18 +22,25 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 final class TagRenderer implements TagRendererInterface
 {
     /**
-     * @var PageRenderer
-     */
-    private $pageRenderer;
-
-    /**
      * @var EntrypointLookupCollectionInterface
      */
     private $entrypointLookupCollection;
 
+    /**
+     * @var array
+     */
+    private $defaultAttributes = [];
+
+    /**
+     * @var array
+     */
+    private $renderedFiles = [];
+
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection)
     {
         $this->entrypointLookupCollection = $entrypointLookupCollection;
+
+        $this->reset();
     }
 
     /**
@@ -74,6 +81,7 @@ final class TagRenderer implements TagRendererInterface
             } else {
                 $pageRenderer->addJsFile(...$attributes);
             }
+            $this->renderedFiles['scripts'][] = $file;
         }
     }
 
@@ -108,11 +116,35 @@ final class TagRenderer implements TagRendererInterface
             $attributes = array_values(array_replace($attributes, $parameters));
 
             $pageRenderer->addCssFile(...$attributes);
+            $this->renderedFiles['styles'][] = $file;
         }
     }
 
     private function getEntrypointLookup(string $buildName): EntrypointLookupInterface
     {
         return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
+    }
+
+    public function getRenderedScripts(): array
+    {
+        return $this->renderedFiles['scripts'];
+    }
+
+    public function getRenderedStyles(): array
+    {
+        return $this->renderedFiles['styles'];
+    }
+
+    public function getDefaultAttributes(): array
+    {
+        return $this->defaultAttributes;
+    }
+
+    public function reset()
+    {
+        $this->renderedFiles = [
+            'scripts' => [],
+            'styles' => [],
+        ];
     }
 }
