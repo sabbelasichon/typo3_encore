@@ -46,7 +46,7 @@ class TagRendererTest extends UnitTestCase
     {
         $this->pageRenderer = $this->getMockBuilder(PageRenderer::class)->getMock();
         $this->entryLookupCollection = $this->getMockBuilder(EntrypointLookupCollectionInterface::class)->getMock();
-        $this->subject = new TagRenderer($this->pageRenderer, $this->entryLookupCollection);
+        $this->subject = new TagRenderer($this->entryLookupCollection);
     }
 
     /**
@@ -59,7 +59,7 @@ class TagRendererTest extends UnitTestCase
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $this->pageRenderer->expects($this->once())->method('addJsFile');
 
-        $this->subject->renderWebpackScriptTags('app', 'header');
+        $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer);
     }
 
     /**
@@ -72,7 +72,7 @@ class TagRendererTest extends UnitTestCase
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $this->pageRenderer->expects($this->once())->method('addJsFooterFile');
 
-        $this->subject->renderWebpackScriptTags('app');
+        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer);
     }
 
     /**
@@ -85,6 +85,6 @@ class TagRendererTest extends UnitTestCase
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $this->pageRenderer->expects($this->once())->method('addCssFile');
 
-        $this->subject->renderWebpackLinkTags('app');
+        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer);
     }
 }

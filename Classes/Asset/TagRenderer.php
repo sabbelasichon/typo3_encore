@@ -17,6 +17,7 @@ namespace Ssch\Typo3Encore\Asset;
  */
 
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class TagRenderer implements TagRendererInterface
 {
@@ -30,14 +31,20 @@ final class TagRenderer implements TagRendererInterface
      */
     private $entrypointLookupCollection;
 
-    public function __construct(PageRenderer $pageRenderer, EntrypointLookupCollectionInterface $entrypointLookupCollection)
+    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection)
     {
-        $this->pageRenderer = $pageRenderer;
         $this->entrypointLookupCollection = $entrypointLookupCollection;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default')
+    /**
+     * @param string $entryName
+     * @param string $position
+     * @param string $buildName
+     * @param PageRenderer|null|object $pageRenderer
+     */
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null)
     {
+        $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
 
         $integrityHashes = ($entryPointLookup instanceof IntegrityDataProviderInterface) ? $entryPointLookup->getIntegrityData() : [];
@@ -57,15 +64,22 @@ final class TagRenderer implements TagRendererInterface
             ];
 
             if ($position === 'footer') {
-                $this->pageRenderer->addJsFooterFile(...$attributes);
+                $pageRenderer->addJsFooterFile(...$attributes);
             } else {
-                $this->pageRenderer->addJsFile(...$attributes);
+                $pageRenderer->addJsFile(...$attributes);
             }
         }
     }
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default')
+    /**
+     * @param string $entryName
+     * @param string $media
+     * @param string $buildName
+     * @param PageRenderer|null|object $pageRenderer
+     */
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null)
     {
+        $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
         $files = $entryPointLookup->getCssFiles($entryName);
 
@@ -80,7 +94,7 @@ final class TagRenderer implements TagRendererInterface
                 '',
                 false,
             ];
-            $this->pageRenderer->addCssFile(...$attributes);
+            $pageRenderer->addCssFile(...$attributes);
         }
     }
 
