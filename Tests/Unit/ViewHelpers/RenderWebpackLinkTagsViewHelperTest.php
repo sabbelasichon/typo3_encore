@@ -18,6 +18,8 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper
@@ -46,8 +48,8 @@ class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
      */
     public function render()
     {
-        $this->viewHelper->setArguments(['entryName' => 'app', 'media' => 'all', 'buildName' => '_default']);
-        $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', '_default');
+        $this->viewHelper->setArguments(['entryName' => 'app', 'media' => 'all', 'buildName' => '_default', 'parameters' => []]);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', '_default', null, []);
         $this->viewHelper->render();
     }
 }

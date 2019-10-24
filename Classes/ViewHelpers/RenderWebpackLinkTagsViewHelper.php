@@ -37,10 +37,11 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
         $this->registerArgument('entryName', 'string', 'The entry name', true);
         $this->registerArgument('media', 'string', 'Media type', false, 'all');
         $this->registerArgument('buildName', 'string', 'The build name', false, '_default');
+        $this->registerArgument('parameters', 'array', 'Additional parameters for the PageRenderer', false, []);
     }
 
     public function render()
     {
-        $this->tagRenderer->renderWebpackLinkTags($this->arguments['entryName'], $this->arguments['media'], $this->arguments['buildName']);
+        $this->tagRenderer->renderWebpackLinkTags($this->arguments['entryName'], $this->arguments['media'], $this->arguments['buildName'], null, $this->arguments['parameters']);
     }
 }
