@@ -22,9 +22,7 @@ use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointNotFoundException;
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
-use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
 /**
@@ -56,7 +54,7 @@ class EntrypointLookupTest extends UnitTestCase
     private $cacheKey;
 
     /**
-     * @var MockObject|FrontendInterface
+     * @var FrontendInterface|MockObject
      */
     private $cache;
 
@@ -67,7 +65,7 @@ class EntrypointLookupTest extends UnitTestCase
         $this->cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)->getMock();
         $this->cacheFactory->method('createInstance')->willReturn($this->cache);
-        $this->subject = new EntrypointLookup(__DIR__.'/../Fixtures/entrypoints.json', self::CACHE_KEY_PREFIX, $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
+        $this->subject = new EntrypointLookup(__DIR__ . '/../Fixtures/entrypoints.json', self::CACHE_KEY_PREFIX, $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
         $this->cacheKey = sprintf('%s-%s', self::CACHE_KEY_PREFIX, CacheFactory::CACHE_KEY);
     }
 

@@ -17,7 +17,6 @@ namespace Ssch\Typo3Encore\Tests\Unit\Asset;
 
 use PHPUnit\Framework\TestCase;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollection;
-use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\UndefinedBuildException;
 use Ssch\Typo3Encore\Integration\EntryLookupFactoryInterface;

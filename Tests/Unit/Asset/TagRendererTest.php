@@ -70,9 +70,9 @@ class TagRendererTest extends UnitTestCase
         $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
         $entrypointLookup->method('getJavaScriptFiles')->with('app')->willReturn(['file.js']);
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addJsFooterFile');
+        $this->pageRenderer->expects($this->once())->method('addJsFooterFile')->with('file.js', 'text/javascript', true, false, '', false, '|', false, '', false, '');
 
-        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer);
+        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer, ['compress' => true, 'excludeFromConcatenation' => false]);
     }
 
     /**
@@ -83,8 +83,8 @@ class TagRendererTest extends UnitTestCase
         $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
         $entrypointLookup->method('getCssFiles')->with('app')->willReturn(['file.css']);
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addCssFile');
+        $this->pageRenderer->expects($this->once())->method('addCssFile')->with('file.css', 'stylesheet', 'all', '', true, true, '', true, '|', false);
 
-        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer);
+        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer, ['forceOnTop' => true, 'compress' => true]);
     }
 }

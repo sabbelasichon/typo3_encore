@@ -40,9 +40,10 @@ final class TagRenderer implements TagRendererInterface
      * @param string $entryName
      * @param string $position
      * @param string $buildName
-     * @param PageRenderer|null|object $pageRenderer
+     * @param object|PageRenderer|null $pageRenderer
+     * @param array $parameters
      */
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null)
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [])
     {
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -50,18 +51,23 @@ final class TagRenderer implements TagRendererInterface
         $integrityHashes = ($entryPointLookup instanceof IntegrityDataProviderInterface) ? $entryPointLookup->getIntegrityData() : [];
         $files = $entryPointLookup->getJavaScriptFiles($entryName);
 
+        unset($parameters['file']);
         foreach ($files as $file) {
             $attributes = [
-                $file,
-                'text/javascript',
-                false,
-                false,
-                '',
-                true,
-                '|',
-                false,
-                $integrityHashes[$file] ?? '',
+                'file' => $file,
+                'type' => 'text/javascript',
+                'compress' => false,
+                'forceOnTop' => false,
+                'allWrap' => '',
+                'excludeFromConcatenation' => true,
+                'splitChar' => '|',
+                'async' => false,
+                'integrity' => $integrityHashes[$file] ?? '',
+                'defer' => false,
+                'crossorigin' => ''
             ];
+
+            $attributes = array_values(array_replace($attributes, $parameters));
 
             if ($position === 'footer') {
                 $pageRenderer->addJsFooterFile(...$attributes);
@@ -75,25 +81,32 @@ final class TagRenderer implements TagRendererInterface
      * @param string $entryName
      * @param string $media
      * @param string $buildName
-     * @param PageRenderer|null|object $pageRenderer
+     * @param object|PageRenderer|null $pageRenderer
+     * @param array $parameters
      */
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null)
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [])
     {
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
         $files = $entryPointLookup->getCssFiles($entryName);
 
+        unset($parameters['file']);
         foreach ($files as $file) {
             $attributes = [
-                $file,
-                'stylesheet',
-                $media,
-                '',
-                false,
-                false,
-                '',
-                false,
+                'file' => $file,
+                'rel' => 'stylesheet',
+                'media' => $media,
+                'title' => '',
+                'compress' => false,
+                'forceOnTop' => false,
+                'allWrap' => '',
+                'excludeFromConcatenation' => true,
+                'splitChar' => '|',
+                'inline' => false
             ];
+
+            $attributes = array_values(array_replace($attributes, $parameters));
+
             $pageRenderer->addCssFile(...$attributes);
         }
     }
