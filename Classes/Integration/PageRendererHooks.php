@@ -16,9 +16,7 @@ namespace Ssch\Typo3Encore\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
-use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
-use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
+use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
@@ -29,22 +27,22 @@ final class PageRendererHooks
     const ENCORE_PREFIX = 'typo3_encore:';
 
     /**
-     * @var EntrypointLookupCollectionInterface|object
+     * @var object|TagRendererInterface
      */
-    private $entrypointLookupCollection;
+    private $tagRenderer;
 
     /**
      * PageRendererHooks constructor.
      *
-     * @param EntrypointLookupCollectionInterface|object|null $entrypointLookupCollection
+     * @param object|TagRendererInterface|null $tagRenderer
      */
-    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
+    public function __construct(TagRendererInterface $tagRenderer = null)
     {
-        if (! $entrypointLookupCollection instanceof EntrypointLookupCollectionInterface) {
+        if (! $tagRenderer instanceof TagRendererInterface) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $entrypointLookupCollection = $objectManager->get(EntrypointLookupCollectionInterface::class);
+            $tagRenderer = $objectManager->get(TagRendererInterface::class);
         }
-        $this->entrypointLookupCollection = $entrypointLookupCollection;
+        $this->tagRenderer = $tagRenderer;
     }
 
     public function renderPreProcess(array $params, PageRenderer $pageRenderer)
@@ -54,18 +52,16 @@ final class PageRendererHooks
             if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $jsFile) {
                     if ($this->isEncoreEntryName($jsFile['file'])) {
-                        $entryPointLookup = $this->getEntrypointLookup($jsFile['file']);
+                        list($first, $second) = $this->createBuildAndEntryName($jsFile['file']);
 
-                        $integrityHashes = ($entryPointLookup instanceof IntegrityDataProviderInterface) ? $entryPointLookup->getIntegrityData() : [];
+                        $buildName = $second ? $first : '_default';
+                        $entryName = $second ?? $first;
 
-                        unset($params[$includeType][$key]);
+                        $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? 'footer' : '';
 
-                        $attributes = $jsFile;
-                        foreach ($entryPointLookup->getJavaScriptFiles($this->resolveEntryName($jsFile['file'])) as $file) {
-                            $attributes['file'] = $file;
-                            $attributes['integrity'] = $integrityHashes[$file] ?? null;
-                            $params[$includeType][$file] = $attributes;
-                        }
+                        unset($params[$includeType][$key], $jsFile['file'], $jsFile['section']);
+
+                        $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile);
                     }
                 }
             }
@@ -76,15 +72,14 @@ final class PageRendererHooks
             if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $cssFile) {
                     if ($this->isEncoreEntryName($cssFile['file'])) {
-                        $entryPointLookup = $this->getEntrypointLookup($cssFile['file']);
+                        list($first, $second) = $this->createBuildAndEntryName($cssFile['file']);
 
-                        unset($params['cssFiles'][$key]);
+                        $buildName = $second ? $first : '_default';
+                        $entryName = $second ?? $first;
 
-                        $attributes = $cssFile;
-                        foreach ($entryPointLookup->getCssFiles($this->resolveEntryName($cssFile['file'])) as $file) {
-                            $attributes['file'] = $file;
-                            $params['cssFiles'][$file] = $attributes;
-                        }
+                        unset($params[$includeType][$key], $cssFile['file']);
+
+                        $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
                     }
                 }
             }
@@ -109,30 +104,6 @@ final class PageRendererHooks
     private function removePrefix(string $file): string
     {
         return str_replace(self::ENCORE_PREFIX, '', $file);
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    private function resolveEntryName(string $file): string
-    {
-        list($buildName, $entryName) = $this->createBuildAndEntryName($file);
-        return $entryName ?? $buildName;
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return EntrypointLookupInterface
-     */
-    private function getEntrypointLookup(string $file): EntrypointLookupInterface
-    {
-        list($buildName, $entryName) = $this->createBuildAndEntryName($file);
-        $buildName = $entryName ? $buildName : '_default';
-
-        return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
     }
 
     /**

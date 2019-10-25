@@ -18,8 +18,6 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper

@@ -17,8 +17,7 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
-use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
+use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\Integration\PageRendererHooks;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
@@ -33,9 +32,9 @@ class PageRendererHooksTest extends UnitTestCase
     protected $subject;
 
     /**
-     * @var EntrypointLookupCollectionInterface|MockObject
+     * @var MockObject|TagRendererInterface
      */
-    protected $entryLookupCollection;
+    protected $tagRenderer;
 
     /**
      * @var MockObject|PageRenderer
@@ -44,9 +43,9 @@ class PageRendererHooksTest extends UnitTestCase
 
     protected function setUp()
     {
-        $this->entryLookupCollection = $this->getMockBuilder(EntrypointLookupCollectionInterface::class)->getMock();
+        $this->tagRenderer = $this->getMockBuilder(TagRendererInterface::class)->getMock();
         $this->pageRenderer = $this->getMockBuilder(PageRenderer::class)->getMock();
-        $this->subject = new PageRendererHooks($this->entryLookupCollection);
+        $this->subject = new PageRendererHooks($this->tagRenderer);
     }
 
     /**
@@ -58,6 +57,8 @@ class PageRendererHooksTest extends UnitTestCase
             'jsFiles' => [
                 [
                     'file' => 'typo3_encore:app',
+                    'forceOnTop' => true,
+                    'section' => 2
                 ],
             ],
             'cssFiles' => [
@@ -67,11 +68,8 @@ class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->expects($this->once())->method('getJavaScriptFiles')->with('app')->willReturn(['files']);
-        $entrypointLookup->expects($this->once())->method('getCssFiles')->with('app')->willReturn(['files']);
-
-        $this->entryLookupCollection->expects($this->any())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'footer', '_default', $this->pageRenderer, ['forceOnTop' => true]);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', '_default', $this->pageRenderer);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
@@ -93,11 +91,8 @@ class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->expects($this->once())->method('getJavaScriptFiles')->with('app')->willReturn(['files']);
-        $entrypointLookup->expects($this->once())->method('getCssFiles')->with('app')->willReturn(['files']);
-
-        $this->entryLookupCollection->expects($this->any())->method('getEntrypointLookup')->with('config')->willReturn($entrypointLookup);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', '', 'config', $this->pageRenderer);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', 'config', $this->pageRenderer);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 }
