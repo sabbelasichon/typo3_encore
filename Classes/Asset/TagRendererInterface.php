@@ -17,10 +17,17 @@ namespace Ssch\Typo3Encore\Asset;
  */
 
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\SingletonInterface;
 
-interface TagRendererInterface
+interface TagRendererInterface extends SingletonInterface
 {
     public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = []);
 
     public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = []);
+
+    public function getRenderedScripts(): array;
+
+    public function getRenderedStyles(): array;
+
+    public function getDefaultAttributes(): array;
 }
