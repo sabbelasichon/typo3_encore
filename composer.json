@@ -2,7 +2,7 @@
   "name": "ssch/typo3-encore",
   "type": "typo3-cms-extension",
   "description": "Use Webpack Encore in TYPO3 Context",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "homepage": "http://www.schreibersebastian.de",
   "keywords": [
     "encore",
@@ -27,7 +27,6 @@
     "phpstan/phpstan": "^0.9 || ^0.10"
   },
   "replace": {
-    "typo3_encore": "self.version",
     "typo3-ter/typo3-encore": "self.version"
   },
   "autoload": {
@@ -60,8 +59,9 @@
       "dev-master": "2.0.0-dev"
     },
     "typo3/cms": {
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web"
+      "extension-key": "typo3_encore",
+      "app-dir": ".Build",
+      "web-dir": ".Build/public"
     }
   }
 }
