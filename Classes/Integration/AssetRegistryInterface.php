@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ssch\Typo3Encore\Asset;
+namespace Ssch\Typo3Encore\Integration;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,12 +16,13 @@ namespace Ssch\Typo3Encore\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\SingletonInterface;
 
-interface TagRendererInterface extends SingletonInterface
+interface AssetRegistryInterface extends SingletonInterface
 {
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = []);
+    public function registerFile(string $file, string $type);
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = []);
+    public function getRegisteredFiles(): array;
+
+    public function getDefaultAttributes(): array;
 }

@@ -16,6 +16,7 @@ namespace Ssch\Typo3Encore\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -36,11 +37,15 @@ final class TagRenderer implements TagRendererInterface
      */
     private $renderedFiles = [];
 
-    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection)
+    /**
+     * @var AssetRegistryInterface
+     */
+    private $assetRegistry;
+
+    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection, AssetRegistryInterface $assetRegistry)
     {
         $this->entrypointLookupCollection = $entrypointLookupCollection;
-
-        $this->reset();
+        $this->assetRegistry = $assetRegistry;
     }
 
     /**
@@ -81,7 +86,7 @@ final class TagRenderer implements TagRendererInterface
             } else {
                 $pageRenderer->addJsFile(...$attributes);
             }
-            $this->renderedFiles['scripts'][] = GeneralUtility::createVersionNumberedFilename($file);
+            $this->assetRegistry->registerFile($file, 'script');
         }
     }
 
@@ -116,35 +121,12 @@ final class TagRenderer implements TagRendererInterface
             $attributes = array_values(array_replace($attributes, $parameters));
 
             $pageRenderer->addCssFile(...$attributes);
-            $this->renderedFiles['styles'][] = GeneralUtility::createVersionNumberedFilename($file);
+            $this->assetRegistry->registerFile($file, 'style');
         }
     }
 
     private function getEntrypointLookup(string $buildName): EntrypointLookupInterface
     {
         return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
-    }
-
-    public function getRenderedScripts(): array
-    {
-        return $this->renderedFiles['scripts'];
-    }
-
-    public function getRenderedStyles(): array
-    {
-        return $this->renderedFiles['styles'];
-    }
-
-    public function getDefaultAttributes(): array
-    {
-        return $this->defaultAttributes;
-    }
-
-    public function reset()
-    {
-        $this->renderedFiles = [
-            'scripts' => [],
-            'styles' => [],
-        ];
     }
 }

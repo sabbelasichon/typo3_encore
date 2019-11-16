@@ -22,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -39,26 +39,26 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     protected $controller;
 
     /**
-     * @var TagRendererInterface|null
+     * @var AssetRegistryInterface|null
      */
-    private $tagRenderer;
+    private $assetRegistry;
 
     /**
      * PreloadAssetsMiddleware constructor.
      *
      * @param TypoScriptFrontendController|null $controller
-     * @param object|TagRendererInterface|null $tagRenderer
+     * @param AssetRegistryInterface|null $assetRegistry
      */
-    public function __construct(TypoScriptFrontendController $controller = null, TagRendererInterface $tagRenderer = null)
+    public function __construct(TypoScriptFrontendController $controller = null, AssetRegistryInterface $assetRegistry = null)
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
 
-        if (!$tagRenderer instanceof TagRendererInterface) {
+        if (! $assetRegistry instanceof AssetRegistryInterface) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $tagRenderer = $objectManager->get(TagRendererInterface::class);
+            $assetRegistry = $objectManager->get(AssetRegistryInterface::class);
         }
 
-        $this->tagRenderer = $tagRenderer;
+        $this->assetRegistry = $assetRegistry;
     }
 
     /**
@@ -75,7 +75,7 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        if ($this->tagRenderer->getRenderedScripts() === [] && $this->tagRenderer->getRenderedStyles() === []) {
+        if ($this->assetRegistry->getRegisteredFiles() === []) {
             return $response;
         }
 
@@ -85,23 +85,17 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
 
         /** @var GenericLinkProvider $linkProvider */
         $linkProvider = $request->getAttribute('_links');
-        $defaultAttributes = $this->tagRenderer->getDefaultAttributes();
+        $defaultAttributes = $this->assetRegistry->getDefaultAttributes();
         $crossOrigin = $defaultAttributes['crossorigin'] ?? false;
 
-        foreach ($this->tagRenderer->getRenderedScripts() as $href) {
-            $link = (new Link('preload', PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', 'script');
-            if (false !== $crossOrigin) {
-                $link = $link->withAttribute('crossorigin', $crossOrigin);
+        foreach ($this->assetRegistry->getRegisteredFiles() as $type => $files) {
+            foreach ($files as $href) {
+                $link = (new Link('preload', PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', $type);
+                if (false !== $crossOrigin) {
+                    $link = $link->withAttribute('crossorigin', $crossOrigin);
+                }
+                $linkProvider = $linkProvider->withLink($link);
             }
-            $linkProvider = $linkProvider->withLink($link);
-        }
-
-        foreach ($this->tagRenderer->getRenderedStyles() as $href) {
-            $link = (new Link('preload', PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', 'style');
-            if (false !== $crossOrigin) {
-                $link = $link->withAttribute('crossorigin', $crossOrigin);
-            }
-            $linkProvider = $linkProvider->withLink($link);
         }
 
         $request = $request->withAttribute('_links', $linkProvider);
