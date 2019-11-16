@@ -37,6 +37,7 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
      * @var TypoScriptFrontendController
      */
     protected $controller;
+    
     /**
      * @var TagRendererInterface|null
      */
