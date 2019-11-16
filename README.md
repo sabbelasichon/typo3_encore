@@ -84,6 +84,23 @@ It is also possible to use the inclusion via the prefix typo3_encore in backend 
 </f:be.container>
 ``` 
 
+### HTTP/2 Preloading
+
+All css and javascript files managed by the extension will be added to the AssetRegistry class during rendering. 
+For these assets a Link HTTP header is created, which are the key to optimize the application performance when using HTTP/2 and preloading capabilities of modern web browsers.
+
+Technically this is done by a PSR-15 Middleware.    
+
+If you want to add additional files to the AssetRegistry you can use the PreloadViewHelper:
+
+```html
+{namespace e = Ssch\Typo3Encore\ViewHelpers}
+
+<e:preload attributes="{type: 'font/woff2'}" as="font" uri="{e:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
+```
+
+Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file. 
+So you can also leverage the versioning feature provided by Webpack.
 
 ## Additional 
 
