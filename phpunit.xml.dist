@@ -1,0 +1,18 @@
+<phpunit
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.1/phpunit.xsd"
+         bootstrap=".Build/vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php"
+         colors="true"
+         forceCoversAnnotation="true"
+         stopOnRisky="true">
+    <testsuites>
+        <testsuite name="small">
+            <directory>./Tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>./Classes</directory>
+        </whitelist>
+    </filter>
+</phpunit>
