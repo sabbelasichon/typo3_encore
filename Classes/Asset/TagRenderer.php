@@ -81,7 +81,7 @@ final class TagRenderer implements TagRendererInterface
             } else {
                 $pageRenderer->addJsFile(...$attributes);
             }
-            $this->renderedFiles['scripts'][] = $file;
+            $this->renderedFiles['scripts'][] = GeneralUtility::createVersionNumberedFilename($file);
         }
     }
 
@@ -116,7 +116,7 @@ final class TagRenderer implements TagRendererInterface
             $attributes = array_values(array_replace($attributes, $parameters));
 
             $pageRenderer->addCssFile(...$attributes);
-            $this->renderedFiles['styles'][] = $file;
+            $this->renderedFiles['styles'][] = GeneralUtility::createVersionNumberedFilename($file);
         }
     }
 
