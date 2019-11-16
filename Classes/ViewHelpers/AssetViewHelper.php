@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Ssch\Typo3Encore\Aspect;
+namespace Ssch\Typo3Encore\ViewHelpers;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,36 +16,28 @@ namespace Ssch\Typo3Encore\Aspect;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Ssch\Typo3Encore\Asset\JsonManifestVersionStrategy;
 use Ssch\Typo3Encore\Asset\VersionStrategyInterface;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-final class ResourceFactorySlot
+final class AssetViewHelper extends AbstractViewHelper
 {
     /**
      * @var VersionStrategyInterface
      */
     private $versionStrategy;
 
-    /**
-     * ResourceFactorySlot constructor.
-     *
-     * @param VersionStrategyInterface $versionStrategy
-     */
     public function __construct(VersionStrategyInterface $versionStrategy)
     {
         $this->versionStrategy = $versionStrategy;
     }
 
-    /**
-     * @param ResourceFactory $resourceFactory
-     * @param string|null $fileIdentifier
-     * @param string|null $slotName
-     *
-     * @return array
-     */
-    public function jsonManifestVersionStrategy(ResourceFactory $resourceFactory, string $fileIdentifier = null, string $slotName = null): array
+    public function initializeArguments()
     {
-        return [$resourceFactory, $this->versionStrategy->getVersion($fileIdentifier)];
+        $this->registerArgument('pathToFile', 'string', 'The path to the file', true);
+    }
+
+    public function render()
+    {
+        return $this->versionStrategy->applyVersion($this->arguments['pathToFile']);
     }
 }

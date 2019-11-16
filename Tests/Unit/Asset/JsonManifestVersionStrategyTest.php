@@ -21,7 +21,6 @@ use Ssch\Typo3Encore\Asset\JsonManifestVersionStrategy;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @covers \Ssch\Typo3Encore\Asset\JsonManifestVersionStrategy
@@ -52,6 +51,7 @@ class JsonManifestVersionStrategyTest extends UnitTestCase
      * @var string
      */
     private $manifestJsonFilePath;
+
     /**
      * @var string
      */
@@ -63,7 +63,13 @@ class JsonManifestVersionStrategyTest extends UnitTestCase
         $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->manifestJsonFile = 'manifest.json';
-        $this->manifestJsonFilePath = GeneralUtility::getFileAbsFileName($this->manifestJsonFile);
+        $this->manifestJsonFilePath = $this->manifestJsonFile;
+
+        // Return input as return value, does nothing actually
+        $this->filesystem->method('getFileAbsFileName')->willReturnCallback(function ($parameter) {
+            return $parameter;
+        });
+
         $this->settingsService->method('getByPath')->with('manifestJsonPath')->willReturn($this->manifestJsonFile);
         $this->subject = new JsonManifestVersionStrategy($this->settingsService, $this->filesystem, $this->jsonDecoder);
     }
