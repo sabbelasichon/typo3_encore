@@ -23,6 +23,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -39,25 +40,36 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     protected $controller;
 
     /**
-     * @var AssetRegistryInterface|null
+     * @var AssetRegistryInterface
      */
     private $assetRegistry;
+
+    /**
+     * @var SettingsServiceInterface
+     */
+    private $settingsService;
 
     /**
      * PreloadAssetsMiddleware constructor.
      *
      * @param TypoScriptFrontendController|null $controller
      * @param AssetRegistryInterface|null $assetRegistry
+     * @param SettingsServiceInterface|null $settingsService
      */
-    public function __construct(TypoScriptFrontendController $controller = null, AssetRegistryInterface $assetRegistry = null)
+    public function __construct(TypoScriptFrontendController $controller = null, AssetRegistryInterface $assetRegistry = null, SettingsServiceInterface $settingsService = null)
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
         if (! $assetRegistry instanceof AssetRegistryInterface) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             $assetRegistry = $objectManager->get(AssetRegistryInterface::class);
         }
 
+        if (! $settingsService instanceof SettingsServiceInterface) {
+            $settingsService = $objectManager->get(SettingsServiceInterface::class);
+        }
+
+        $this->settingsService = $settingsService;
         $this->assetRegistry = $assetRegistry;
     }
 
@@ -71,7 +83,7 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if ($response instanceof NullResponse && ! $this->controller->isOutputting()) {
+        if ((bool)$this->settingsService->getByPath('preload.enable') === false || ($response instanceof NullResponse && ! $this->controller->isOutputting())) {
             return $response;
         }
 
@@ -91,7 +103,7 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
         foreach ($this->assetRegistry->getRegisteredFiles() as $type => $files) {
             foreach ($files as $href => $attributes) {
                 $link = (new Link('preload', PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', $type);
-                if (false !== $crossOrigin) {
+                if (false !== $crossOrigin && '' !== (string)$crossOrigin) {
                     $link = $link->withAttribute('crossorigin', $crossOrigin);
                 }
 

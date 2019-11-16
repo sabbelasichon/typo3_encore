@@ -2,6 +2,11 @@ plugin.tx_typo3encore {
     settings {
         entrypointJsonPath = {$plugin.tx_typo3encore.settings.entrypointJsonPath}
         manifestJsonPath = {$plugin.tx_typo3encore.settings.manifestJsonPath}
+
+        preload {
+            enable = {$plugin.tx_typo3encore.settings.preload.enable}
+            crossorigin = {$plugin.tx_typo3encore.settings.preload.crossorigin}
+        }
     }
 }
 

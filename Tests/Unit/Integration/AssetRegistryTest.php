@@ -18,6 +18,7 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 use PHPUnit\Framework\TestCase;
 use Ssch\Typo3Encore\Integration\AssetRegistry;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 
 class AssetRegistryTest extends TestCase
 {
@@ -28,7 +29,9 @@ class AssetRegistryTest extends TestCase
 
     protected function setUp()
     {
-        $this->subject = new AssetRegistry();
+        $settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
+        $settingsService->method('getByPath')->with('preload.crossorigin')->willReturn('anonymus');
+        $this->subject = new AssetRegistry($settingsService);
     }
 
     /**
@@ -43,5 +46,7 @@ class AssetRegistryTest extends TestCase
         $registeredFiles = $this->subject->getRegisteredFiles();
         $this->assertCount(2, $registeredFiles['style']);
         $this->assertCount(1, $registeredFiles['script']);
+
+        $this->assertSame(['crossorigin' => 'anonymus'], $this->subject->getDefaultAttributes());
     }
 }

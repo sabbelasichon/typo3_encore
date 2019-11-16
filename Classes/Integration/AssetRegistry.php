@@ -30,6 +30,12 @@ final class AssetRegistry implements AssetRegistryInterface
      */
     private $defaultAttributes = [];
 
+    public function __construct(SettingsServiceInterface $settingsService)
+    {
+        $this->defaultAttributes['crossorigin'] = $settingsService->getByPath('preload.crossorigin');
+        $this->reset();
+    }
+
     public function registerFile(string $file, string $type, array $attributes = [])
     {
         if (!isset($this->registeredFiles[$type])) {
@@ -48,5 +54,10 @@ final class AssetRegistry implements AssetRegistryInterface
     public function getDefaultAttributes(): array
     {
         return $this->defaultAttributes;
+    }
+
+    private function reset()
+    {
+        $this->registeredFiles = [];
     }
 }
