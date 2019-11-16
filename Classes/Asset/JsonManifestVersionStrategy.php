@@ -16,10 +16,13 @@ namespace Ssch\Typo3Encore\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RuntimeException;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
 
 final class JsonManifestVersionStrategy implements VersionStrategyInterface
 {
@@ -37,6 +40,7 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
      * @var JsonDecoderInterface
      */
     private $jsonDecoder;
+
     /**
      * @var FilesystemInterface
      */
@@ -44,7 +48,7 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
 
     public function __construct(SettingsServiceInterface $settingsService, FilesystemInterface $filesystem, JsonDecoderInterface $jsonDecoder)
     {
-        $this->manifestPath = GeneralUtility::getFileAbsFileName($settingsService->getByPath('manifestJsonPath'));
+        $this->manifestPath = $filesystem->getFileAbsFileName($settingsService->getByPath('manifestJsonPath'));
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
     }
@@ -72,11 +76,19 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
     {
         if (null === $this->manifestData) {
             if (!$this->filesystem->exists($this->manifestPath)) {
-                throw new \RuntimeException(sprintf('Asset manifest file "%s" does not exist.', $this->manifestPath));
+                throw new RuntimeException(sprintf('Asset manifest file "%s" does not exist.', $this->manifestPath));
             }
 
             $this->manifestData = $this->jsonDecoder->decode($this->filesystem->get($this->manifestPath));
         }
+
+        // Resolve also path identifiers beginning with EXT:
+        $path = $this->filesystem->getFileAbsFileName($path);
+
+        if (StringUtility::beginsWith($path, Environment::getPublicPath())) {
+            $path = PathUtility::stripPathSitePrefix($path);
+        }
+
         return $this->manifestData[$path] ?? null;
     }
 }

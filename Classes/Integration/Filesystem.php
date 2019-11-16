@@ -16,6 +16,7 @@ namespace Ssch\Typo3Encore\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use UnexpectedValueException;
 
 final class Filesystem implements FilesystemInterface
@@ -34,5 +35,10 @@ final class Filesystem implements FilesystemInterface
     public function exists(string $pathToFile): bool
     {
         return file_exists($pathToFile);
+    }
+
+    public function getFileAbsFileName(string $pathToFile): string
+    {
+        return GeneralUtility::getFileAbsFileName($pathToFile);
     }
 }

@@ -3,8 +3,9 @@ plugin.tx_typo3encore {
         entrypointJsonPath = {$plugin.tx_typo3encore.settings.entrypointJsonPath}
         manifestJsonPath = {$plugin.tx_typo3encore.settings.manifestJsonPath}
 
-        builds {
-            // Define your builds by using BUILD_NAME = PATH_TO_BUILD_FOLDER
+        preload {
+            enable = {$plugin.tx_typo3encore.settings.preload.enable}
+            crossorigin = {$plugin.tx_typo3encore.settings.preload.crossorigin}
         }
     }
 }

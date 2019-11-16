@@ -20,6 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
+use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
 /**
@@ -42,11 +43,17 @@ class TagRendererTest extends UnitTestCase
      */
     protected $entryLookupCollection;
 
+    /**
+     * @var AssetRegistryInterface|MockObject
+     */
+    private $assetRegistry;
+
     protected function setUp()
     {
         $this->pageRenderer = $this->getMockBuilder(PageRenderer::class)->getMock();
         $this->entryLookupCollection = $this->getMockBuilder(EntrypointLookupCollectionInterface::class)->getMock();
-        $this->subject = new TagRenderer($this->entryLookupCollection);
+        $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
+        $this->subject = new TagRenderer($this->entryLookupCollection, $this->assetRegistry);
     }
 
     /**
@@ -60,7 +67,6 @@ class TagRendererTest extends UnitTestCase
         $this->pageRenderer->expects($this->once())->method('addJsFile');
 
         $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer);
-        $this->assertSame(['file.js'], $this->subject->getRenderedScripts());
     }
 
     /**
@@ -74,7 +80,6 @@ class TagRendererTest extends UnitTestCase
         $this->pageRenderer->expects($this->once())->method('addJsFooterFile')->with('file.js', 'text/javascript', true, false, '', false, '|', false, '', false, '');
 
         $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer, ['compress' => true, 'excludeFromConcatenation' => false]);
-        $this->assertSame(['file.js'], $this->subject->getRenderedScripts());
     }
 
     /**
@@ -88,6 +93,5 @@ class TagRendererTest extends UnitTestCase
         $this->pageRenderer->expects($this->once())->method('addCssFile')->with('file.css', 'stylesheet', 'all', '', true, true, '', true, '|', false);
 
         $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer, ['forceOnTop' => true, 'compress' => true]);
-        $this->assertSame(['file.css'], $this->subject->getRenderedStyles());
     }
 }
