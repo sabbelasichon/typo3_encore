@@ -30,13 +30,14 @@ final class AssetRegistry implements AssetRegistryInterface
      */
     private $defaultAttributes = [];
 
-    public function registerFile(string $file, string $type)
+    public function registerFile(string $file, string $type, array $attributes = [])
     {
         if (!isset($this->registeredFiles[$type])) {
             $this->registeredFiles[$type] = [];
         }
 
-        $this->registeredFiles[$type][] = GeneralUtility::createVersionNumberedFilename($file);
+        $file = GeneralUtility::createVersionNumberedFilename($file);
+        $this->registeredFiles[$type][$file] = $attributes;
     }
 
     public function getRegisteredFiles(): array

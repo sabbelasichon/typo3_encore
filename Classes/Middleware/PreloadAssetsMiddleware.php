@@ -89,11 +89,16 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
         $crossOrigin = $defaultAttributes['crossorigin'] ?? false;
 
         foreach ($this->assetRegistry->getRegisteredFiles() as $type => $files) {
-            foreach ($files as $href) {
+            foreach ($files as $href => $attributes) {
                 $link = (new Link('preload', PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', $type);
                 if (false !== $crossOrigin) {
                     $link = $link->withAttribute('crossorigin', $crossOrigin);
                 }
+
+                foreach ($attributes as $key => $value) {
+                    $link = $link->withAttribute($key, $value);
+                }
+
                 $linkProvider = $linkProvider->withLink($link);
             }
         }
