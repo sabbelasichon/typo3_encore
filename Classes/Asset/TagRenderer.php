@@ -54,8 +54,9 @@ final class TagRenderer implements TagRendererInterface
      * @param string $buildName
      * @param object|PageRenderer|null $pageRenderer
      * @param array $parameters
+     * @param bool $registerFile
      */
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [])
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true)
     {
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -86,7 +87,10 @@ final class TagRenderer implements TagRendererInterface
             } else {
                 $pageRenderer->addJsFile(...$attributes);
             }
-            $this->assetRegistry->registerFile($file, 'script');
+
+            if ($registerFile === true) {
+                $this->assetRegistry->registerFile($file, 'script');
+            }
         }
     }
 
@@ -96,8 +100,9 @@ final class TagRenderer implements TagRendererInterface
      * @param string $buildName
      * @param object|PageRenderer|null $pageRenderer
      * @param array $parameters
+     * @param bool $registerFile
      */
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [])
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true)
     {
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -121,7 +126,10 @@ final class TagRenderer implements TagRendererInterface
             $attributes = array_values(array_replace($attributes, $parameters));
 
             $pageRenderer->addCssFile(...$attributes);
-            $this->assetRegistry->registerFile($file, 'style');
+
+            if ($registerFile === true) {
+                $this->assetRegistry->registerFile($file, 'style');
+            }
         }
     }
 

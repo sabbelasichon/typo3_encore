@@ -83,7 +83,11 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if ((bool)$this->settingsService->getByPath('preload.enable') === false || ($response instanceof NullResponse && ! $this->controller->isOutputting())) {
+        if ((bool)$this->settingsService->getByPath('preload.enable') === false) {
+            return $response;
+        }
+
+        if (($response instanceof NullResponse && ! $this->controller->isOutputting())) {
             return $response;
         }
 

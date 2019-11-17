@@ -46,7 +46,7 @@ class RenderWebpackScriptTagsViewHelperTest extends ViewHelperBaseTestcase
      */
     public function render()
     {
-        $this->viewHelper->setArguments(['entryName' => 'app', 'position' => 'footer', 'buildName' => '_default', 'parameters' => []]);
+        $this->viewHelper->setArguments(['entryName' => 'app', 'position' => 'footer', 'buildName' => '_default', 'parameters' => [], 'registerFile' => true]);
         $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'footer', '_default');
         $this->viewHelper->render();
     }

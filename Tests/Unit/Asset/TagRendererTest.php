@@ -66,7 +66,22 @@ class TagRendererTest extends UnitTestCase
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $this->pageRenderer->expects($this->once())->method('addJsFile');
 
+        $this->assetRegistry->expects($this->once())->method('registerFile');
         $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer);
+    }
+
+    /**
+     * @test
+     */
+    public function renderWebpackScriptTagsWithDefaultBuildWithoutAssetRegistration()
+    {
+        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
+        $entrypointLookup->method('getJavaScriptFiles')->with('app')->willReturn(['file.js']);
+        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
+        $this->pageRenderer->expects($this->once())->method('addJsFile');
+
+        $this->assetRegistry->expects($this->never())->method('registerFile');
+        $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer, [], false);
     }
 
     /**
@@ -79,6 +94,7 @@ class TagRendererTest extends UnitTestCase
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $this->pageRenderer->expects($this->once())->method('addJsFooterFile')->with('file.js', 'text/javascript', true, false, '', false, '|', false, '', false, '');
 
+        $this->assetRegistry->expects($this->once())->method('registerFile');
         $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer, ['compress' => true, 'excludeFromConcatenation' => false]);
     }
 
@@ -92,6 +108,21 @@ class TagRendererTest extends UnitTestCase
         $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $this->pageRenderer->expects($this->once())->method('addCssFile')->with('file.css', 'stylesheet', 'all', '', true, true, '', true, '|', false);
 
+        $this->assetRegistry->expects($this->once())->method('registerFile');
         $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer, ['forceOnTop' => true, 'compress' => true]);
+    }
+
+    /**
+     * @test
+     */
+    public function renderWebpackLinkTagsWithDefaultBuildWithoutAssetRegistration()
+    {
+        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
+        $entrypointLookup->method('getCssFiles')->with('app')->willReturn(['file.css']);
+        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
+        $this->pageRenderer->expects($this->once())->method('addCssFile')->with('file.css', 'stylesheet', 'all', '', true, true, '', true, '|', false);
+
+        $this->assetRegistry->expects($this->never())->method('registerFile');
+        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer, ['forceOnTop' => true, 'compress' => true], false);
     }
 }
