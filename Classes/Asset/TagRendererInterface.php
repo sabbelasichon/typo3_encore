@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\SingletonInterface;
 
 interface TagRendererInterface extends SingletonInterface
 {
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = []);
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true);
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = []);
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true);
 }
