@@ -16,8 +16,8 @@ namespace Ssch\Typo3Encore\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
-use InvalidArgumentException;
+use RuntimeException;
 
-final class EntrypointNotFoundException extends InvalidArgumentException
+final class EntrypointNotFoundException extends RuntimeException
 {
 }

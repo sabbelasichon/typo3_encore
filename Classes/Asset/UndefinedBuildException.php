@@ -16,8 +16,8 @@ namespace Ssch\Typo3Encore\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Exception;
+use RuntimeException;
 
-final class UndefinedBuildException extends Exception
+final class UndefinedBuildException extends RuntimeException
 {
 }
