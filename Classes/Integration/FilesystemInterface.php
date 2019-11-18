@@ -23,4 +23,6 @@ interface FilesystemInterface
     public function exists(string $pathToFile): bool;
 
     public function getFileAbsFileName(string $pathToFile): string;
+
+    public function getRelativeFilePath(string $pathToFile): string;
 }

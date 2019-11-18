@@ -20,9 +20,6 @@ use RuntimeException;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 final class JsonManifestVersionStrategy implements VersionStrategyInterface
 {
@@ -82,12 +79,7 @@ final class JsonManifestVersionStrategy implements VersionStrategyInterface
             $this->manifestData = $this->jsonDecoder->decode($this->filesystem->get($this->manifestPath));
         }
 
-        // Resolve also path identifiers beginning with EXT:
-        $path = $this->filesystem->getFileAbsFileName($path);
-
-        if (StringUtility::beginsWith($path, Environment::getPublicPath())) {
-            $path = PathUtility::stripPathSitePrefix($path);
-        }
+        $path = $this->filesystem->getRelativeFilePath($path);
 
         return $this->manifestData[$path] ?? null;
     }

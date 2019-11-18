@@ -8,4 +8,7 @@ plugin.tx_typo3encore {
             crossorigin =
         }
     }
+    builds {
+
+    }
 }

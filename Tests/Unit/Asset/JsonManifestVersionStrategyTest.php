@@ -66,9 +66,11 @@ class JsonManifestVersionStrategyTest extends UnitTestCase
         $this->manifestJsonFilePath = $this->manifestJsonFile;
 
         // Return input as return value, does nothing actually
-        $this->filesystem->method('getFileAbsFileName')->willReturnCallback(function ($parameter) {
+        $pathToFileCallback = static function ($parameter) {
             return $parameter;
-        });
+        };
+        $this->filesystem->method('getRelativeFilePath')->willReturnCallback($pathToFileCallback);
+        $this->filesystem->method('getFileAbsFileName')->willReturnCallback($pathToFileCallback);
 
         $this->settingsService->method('getByPath')->with('manifestJsonPath')->willReturn($this->manifestJsonFile);
         $this->subject = new JsonManifestVersionStrategy($this->settingsService, $this->filesystem, $this->jsonDecoder);
