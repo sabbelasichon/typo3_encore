@@ -20,6 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use Ssch\Typo3Encore\ViewHelpers\SvgViewHelper;
 use TYPO3\CMS\Core\Resource\FileInterface;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
@@ -54,7 +55,7 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
     {
         parent::setUp();
         $this->viewHelper = $this->getAccessibleMock(SvgViewHelper::class, ['renderChildren']);
-        $this->imageService = $this->getMockBuilder(ImageService::class)->getMock();
+        $this->imageService = $this->getMockBuilder(ImageService::class)->disableOriginalConstructor()->getMock();
         $this->idGenerator = $this->getMockBuilder(IdGeneratorInterface::class)->getMock();
         $this->idGenerator->method('generate')->willReturn(self::ID);
         $this->viewHelper->injectImageService($this->imageService);
