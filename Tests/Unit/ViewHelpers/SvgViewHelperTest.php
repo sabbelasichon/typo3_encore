@@ -73,7 +73,7 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
      */
     public function render(array $arguments, string $expected)
     {
-        $arguments = array_merge($arguments, ['src' => 'somefile.jpg', 'name' => 'name']);
+        $arguments = array_merge($arguments, ['src' => 'somefile.svg']);
         $image = $this->getMockBuilder(FileInterface::class)->getMock();
         $this->viewHelper->setArguments($arguments);
         $this->imageService->expects($this->once())->method('getImage')->with($arguments['src'])->willReturn($image);
@@ -84,11 +84,19 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
     {
         return [
             [
-                [],
-                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false"><use xlink:href="#name" /></svg>'
+                ['name' => 'name'],
+                sprintf('<svg xmlns="http://www.w3.org/2000/svg" focusable="false"><use xlink:href="#name" /></svg>')
             ],
             [
-                ['title' => 'Title', 'description' => 'Description'],
+                ['name' => 1420],
+                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false"><use xlink:href="#1420" /></svg>'
+            ],
+            [
+                ['name' => 3333, 'title' => 1222, 'description' => 1420],
+                sprintf('<svg aria-labelledby="title-%1$s description-%1$s" xmlns="http://www.w3.org/2000/svg" focusable="false"><title id="title-%1$s">1222</title><desc id="description-%1$s">1420</desc><use xlink:href="#3333" /></svg>', self::ID)
+            ],
+            [
+                ['name' => 'name', 'title' => 'Title', 'description' => 'Description'],
                 sprintf('<svg aria-labelledby="title-%1$s description-%1$s" xmlns="http://www.w3.org/2000/svg" focusable="false"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><use xlink:href="#name" /></svg>', self::ID)
             ],
         ];
