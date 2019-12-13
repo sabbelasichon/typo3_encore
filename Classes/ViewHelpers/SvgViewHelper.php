@@ -84,20 +84,32 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
         if ($this->arguments['title']) {
             $titleId = sprintf('title-%s', $uniqueId);
             $ariaLabelledBy[] = $titleId;
-            $content[] = sprintf('<title id="%s">%s</title>', $titleId, htmlspecialchars($this->arguments['title']));
+            $content[] = sprintf(
+                '<title id="%s">%s</title>',
+                $titleId,
+                htmlspecialchars((string)$this->arguments['title'], ENT_QUOTES | ENT_HTML5)
+            );
         }
 
         if ($this->arguments['description']) {
             $descriptionId = sprintf('description-%s', $uniqueId);
             $ariaLabelledBy[] = $descriptionId;
-            $content[] = sprintf('<desc id="%s">%s</desc>', $descriptionId, htmlspecialchars($this->arguments['description']));
+            $content[] = sprintf(
+                '<desc id="%s">%s</desc>',
+                $descriptionId,
+                htmlspecialchars((string)$this->arguments['description'], ENT_QUOTES | ENT_HTML5)
+            );
         }
 
         if (! empty($ariaLabelledBy)) {
             $this->tag->addAttribute('aria-labelledby', implode(' ', $ariaLabelledBy));
         }
 
-        $content[] = sprintf('<use xlink:href="%s#%s" />', $imageUri, htmlspecialchars($this->arguments['name']));
+        $content[] = sprintf(
+            '<use xlink:href="%s#%s" />',
+            $imageUri,
+            htmlspecialchars((string)$this->arguments['name'], ENT_QUOTES | ENT_HTML5)
+        );
 
         $this->tag->setContent(implode('', $content));
 
