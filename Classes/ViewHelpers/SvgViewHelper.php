@@ -70,8 +70,8 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
 
     public function render(): string
     {
-        $image = $this->imageService->getImage($this->arguments['src'], null, null);
-        $imageUri = $this->imageService->getImageUri($image, $this->arguments['absolute']);
+        $image = $this->imageService->getImage($this->arguments['src'], null, false);
+        $imageUri = $this->imageService->getImageUri($image, (bool)$this->arguments['absolute']);
 
         $content = [];
         $uniqueId = 'unique';
