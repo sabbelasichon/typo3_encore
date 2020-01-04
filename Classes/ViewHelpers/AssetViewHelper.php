@@ -17,18 +17,20 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  */
 
 use Ssch\Typo3Encore\Asset\VersionStrategyInterface;
+use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
+use Symfony\Component\Asset\PackageInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class AssetViewHelper extends AbstractViewHelper
 {
     /**
-     * @var VersionStrategyInterface
+     * @var PackageInterface
      */
-    private $versionStrategy;
+    private $package;
 
-    public function __construct(VersionStrategyInterface $versionStrategy)
+    public function __construct(PackageFactoryInterface $packageFactory)
     {
-        $this->versionStrategy = $versionStrategy;
+        $this->package = $packageFactory->getPackage();
     }
 
     public function initializeArguments()
@@ -38,6 +40,6 @@ final class AssetViewHelper extends AbstractViewHelper
 
     public function render()
     {
-        return $this->versionStrategy->applyVersion($this->arguments['pathToFile']);
+        return $this->package->getUrl($this->arguments['pathToFile']);
     }
 }

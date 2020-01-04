@@ -17,7 +17,9 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Asset\VersionStrategyInterface;
+use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
 use Ssch\Typo3Encore\ViewHelpers\AssetViewHelper;
+use Symfony\Component\Asset\PackageInterface;
 
 class AssetViewHelperTest extends ViewHelperBaseTestcase
 {
@@ -26,16 +28,16 @@ class AssetViewHelperTest extends ViewHelperBaseTestcase
      */
     protected $viewHelper;
 
-    /**
-     * @var VersionStrategyInterface
-     */
-    protected $versionStrategy;
+    protected $package;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->versionStrategy = $this->getMockBuilder(VersionStrategyInterface::class)->getMock();
-        $this->viewHelper = new AssetViewHelper($this->versionStrategy);
+        $this->package = $this->getMockBuilder(PackageInterface::class)->getMock();
+
+        $packageFactory = $this->getMockBuilder(PackageFactoryInterface::class)->getMock();
+        $packageFactory->method('getPackage')->willReturn($this->package);
+        $this->viewHelper = new AssetViewHelper($packageFactory);
     }
 
     /**
@@ -46,7 +48,7 @@ class AssetViewHelperTest extends ViewHelperBaseTestcase
         $pathToFile = 'EXT:typo3_encore/Tests/Build/UnitTests.xml';
         $this->viewHelper->setArguments(['pathToFile' => $pathToFile]);
 
-        $this->versionStrategy->expects($this->once())->method('applyVersion')->willReturn($pathToFile);
+        $this->package->expects($this->once())->method('getUrl')->willReturn($pathToFile);
         $this->assertEquals($pathToFile, $this->viewHelper->render());
     }
 }

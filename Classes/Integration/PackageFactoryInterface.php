@@ -1,7 +1,8 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace Ssch\Typo3Encore\Asset;
+
+namespace Ssch\Typo3Encore\Integration;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,8 +17,9 @@ namespace Ssch\Typo3Encore\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RuntimeException;
+use Symfony\Component\Asset\PackageInterface;
 
-final class ManifestNotFoundException extends RuntimeException
+interface PackageFactoryInterface
 {
+    public function getPackage(): PackageInterface;
 }
