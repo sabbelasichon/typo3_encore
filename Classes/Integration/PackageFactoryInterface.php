@@ -21,5 +21,5 @@ use Symfony\Component\Asset\PackageInterface;
 
 interface PackageFactoryInterface
 {
-    public function getPackage(): PackageInterface;
+    public function getPackage(string $package): PackageInterface;
 }

@@ -40,8 +40,9 @@ final class PackageFactory implements PackageFactoryInterface
         $this->filesystem = $filesystem;
     }
 
-    public function getPackage(): PackageInterface
+    public function getPackage(string $package): PackageInterface
     {
-        return new Package(new JsonManifestVersionStrategy($this->filesystem->getFileAbsFileName($this->settingsService->getByPath('manifestJsonPath'))));
+        $manifestJsonPath = $package === '_default' ? 'manifestJsonPath' : sprintf('packages.%s.manifestJsonPath', $package);
+        return new Package(new JsonManifestVersionStrategy($this->filesystem->getFileAbsFileName($this->settingsService->getByPath($manifestJsonPath))));
     }
 }

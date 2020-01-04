@@ -24,22 +24,23 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 final class AssetViewHelper extends AbstractViewHelper
 {
     /**
-     * @var PackageInterface
+     * @var PackageFactoryInterface
      */
-    private $package;
+    private $packageFactory;
 
     public function __construct(PackageFactoryInterface $packageFactory)
     {
-        $this->package = $packageFactory->getPackage();
+        $this->packageFactory = $packageFactory;
     }
 
     public function initializeArguments()
     {
         $this->registerArgument('pathToFile', 'string', 'The path to the file', true);
+        $this->registerArgument('package', 'string', 'The package configuration to use', false, '_default');
     }
 
     public function render()
     {
-        return $this->package->getUrl($this->arguments['pathToFile']);
+        return $this->packageFactory->getPackage($this->arguments['package'])->getUrl($this->arguments['pathToFile']);
     }
 }
