@@ -26,7 +26,6 @@
     "phpstan/phpstan": "^0.9 || ^0.10"
   },
   "replace": {
-    "typo3_encore": "self.version",
     "typo3-ter/typo3-encore": "self.version"
   },
   "autoload": {
