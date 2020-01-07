@@ -16,7 +16,6 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  */
 
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
-use Ssch\Typo3Encore\Asset\VersionStrategyInterface;
 use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
 use Ssch\Typo3Encore\ViewHelpers\AssetViewHelper;
 use Symfony\Component\Asset\PackageInterface;

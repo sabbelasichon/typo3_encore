@@ -20,7 +20,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use Ssch\Typo3Encore\ViewHelpers\SvgViewHelper;
 use TYPO3\CMS\Core\Resource\FileInterface;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
