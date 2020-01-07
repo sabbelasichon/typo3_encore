@@ -29,25 +29,27 @@ notifications:
 before_install:
   - composer self-update
   - composer --version
+  - phpenv config-rm xdebug.ini || return 0
 
 before_script:
-  - |
-    # Remove Xdebug for a huge performance increase:
-    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
-      phpenv config-rm xdebug.ini
-    else
-      echo "xdebug.ini does not exist"
-    fi
   - composer require typo3/minimal=$TYPO3_VERSION
   # Restore composer.json
   - git checkout composer.json
   - export TYPO3_PATH_WEB=$PWD/.Build/Web
+  - mv phpunit.xml.dist phpunit.xml
 
 script:
   - >
     echo;
     echo "Running unit tests";
-    .Build/bin/phpunit --colors -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/
+    .Build/bin/phpunit --colors -c phpunit.xml
+
+  - >
+    echo;
+    echo "Test coverage";
+    phpdbg -qrr -d memory_limit=-1 .Build/bin/phpunit -c phpunit.xml --coverage-clover coverage.xml;
+    wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar;
+    php php-coveralls.phar --verbose
 
   - >
     echo;

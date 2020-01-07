@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/sabbelasichon/typo3_encore.png)](https://travis-ci.org/sabbelasichon/typo3_encore)
+[![Build Status](https://img.shields.io/travis/sabbelasichon/typo3_encore/master.svg?style=flat-square)](https://travis-ci.org/sabbelasichon/typo3_encore)
+[![Coverage Status](https://img.shields.io/coveralls/sabbelasichon/typo3_encore/master.svg?style=flat-square)](https://coveralls.io/github/sabbelasichon/typo3_encore?branch=master)
+[![Downloads](https://img.shields.io/packagist/dt/ssch/typo3-encore.svg?style=flat-square)](https://packagist.org/packages/ssch/typo3-encore)
 
 TYPO3 integration with Webpack Encore!
 ======================================
@@ -18,7 +20,7 @@ composer require ssch/typo3-encore
 You should really be able to use all of the things described in the documentation.
 Like Sass-Loader, Vue-Loader etc. These things are completely independent from this little extension.
 
-You can also use the enableVersioning() of files (mostly used only in production context).  
+You can also use the enableVersioning() of files (mostly used only in production context).
 You can also use the enableIntegrityHashes(). This is taking into account if the files are included.
 
 2. Define your entry path(s) and the output path (usually your Resource/Public/ folder in your Package extension) in the webpack.config.js
@@ -32,7 +34,7 @@ plugin.tx_typo3encore {
     }
 }
 ```
- 
+
 4. In your Page templates/layout you can then use the ViewHelpers to integrate the CSS- and JS-Files in your website
 ```html
 {namespace e = Ssch\Typo3Encore\ViewHelpers}
@@ -55,7 +57,7 @@ Alternatively you can also include the files via TypoScript
 ```php
 page.includeCSS {
     # Pattern typo3_encore:entryName
-    app = typo3_encore:app 
+    app = typo3_encore:app
 }
 
 page.includeJS {
@@ -72,7 +74,7 @@ page.includeJSFooter {
 Note the prefix typo3_encore: This is important in order to render the files correctly.
 You can then use all other known settings to include your files.
 
-You don´t have to care about including it only once. This will not happen during one request cycle unless you want to. 
+You don´t have to care about including it only once. This will not happen during one request cycle unless you want to.
 
 It is also possible to use the inclusion via the prefix typo3_encore in backend specific contexts. For example like so:
 
@@ -80,14 +82,14 @@ It is also possible to use the inclusion via the prefix typo3_encore in backend 
 <f:be.container includeCssFiles="{0: 'typo3_encore:backend'}" includeJsFiles="{0: 'typo3_encore:backend'}">
 
 </f:be.container>
-``` 
+```
 
 ### HTTP/2 Preloading
 
-All css and javascript files managed by the extension will be added to the AssetRegistry class during rendering. 
+All css and javascript files managed by the extension will be added to the AssetRegistry class during rendering.
 For these assets a Link HTTP header is created, which are the key to optimize the application performance when using HTTP/2 and preloading capabilities of modern web browsers.
 
-Technically this is done by a PSR-15 Middleware.    
+Technically this is done by a PSR-15 Middleware.
 
 If you want to add additional files to the AssetRegistry you can use the PreloadViewHelper:
 
@@ -97,10 +99,10 @@ If you want to add additional files to the AssetRegistry you can use the Preload
 <e:preload attributes="{type: 'font/woff2'}" as="font" uri="{e:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
 ```
 
-Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file. 
+Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file.
 So you can also leverage the versioning feature provided by Webpack.
 
-## Additional 
+## Additional
 
 1. If you are in production mode and set enableVersioning(true) then you should set the option
 
@@ -108,7 +110,7 @@ So you can also leverage the versioning feature provided by Webpack.
 $GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
 ```
 
-2. Defining Multiple Webpack Configurations ([see](https://symfony.com/doc/current/frontend/encore/advanced-config.html#defining-multiple-webpack-configurations)) 
+2. Defining Multiple Webpack Configurations ([see](https://symfony.com/doc/current/frontend/encore/advanced-config.html#defining-multiple-webpack-configurations))
 
 Then you have to define your builds in your TypoScript-Setup:
 
@@ -128,7 +130,7 @@ Finally, you can specify which build to use:
 ```php
 page.includeCSS {
     # Pattern typo3_encore:buildName:entryName
-    app = typo3_encore:firstBuild:app 
+    app = typo3_encore:firstBuild:app
 }
 ```
 
@@ -141,23 +143,23 @@ page.includeCSS {
 ## Getting Started with Webpack Encore
 
 Although the documentation of Webpack Encore is awesome, i am going to provide a minimalistic how to install the frontend related things.
-I assume some basic knowledge of modern frontend development. 
+I assume some basic knowledge of modern frontend development.
 
 ### Install Encore into your project via Yarn or Npm:
-First, make sure you install [Node.js](https://nodejs.org/en/download/) and also the [Yarn](https://yarnpkg.com/lang/en/docs/install/) or [npm](https://www.npmjs.com/get-npm) package manager. 
+First, make sure you install [Node.js](https://nodejs.org/en/download/) and also the [Yarn](https://yarnpkg.com/lang/en/docs/install/) or [npm](https://www.npmjs.com/get-npm) package manager.
 
 
-```cli 
+```cli
 yarn add @symfony/webpack-encore --dev
 ```
 
-This command creates or modifies a package.json file and downloads dependencies into a node_modules/ directory. 
+This command creates or modifies a package.json file and downloads dependencies into a node_modules/ directory.
 Yarn also creates/updates a yarn.lock (called package-lock.json if you use npm).
 
 You should commit package.json and yarn.lock (or package-lock.json if using npm) to version control, but ignore the node_modules/ folder.
 
 ### Creating the webpack.config.js File
-Next, we are going to create a webpack.config.js file at the root of our project. 
+Next, we are going to create a webpack.config.js file at the root of our project.
 This is the main config file for both Webpack and Webpack Encore:
 
 ```javascript
@@ -166,13 +168,13 @@ var Encore = require('@symfony/webpack-encore');
 Encore
     // the directory where compiled assets will be stored
     .setOutputPath('public/typo3conf/ext/my_sitepackage/Resources/Public/')
-    
+
     // public path used by the web server to access the output path
     .setPublicPath('/typo3conf/ext/my_sitepackage/Resources/Public/')
-    
+
     // only needed for CDN's or sub-directory deploy
     // .setManifestKeyPrefix('build/')
-    
+
     // Copy some static images to your -> https://symfony.com/doc/current/frontend/encore/copy-files.html
     .copyFiles({
         from: './src/images',
@@ -196,17 +198,17 @@ Encore
      */
     .addEntry('app', './src/js/app.js')
     .addEntry('homepage', './src/js/homepage.js')
-    
+
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
-    
+
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
-    
+
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
-    
+
     // uncomment if you use TypeScript -> https://symfony.com/doc/current/frontend/encore/typescript.html
     // .enableTypeScriptLoader()
 
@@ -215,21 +217,21 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin -> https://symfony.com/doc/current/frontend/encore/legacy-applications.html
     // .autoProvidejQuery()
-    
+
     // uncomment if you use the postcss -> https://symfony.com/doc/current/frontend/encore/postcss.html
     // .enablePostCssLoader()
-    
-    
+
+
     // uncomment if you want to use vue -> https://symfony.com/doc/current/frontend/encore/vuejs.html
     // .enableVueLoader()
-    
+
     // uncomment if you´re want to lint your sources
     // .enableEslintLoader()
-    
-    // uncomment if you´re want to have integrity hashes for your script tags, the extension takes care of it 
+
+    // uncomment if you´re want to have integrity hashes for your script tags, the extension takes care of it
     // .enableIntegrityHashes()
-    
-    // uncomment if you´re want to share general code for the different entries -> https://symfony.com/doc/current/frontend/encore/split-chunks.html 
+
+    // uncomment if you´re want to share general code for the different entries -> https://symfony.com/doc/current/frontend/encore/split-chunks.html
     // .splitEntryChunks()
     ;
 
@@ -247,7 +249,7 @@ module.exports = Encore.getWebpackConfig();
 ```
 
 ### The realm of Webpack plugins
-Encore already ships with a lot of useful plugins for the daily work. 
+Encore already ships with a lot of useful plugins for the daily work.
 But someday you are gonna get to the point where you need more.
 
 #### Generating icons and inject them automatically
@@ -314,7 +316,7 @@ Encore.addLoader({
 
 ```
 
-Now you have to import all your svg files in your javascript 
+Now you have to import all your svg files in your javascript
 
 ```
 function requireAll(r) {

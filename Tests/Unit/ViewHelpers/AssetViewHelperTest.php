@@ -20,6 +20,9 @@ use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
 use Ssch\Typo3Encore\ViewHelpers\AssetViewHelper;
 use Symfony\Component\Asset\PackageInterface;
 
+/**
+ * @covers \Ssch\Typo3Encore\ViewHelpers\AssetViewHelper
+ */
 class AssetViewHelperTest extends ViewHelperBaseTestcase
 {
     /**

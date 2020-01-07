@@ -20,6 +20,9 @@ use Ssch\Typo3Encore\Integration\AssetRegistry;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 
+/**
+ * @covers \Ssch\Typo3Encore\Integration\AssetRegistry
+ */
 class AssetRegistryTest extends UnitTestCase
 {
     /**

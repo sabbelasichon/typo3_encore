@@ -19,6 +19,9 @@ use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
 
+/**
+ * @covers \Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper
+ */
 class PreloadViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
