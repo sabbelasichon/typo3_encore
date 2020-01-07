@@ -16,9 +16,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Ssch\Typo3Encore\Asset\VersionStrategyInterface;
 use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
-use Symfony\Component\Asset\PackageInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class AssetViewHelper extends AbstractViewHelper

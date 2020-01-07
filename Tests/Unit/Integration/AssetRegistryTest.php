@@ -15,12 +15,12 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use PHPUnit\Framework\TestCase;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\AssetRegistry;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 
-class AssetRegistryTest extends TestCase
+class AssetRegistryTest extends UnitTestCase
 {
     /**
      * @var AssetRegistryInterface

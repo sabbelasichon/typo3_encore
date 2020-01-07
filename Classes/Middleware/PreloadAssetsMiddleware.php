@@ -28,6 +28,7 @@ use Symfony\Component\WebLink\Link;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -55,11 +56,16 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
      * @param TypoScriptFrontendController|null $controller
      * @param AssetRegistryInterface|null $assetRegistry
      * @param SettingsServiceInterface|null $settingsService
+     *
+     * @throws Exception
      */
     public function __construct(TypoScriptFrontendController $controller = null, AssetRegistryInterface $assetRegistry = null, SettingsServiceInterface $settingsService = null)
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+        if (!$settingsService instanceof SettingsServiceInterface || !$assetRegistry instanceof AssetRegistryInterface) {
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        }
 
         if (! $assetRegistry instanceof AssetRegistryInterface) {
             $assetRegistry = $objectManager->get(AssetRegistryInterface::class);
