@@ -123,6 +123,23 @@ class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
+    public function getFilesWithNonExistingType()
+    {
+        $this->filesystem->method('exists')->willReturn(true);
+        $entrypoints = [
+            'app' => [
+                'foo' => [
+                    'file.css'
+                ]
+            ],
+        ];
+        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->assertEmpty($this->subject->getCssFiles('app'));
+    }
+
+    /**
+     * @test
+     */
     public function getFromCache()
     {
         $this->filesystem->expects($this->never())->method('exists');
