@@ -96,8 +96,8 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
                 sprintf('<svg aria-labelledby="title-%1$s description-%1$s" xmlns="http://www.w3.org/2000/svg" focusable="false"><title id="title-%1$s">1222</title><desc id="description-%1$s">1420</desc><use xlink:href="#3333" /></svg>', self::ID)
             ],
             [
-                ['name' => 'name', 'title' => 'Title', 'description' => 'Description'],
-                sprintf('<svg aria-labelledby="title-%1$s description-%1$s" xmlns="http://www.w3.org/2000/svg" focusable="false"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><use xlink:href="#name" /></svg>', self::ID)
+                ['name' => 'name', 'title' => 'Title', 'description' => 'Description', 'width' => 100, 'height' => 100, 'role' => 'foo'],
+                sprintf('<svg aria-labelledby="title-%1$s description-%1$s" width="100" height="100" xmlns="http://www.w3.org/2000/svg" focusable="false" role="foo"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><use xlink:href="#name" /></svg>', self::ID)
             ],
         ];
     }
