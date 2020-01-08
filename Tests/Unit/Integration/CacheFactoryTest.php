@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\CacheFactory
@@ -50,7 +51,7 @@ class CacheFactoryTest extends UnitTestCase
     public function nullFrontendIsReturnedBecauseNoSuchCacheExceptionIsThrown()
     {
         $this->cacheManager->expects($this->once())->method('getCache')->willThrowException(new NoSuchCacheException());
-        $this->assertInstanceOf(NullFrontend::class, $this->subject->createInstance());
+        $this->assertNull($this->subject->createInstance());
     }
 
     /**

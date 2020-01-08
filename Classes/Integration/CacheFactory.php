@@ -20,6 +20,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 
 /**
  * @final
@@ -50,12 +51,12 @@ class CacheFactory
     /**
      * @return FrontendInterface
      */
-    public function createInstance(): FrontendInterface
+    public function createInstance(): ?FrontendInterface
     {
         try {
             return $this->cacheManager->getCache(self::CACHE_KEY);
         } catch (NoSuchCacheException $e) {
-           return new NullFrontend(self::CACHE_KEY);
+           return null;
         }
     }
 }
