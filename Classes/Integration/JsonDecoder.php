@@ -26,6 +26,6 @@ final class JsonDecoder implements JsonDecoderInterface
             throw new JsonDecodeException(json_last_error_msg());
         }
 
-        return $array;
+        return (array)$array;
     }
 }

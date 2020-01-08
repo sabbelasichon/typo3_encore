@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Asset;
 
@@ -19,6 +19,7 @@ namespace Ssch\Typo3Encore\Asset;
 use InvalidArgumentException;
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
+use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -96,7 +97,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     {
         $entriesData = $this->getEntriesData();
 
-        if (! array_key_exists('integrity', $entriesData)) {
+        if ( ! array_key_exists('integrity', $entriesData)) {
             return [];
         }
 
@@ -117,7 +118,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
         $entriesData = $this->getEntriesData();
         $entryData = $entriesData['entrypoints'][$entryName];
 
-        if (! isset($entryData[$key])) {
+        if ( ! isset($entryData[$key])) {
             // If we don't find the file type then just send back nothing.
             return [];
         }
@@ -133,7 +134,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     private function validateEntryName(string $entryName)
     {
         $entriesData = $this->getEntriesData();
-        if (! isset($entriesData['entrypoints'][$entryName])) {
+        if ( ! isset($entriesData['entrypoints'][$entryName])) {
             $withoutExtension = substr($entryName, 0, (int)strrpos($entryName, '.'));
 
             if (isset($entriesData['entrypoints'][$withoutExtension])) {
@@ -154,17 +155,17 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             return $this->cache->get($this->cacheKey);
         }
 
-        if (! $this->filesystem->exists($this->entrypointJsonPath)) {
+        if ( ! $this->filesystem->exists($this->entrypointJsonPath)) {
             throw new InvalidArgumentException(sprintf('Could not find the entrypoints file from Webpack: the file "%s" does not exist.', $this->entrypointJsonPath));
         }
 
-        $this->entriesData = $this->jsonDecoder->decode($this->filesystem->get($this->entrypointJsonPath));
-
-        if (null === $this->entriesData) {
+        try {
+            $this->entriesData = $this->jsonDecoder->decode($this->filesystem->get($this->entrypointJsonPath));
+        } catch (JsonDecodeException $e) {
             throw new InvalidArgumentException(sprintf('There was a problem JSON decoding the "%s" file', $this->entrypointJsonPath));
         }
 
-        if (! isset($this->entriesData['entrypoints'])) {
+        if ( ! isset($this->entriesData['entrypoints'])) {
             throw new InvalidArgumentException(sprintf('Could not find an "entrypoints" key in the "%s" file', $this->entrypointJsonPath));
         }
 

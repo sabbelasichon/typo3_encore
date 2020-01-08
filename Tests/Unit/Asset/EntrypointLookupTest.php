@@ -22,6 +22,7 @@ use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointNotFoundException;
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
+use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -155,6 +156,17 @@ class EntrypointLookupTest extends UnitTestCase
         $this->cache->method('get')->with($this->cacheKey)->willReturn(['entrypoints' => $entrypoints]);
 
         $this->assertContains('file.css', $this->subject->getCssFiles('app'));
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionIfJsonCannotBeParsed()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->filesystem->method('exists')->willReturn(true);
+        $this->jsonDecoder->method('decode')->willThrowException(new JsonDecodeException());
+        $this->subject->getJavaScriptFiles('foo');
     }
 
     /**
