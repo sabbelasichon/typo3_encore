@@ -48,7 +48,7 @@ class PreloadViewHelperTest extends ViewHelperBaseTestcase
     {
         $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style']);
         $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', []);
-        $this->viewHelper->render();
+        $this->viewHelper->initializeArgumentsAndRender();
     }
 
     /**
@@ -59,6 +59,6 @@ class PreloadViewHelperTest extends ViewHelperBaseTestcase
         $attributes = ['type' => 'something'];
         $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
         $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes);
-        $this->viewHelper->render();
+        $this->viewHelper->initializeArgumentsAndRender();
     }
 }

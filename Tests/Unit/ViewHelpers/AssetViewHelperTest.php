@@ -51,6 +51,6 @@ class AssetViewHelperTest extends ViewHelperBaseTestcase
         $this->viewHelper->setArguments(['pathToFile' => $pathToFile, 'package' => '_default']);
 
         $this->package->expects($this->once())->method('getUrl')->willReturn($pathToFile);
-        $this->assertEquals($pathToFile, $this->viewHelper->render());
+        $this->assertEquals($pathToFile, $this->viewHelper->initializeArgumentsAndRender());
     }
 }
