@@ -40,11 +40,17 @@ final class Filesystem implements FilesystemInterface
         return file_exists($pathToFile);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getFileAbsFileName(string $pathToFile): string
     {
         return GeneralUtility::getFileAbsFileName($pathToFile);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getRelativeFilePath(string $pathToFile): string
     {
         $pathToFile = $this->getFileAbsFileName(($pathToFile));
