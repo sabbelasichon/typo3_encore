@@ -23,6 +23,7 @@ use Ssch\Typo3Encore\Asset\EntrypointNotFoundException;
 use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
 /**
@@ -67,6 +68,17 @@ class EntrypointLookupTest extends UnitTestCase
         $this->cacheFactory->method('createInstance')->willReturn($this->cache);
         $this->subject = new EntrypointLookup(__DIR__ . '/../Fixtures/entrypoints.json', self::CACHE_KEY_PREFIX, $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
         $this->cacheKey = sprintf('%s-%s', self::CACHE_KEY_PREFIX, CacheFactory::CACHE_KEY);
+    }
+
+    /**
+     * @test
+     */
+    public function noSuchCacheExceptionIsThrown()
+    {
+        $cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
+        $cacheFactory->method('createInstance')->willThrowException(new NoSuchCacheException());
+        $this->expectException(NoSuchCacheException::class);
+        $subject = new EntrypointLookup('foo', 'bar', $this->jsonDecoder, $this->filesystem, $cacheFactory);
     }
 
     /**

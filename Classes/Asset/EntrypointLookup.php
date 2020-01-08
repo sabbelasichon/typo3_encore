@@ -22,6 +22,7 @@ use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class EntrypointLookup implements EntrypointLookupInterface, IntegrityDataProviderInterface
@@ -64,13 +65,10 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
 
     public function __construct(string $entrypointJsonPath, string $cacheKeyPrefix, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
     {
-        $this->entrypointJsonPath = GeneralUtility::getFileAbsFileName($entrypointJsonPath);
+        $this->entrypointJsonPath = $filesystem->getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
-        try {
-            $this->cache = $cacheFactory->createInstance();
-        } catch (NoSuchCacheException $e) {
-        }
+        $this->cache = $cacheFactory->createInstance();
         $this->cacheKey = sprintf('%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY);
     }
 

@@ -19,6 +19,7 @@ namespace Ssch\Typo3Encore\Integration;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 
 /**
  * @final
@@ -48,10 +49,13 @@ class CacheFactory
 
     /**
      * @return FrontendInterface
-     * @throws NoSuchCacheException
      */
     public function createInstance(): FrontendInterface
     {
-        return $this->cacheManager->getCache(self::CACHE_KEY);
+        try {
+            return $this->cacheManager->getCache(self::CACHE_KEY);
+        } catch (NoSuchCacheException $e) {
+           return new NullFrontend(self::CACHE_KEY);
+        }
     }
 }
