@@ -39,8 +39,10 @@ final class PageRendererHooks
     public function __construct(TagRendererInterface $tagRenderer = null)
     {
         if (! $tagRenderer instanceof TagRendererInterface) {
+            // @codeCoverageIgnoreStart
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             $tagRenderer = $objectManager->get(TagRendererInterface::class);
+            // @codeCoverageIgnoreEnd
         }
         $this->tagRenderer = $tagRenderer;
     }
