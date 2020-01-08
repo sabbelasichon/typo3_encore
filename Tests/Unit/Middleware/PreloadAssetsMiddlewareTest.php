@@ -121,12 +121,20 @@ class PreloadAssetsMiddlewareTest extends UnitTestCase
     {
         $registeredFiles = [
             'style' => [
-                'file1.css' => [],
-                'file2.css' => [],
+                'file1.css' => [
+                    'crossorigin' => true
+                ],
+                'file2.css' => [
+                    'crossorigin' => true
+                ],
             ],
             'script' => [
-                'file1.js' => [],
-                'file2.js' => [],
+                'file1.js' => [
+                    'crossorigin' => true
+                ],
+                'file2.js' => [
+                    'crossorigin' => true
+                ],
             ],
         ];
 
@@ -136,7 +144,8 @@ class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler->method('handle')->willReturn($response);
         $this->settingsService->expects($this->once())->method('getByPath')->willReturn(true);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
-        $this->assetRegistry->expects($this->once())->method('getDefaultAttributes');
+        $defaultAttributes = ['crossorigin' => true];
+        $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
         $returnedResponse = $this->subject->process($request, $handler);
 
