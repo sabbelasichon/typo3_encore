@@ -77,5 +77,7 @@ class EntryLookupFactoryTest extends UnitTestCase
 
         $this->assertContainsOnlyInstancesOf(EntrypointLookupInterface::class, $collection);
         $this->assertArrayHasKey('_default', $collection);
+
+        $this->assertSame($collection, $this->subject->getCollection());
     }
 }
