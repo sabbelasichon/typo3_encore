@@ -17,7 +17,6 @@ declare(strict_types = 1);
 namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 final class EntryLookupFactory implements EntryLookupFactoryInterface

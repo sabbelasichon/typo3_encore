@@ -21,8 +21,6 @@ use Ssch\Typo3Encore\Integration\CacheFactory;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\CacheFactory
@@ -35,7 +33,7 @@ class CacheFactoryTest extends UnitTestCase
     protected $subject;
 
     /**
-     * @var MockObject|CacheManager
+     * @var CacheManager|MockObject
      */
     private $cacheManager;
 

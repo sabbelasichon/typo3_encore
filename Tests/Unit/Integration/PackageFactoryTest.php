@@ -38,7 +38,7 @@ class PackageFactoryTest extends UnitTestCase
     private $settingsService;
 
     /**
-     * @var MockObject|FilesystemInterface
+     * @var FilesystemInterface|MockObject
      */
     private $filesystem;
 
@@ -57,7 +57,6 @@ class PackageFactoryTest extends UnitTestCase
         $this->settingsService->method('getByPath')->with('manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
         $this->assertInstanceOf(PackageInterface::class, $this->subject->getPackage('_default'));
-
     }
 
     /**
@@ -68,6 +67,5 @@ class PackageFactoryTest extends UnitTestCase
         $this->settingsService->method('getByPath')->with('packages.custom.manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
         $this->assertInstanceOf(PackageInterface::class, $this->subject->getPackage('custom'));
-
     }
 }

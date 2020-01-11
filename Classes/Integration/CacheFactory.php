@@ -19,8 +19,6 @@ namespace Ssch\Typo3Encore\Integration;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 
 /**
  * @final
@@ -56,7 +54,7 @@ class CacheFactory
         try {
             return $this->cacheManager->getCache(self::CACHE_KEY);
         } catch (NoSuchCacheException $e) {
-           return null;
+            return null;
         }
     }
 }

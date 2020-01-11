@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Tests\Functional;
 
@@ -35,7 +34,7 @@ final class IncludeFilesTest extends FunctionalTestCase
     {
         parent::setUp();
         try {
-            $this->importDataSet(__DIR__.'/Fixtures/pages.xml');
+            $this->importDataSet(__DIR__ . '/Fixtures/pages.xml');
         } catch (Exception $e) {
         }
     }
