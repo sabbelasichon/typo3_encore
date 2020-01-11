@@ -1,0 +1,12 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.js"
+      ],
+      "css": [
+        "typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.css"
+      ]
+    }
+  }
+}

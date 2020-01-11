@@ -75,7 +75,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
             }
         }
 
-        if ($this->filesystem->exists(GeneralUtility::getFileAbsFileName($entrypointsPathDefaultBuild))) {
+        if ($this->filesystem->exists($this->filesystem->getFileAbsFileName($entrypointsPathDefaultBuild))) {
             $builds['_default'] =  $this->objectManager->get(EntrypointLookupInterface::class, $entrypointsPathDefaultBuild, '_default');
         }
 

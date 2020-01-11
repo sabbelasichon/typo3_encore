@@ -32,21 +32,11 @@ final class SettingsService implements SettingsServiceInterface
      */
     private $configurationManager;
 
-    /**
-     * SettingsService constructor.
-     *
-     * @param ConfigurationManagerInterface $configurationManager
-     */
     public function __construct(ConfigurationManagerInterface $configurationManager)
     {
         $this->configurationManager = $configurationManager;
     }
 
-    /**
-     * Returns all settings.
-     *
-     * @return array
-     */
     public function getSettings(): array
     {
         if ($this->settings === null) {
