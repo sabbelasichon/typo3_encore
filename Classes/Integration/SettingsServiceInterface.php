@@ -20,10 +20,9 @@ interface SettingsServiceInterface
 {
     public function getSettings(): array;
 
-    /**
-     * @param string $path
-     *
-     * @return mixed
-     */
-    public function getByPath(string $path);
+    public function getArrayByPath(string $path): array;
+
+    public function getStringByPath(string $path): string;
+
+    public function getBooleanByPath(string $path): bool;
 }

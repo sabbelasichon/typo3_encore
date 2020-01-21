@@ -41,11 +41,6 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     private static $collection;
 
-    /**
-     * EntryLookupFactory constructor.
-     *
-     * @param SettingsServiceInterface $settingsService
-     */
     public function __construct(SettingsServiceInterface $settingsService, ObjectManagerInterface $objectManager, FilesystemInterface $filesystem)
     {
         $this->settingsService = $settingsService;
@@ -62,8 +57,8 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
             return static::$collection;
         }
 
-        $buildConfigurations = $this->settingsService->getByPath('builds');
-        $entrypointsPathDefaultBuild = $this->settingsService->getByPath('entrypointJsonPath');
+        $buildConfigurations = $this->settingsService->getArrayByPath('builds');
+        $entrypointsPathDefaultBuild = $this->settingsService->getStringByPath('entrypointJsonPath');
 
         $builds = [];
 

@@ -54,7 +54,7 @@ class PackageFactoryTest extends UnitTestCase
      */
     public function returnsPackageWithDefaultManifestPath()
     {
-        $this->settingsService->method('getByPath')->with('manifestJsonPath')->willReturn('manifest.json');
+        $this->settingsService->method('getStringByPath')->with('manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
         $this->assertInstanceOf(PackageInterface::class, $this->subject->getPackage('_default'));
     }
@@ -64,7 +64,7 @@ class PackageFactoryTest extends UnitTestCase
      */
     public function returnsPackageWithSpecificManifestPath()
     {
-        $this->settingsService->method('getByPath')->with('packages.custom.manifestJsonPath')->willReturn('manifest.json');
+        $this->settingsService->method('getStringByPath')->with('packages.custom.manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
         $this->assertInstanceOf(PackageInterface::class, $this->subject->getPackage('custom'));
     }

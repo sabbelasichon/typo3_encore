@@ -42,6 +42,6 @@ final class PackageFactory implements PackageFactoryInterface
     public function getPackage(string $package): PackageInterface
     {
         $manifestJsonPath = $package === '_default' ? 'manifestJsonPath' : sprintf('packages.%s.manifestJsonPath', $package);
-        return new Package(new JsonManifestVersionStrategy($this->filesystem->getFileAbsFileName($this->settingsService->getByPath($manifestJsonPath))));
+        return new Package(new JsonManifestVersionStrategy($this->filesystem->getFileAbsFileName($this->settingsService->getStringByPath($manifestJsonPath))));
     }
 }
