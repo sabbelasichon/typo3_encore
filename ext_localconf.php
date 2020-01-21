@@ -2,10 +2,6 @@
 
 use TYPO3\CMS\Core\Core\Environment;
 
-if (! Environment::isComposerMode()) {
-    require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('typo3_encore') . 'Libraries/autoload.php';
-}
-
 if (! defined('TYPO3_MODE')) {
     die('Access denied.');
 }

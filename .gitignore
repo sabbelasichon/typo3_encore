@@ -9,3 +9,6 @@
 /phpunit.xml
 /build
 /var
+/Libraries/*
+!/Libraries/composer.json
+!/Libraries/composer.lock
