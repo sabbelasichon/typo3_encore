@@ -70,7 +70,7 @@ class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getByPath')->willReturn(false);
+        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(false);
         $this->assetRegistry->expects($this->never())->method('getRegisteredFiles');
 
         $returnedResponse = $this->subject->process($request, $handler);
@@ -87,7 +87,7 @@ class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(NullResponse::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getByPath')->willReturn(true);
+        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(true);
         $this->typoScriptFrontendController->expects($this->once())->method('isOutputting')->willReturn(false);
         $this->assetRegistry->expects($this->never())->method('getRegisteredFiles');
 
@@ -105,7 +105,7 @@ class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getByPath')->willReturn(true);
+        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(true);
         $this->assetRegistry->expects($this->once())->method('getRegisteredFiles')->willReturn([]);
         $this->assetRegistry->expects($this->never())->method('getDefaultAttributes');
 
@@ -142,7 +142,7 @@ class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getByPath')->willReturn(true);
+        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(true);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
         $defaultAttributes = ['crossorigin' => true];
         $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);

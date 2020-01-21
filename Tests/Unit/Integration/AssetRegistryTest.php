@@ -33,7 +33,7 @@ class AssetRegistryTest extends UnitTestCase
     protected function setUp()
     {
         $settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
-        $settingsService->method('getByPath')->with('preload.crossorigin')->willReturn('anonymus');
+        $settingsService->method('getStringByPath')->with('preload.crossorigin')->willReturn('anonymus');
         $this->subject = new AssetRegistry($settingsService);
     }
 

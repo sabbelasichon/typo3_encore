@@ -60,8 +60,23 @@ final class SettingsService implements SettingsServiceInterface
      *
      * @return mixed
      */
-    public function getByPath(string $path)
+    private function getByPath(string $path)
     {
         return ObjectAccess::getPropertyPath($this->getSettings(), $path);
+    }
+
+    public function getArrayByPath(string $path): array
+    {
+        return (array)$this->getByPath($path);
+    }
+
+    public function getStringByPath(string $path): string
+    {
+        return (string)$this->getByPath($path);
+    }
+
+    public function getBooleanByPath(string $path): bool
+    {
+        return (bool)$this->getByPath($path);
     }
 }

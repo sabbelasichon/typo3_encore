@@ -65,8 +65,8 @@ class EntryLookupFactoryTest extends UnitTestCase
             'config1' => 'path/to/config1'
         ];
 
-        $this->settingsService->expects($this->at(0))->method('getByPath')->with($this->equalTo('builds'))->willReturn($builds);
-        $this->settingsService->expects($this->at(1))->method('getByPath')->with($this->equalTo('entrypointJsonPath'))->willReturn('path/to/entrypoints.json');
+        $this->settingsService->expects($this->at(0))->method('getArrayByPath')->with($this->equalTo('builds'))->willReturn($builds);
+        $this->settingsService->expects($this->at(1))->method('getStringByPath')->with($this->equalTo('entrypointJsonPath'))->willReturn('path/to/entrypoints.json');
 
         $this->objectManager->expects($this->at(0))->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
         $this->objectManager->expects($this->at(1))->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());

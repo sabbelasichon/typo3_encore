@@ -32,7 +32,7 @@ final class AssetRegistry implements AssetRegistryInterface
 
     public function __construct(SettingsServiceInterface $settingsService)
     {
-        $this->defaultAttributes['crossorigin'] = $settingsService->getByPath('preload.crossorigin');
+        $this->defaultAttributes['crossorigin'] = $settingsService->getStringByPath('preload.crossorigin');
         $this->reset();
     }
 

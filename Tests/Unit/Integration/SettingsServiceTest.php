@@ -37,7 +37,7 @@ class SettingsServiceTest extends UnitTestCase
 
     protected function setUp()
     {
-        $this->configurationManager = $this->getMockBuilder(ConfigurationManagerInterface::class)->getMock();
+        $this->configurationManager = $this->createMock(ConfigurationManagerInterface::class);
         $this->subject = new SettingsService($this->configurationManager);
     }
 
@@ -55,13 +55,37 @@ class SettingsServiceTest extends UnitTestCase
                                    ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
                                    ->willReturn($settings);
 
-        $this->assertEquals($settings['entrypointJsonPath'], $this->subject->getByPath('entrypointJsonPath'));
+        $this->assertEquals($settings['entrypointJsonPath'], $this->subject->getStringByPath('entrypointJsonPath'));
     }
 
     /**
      * @test
      */
-    public function getNonExistingSettingByPathReturnsNull()
+    public function getNonExistingSettingStringByPathReturnsString()
+    {
+        $this->expectEmptySettingsAreReturned();
+        $this->assertIsString($this->subject->getStringByPath('entrypointJsonPath'));
+    }
+
+    /**
+     * @test
+     */
+    public function getNonExistingSettingArrayByPathReturnsArray()
+    {
+        $this->expectEmptySettingsAreReturned();
+        $this->assertIsArray($this->subject->getArrayByPath('entrypointJsonPath'));
+    }
+
+    /**
+     * @test
+     */
+    public function getNonExistingSettingBooleanByPathReturnsBoolean()
+    {
+        $this->expectEmptySettingsAreReturned();
+        $this->assertIsBool($this->subject->getBooleanByPath('entrypointJsonPath'));
+    }
+
+    private function expectEmptySettingsAreReturned(): void
     {
         $settings = [];
 
@@ -69,7 +93,5 @@ class SettingsServiceTest extends UnitTestCase
                                    ->method('getConfiguration')
                                    ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
                                    ->willReturn([]);
-
-        $this->assertNull($this->subject->getByPath('entrypointJsonPath'));
     }
 }
