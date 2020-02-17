@@ -22,7 +22,7 @@ use Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper;
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper
  */
-class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
+final class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
      * @var MockObject|RenderWebpackLinkTagsViewHelper

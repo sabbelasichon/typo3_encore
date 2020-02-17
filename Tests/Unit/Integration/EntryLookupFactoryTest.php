@@ -26,7 +26,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 /**
  * @covers \Ssch\Typo3Encore\Integration\EntryLookupFactory
  */
-class EntryLookupFactoryTest extends UnitTestCase
+final class EntryLookupFactoryTest extends UnitTestCase
 {
     /**
      * @var EntryLookupFactory

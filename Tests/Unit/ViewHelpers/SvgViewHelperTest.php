@@ -26,9 +26,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\SvgViewHelper
  */
-class SvgViewHelperTest extends ViewHelperBaseTestcase
+final class SvgViewHelperTest extends ViewHelperBaseTestcase
 {
-    const ID = '2433esds';
+    private const ID = '2433esds';
 
     /**
      * @var MockObject|SvgViewHelper

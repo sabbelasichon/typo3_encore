@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 /**
  * @covers \Ssch\Typo3Encore\Integration\SettingsService
  */
-class SettingsServiceTest extends UnitTestCase
+final class SettingsServiceTest extends UnitTestCase
 {
     /**
      * @var SettingsService

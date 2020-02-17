@@ -24,7 +24,7 @@ use Ssch\Typo3Encore\Integration\EntryLookupFactoryInterface;
 /**
  * @covers \Ssch\Typo3Encore\Asset\EntrypointLookupCollection
  */
-class EntrypointLookupCollectionTest extends TestCase
+final class EntrypointLookupCollectionTest extends TestCase
 {
     /**
      * @var EntrypointLookupCollection

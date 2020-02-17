@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 /**
  * @covers \Ssch\Typo3Encore\Integration\PageRendererHooks
  */
-class PageRendererHooksTest extends UnitTestCase
+final class PageRendererHooksTest extends UnitTestCase
 {
     /**
      * @var PageRendererHooks

@@ -23,7 +23,7 @@ use Symfony\Component\Asset\PackageInterface;
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\AssetViewHelper
  */
-class AssetViewHelperTest extends ViewHelperBaseTestcase
+final class AssetViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
      * @var AssetViewHelper

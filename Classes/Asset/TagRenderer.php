@@ -48,15 +48,7 @@ final class TagRenderer implements TagRendererInterface
         $this->assetRegistry = $assetRegistry;
     }
 
-    /**
-     * @param string $entryName
-     * @param string $position
-     * @param string $buildName
-     * @param object|PageRenderer|null $pageRenderer
-     * @param array $parameters
-     * @param bool $registerFile
-     */
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true)
+    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
     {
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -94,15 +86,7 @@ final class TagRenderer implements TagRendererInterface
         }
     }
 
-    /**
-     * @param string $entryName
-     * @param string $media
-     * @param string $buildName
-     * @param object|PageRenderer|null $pageRenderer
-     * @param array $parameters
-     * @param bool $registerFile
-     */
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true)
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
     {
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);

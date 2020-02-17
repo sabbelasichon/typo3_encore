@@ -22,7 +22,7 @@ use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper
  */
-class PreloadViewHelperTest extends ViewHelperBaseTestcase
+final class PreloadViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
      * @var PreloadViewHelper

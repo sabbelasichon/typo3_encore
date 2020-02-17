@@ -38,9 +38,6 @@ class EntrypointLookupCollection implements EntrypointLookupCollectionInterface
     }
 
     /**
-     * @param string|null $buildName
-     *
-     * @return EntrypointLookupInterface
      * @throws UndefinedBuildException
      */
     public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface

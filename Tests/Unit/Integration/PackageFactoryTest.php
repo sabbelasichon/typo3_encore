@@ -25,7 +25,7 @@ use Symfony\Component\Asset\PackageInterface;
 /**
  * @covers \Ssch\Typo3Encore\Integration\PackageFactory
  */
-class PackageFactoryTest extends UnitTestCase
+final class PackageFactoryTest extends UnitTestCase
 {
     /**
      * @var PackageFactory
