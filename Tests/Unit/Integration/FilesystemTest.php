@@ -21,7 +21,7 @@ use Ssch\Typo3Encore\Integration\Filesystem;
 /**
  * @covers \Ssch\Typo3Encore\Integration\Filesystem
  */
-class FilesystemTest extends UnitTestCase
+final class FilesystemTest extends UnitTestCase
 {
 
     /**

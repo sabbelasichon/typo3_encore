@@ -31,7 +31,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @covers \Ssch\Typo3Encore\Middleware\PreloadAssetsMiddleware
  */
-class PreloadAssetsMiddlewareTest extends UnitTestCase
+final class PreloadAssetsMiddlewareTest extends UnitTestCase
 {
     /**
      * @var PreloadAssetsMiddleware

@@ -24,7 +24,7 @@ use Ssch\Typo3Encore\ViewHelpers\WebpackCssFilesViewHelper;
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\WebpackCssFilesViewHelper
  */
-class WebpackCssFilesViewHelperTest extends ViewHelperBaseTestcase
+final class WebpackCssFilesViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
      * @var MockObject|WebpackCssFilesViewHelper

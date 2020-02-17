@@ -30,7 +30,7 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 /**
  * @covers \Ssch\Typo3Encore\Asset\EntrypointLookup
  */
-class EntrypointLookupTest extends UnitTestCase
+final class EntrypointLookupTest extends UnitTestCase
 {
     const CACHE_KEY_PREFIX = 'cacheKeyPrefix';
     private $subject;

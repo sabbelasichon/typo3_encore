@@ -50,15 +50,6 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
      */
     private $settingsService;
 
-    /**
-     * PreloadAssetsMiddleware constructor.
-     *
-     * @param TypoScriptFrontendController|null $controller
-     * @param AssetRegistryInterface|null $assetRegistry
-     * @param SettingsServiceInterface|null $settingsService
-     *
-     * @throws Exception
-     */
     public function __construct(TypoScriptFrontendController $controller = null, AssetRegistryInterface $assetRegistry = null, SettingsServiceInterface $settingsService = null)
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
@@ -85,12 +76,6 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
         $this->assetRegistry = $assetRegistry;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
-     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);

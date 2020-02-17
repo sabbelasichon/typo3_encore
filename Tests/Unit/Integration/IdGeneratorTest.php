@@ -21,7 +21,7 @@ use Ssch\Typo3Encore\Integration\IdGenerator;
 /**
  * @covers \Ssch\Typo3Encore\Integration\IdGenerator
  */
-class IdGeneratorTest extends UnitTestCase
+final class IdGeneratorTest extends UnitTestCase
 {
     /**
      * @test

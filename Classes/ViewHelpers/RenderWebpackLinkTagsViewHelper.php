@@ -32,7 +32,7 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
         $this->tagRenderer = $tagRenderer;
     }
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
         $this->registerArgument('media', 'string', 'Media type', false, 'all');
@@ -41,7 +41,7 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
         $this->registerArgument('registerFile', 'bool', 'Register file for HTTP/2 push functionality', false, true);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->tagRenderer->renderWebpackLinkTags($this->arguments['entryName'], $this->arguments['media'], $this->arguments['buildName'], null, $this->arguments['parameters'], $this->arguments['registerFile']);
     }

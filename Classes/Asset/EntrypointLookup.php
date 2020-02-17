@@ -70,21 +70,11 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
         $this->cacheKey = sprintf('%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY);
     }
 
-    /**
-     * @param string $entryName
-     *
-     * @return array
-     */
     public function getJavaScriptFiles(string $entryName): array
     {
         return $this->getEntryFiles($entryName, 'js');
     }
 
-    /**
-     * @param string $entryName
-     *
-     * @return array
-     */
     public function getCssFiles(string $entryName): array
     {
         return $this->getEntryFiles($entryName, 'css');

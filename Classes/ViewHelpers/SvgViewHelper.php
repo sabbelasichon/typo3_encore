@@ -45,17 +45,17 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
      */
     private $idGenerator;
 
-    public function injectImageService(ImageService $imageService)
+    public function injectImageService(ImageService $imageService): void
     {
         $this->imageService = $imageService;
     }
 
-    public function injectIdGenerator(IdGeneratorInterface $idGenerator)
+    public function injectIdGenerator(IdGeneratorInterface $idGenerator): void
     {
         $this->idGenerator = $idGenerator;
     }
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();

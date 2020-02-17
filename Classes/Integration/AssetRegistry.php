@@ -36,7 +36,7 @@ final class AssetRegistry implements AssetRegistryInterface
         $this->reset();
     }
 
-    public function registerFile(string $file, string $type, array $attributes = [])
+    public function registerFile(string $file, string $type, array $attributes = []): void
     {
         if (!isset($this->registeredFiles[$type])) {
             $this->registeredFiles[$type] = [];
@@ -56,7 +56,7 @@ final class AssetRegistry implements AssetRegistryInterface
         return $this->defaultAttributes;
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->registeredFiles = [];
     }

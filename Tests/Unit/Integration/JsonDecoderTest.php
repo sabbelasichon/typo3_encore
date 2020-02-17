@@ -22,7 +22,7 @@ use Ssch\Typo3Encore\Integration\JsonDecoder;
 /**
  * @covers \Ssch\Typo3Encore\Integration\JsonDecoder
  */
-class JsonDecoderTest extends UnitTestCase
+final class JsonDecoderTest extends UnitTestCase
 {
     /**
      * @var JsonDecoder

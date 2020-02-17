@@ -23,7 +23,7 @@ use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 /**
  * @covers \Ssch\Typo3Encore\Integration\AssetRegistry
  */
-class AssetRegistryTest extends UnitTestCase
+final class AssetRegistryTest extends UnitTestCase
 {
     /**
      * @var AssetRegistryInterface

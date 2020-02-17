@@ -25,7 +25,7 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 /**
  * @covers \Ssch\Typo3Encore\Integration\CacheFactory
  */
-class CacheFactoryTest extends UnitTestCase
+final class CacheFactoryTest extends UnitTestCase
 {
     /**
      * @var CacheFactory

@@ -24,18 +24,13 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 final class PageRendererHooks
 {
-    const ENCORE_PREFIX = 'typo3_encore:';
+    private const ENCORE_PREFIX = 'typo3_encore:';
 
     /**
-     * @var object|TagRendererInterface
+     * @var TagRendererInterface
      */
     private $tagRenderer;
 
-    /**
-     * PageRendererHooks constructor.
-     *
-     * @param object|TagRendererInterface|null $tagRenderer
-     */
     public function __construct(TagRendererInterface $tagRenderer = null)
     {
         if (! $tagRenderer instanceof TagRendererInterface) {
@@ -47,14 +42,14 @@ final class PageRendererHooks
         $this->tagRenderer = $tagRenderer;
     }
 
-    public function renderPreProcess(array $params, PageRenderer $pageRenderer)
+    public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
         // Add JavaScript Files by entryNames
         foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {
             if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $jsFile) {
                     if ($this->isEncoreEntryName($jsFile['file'])) {
-                        list($first, $second) = $this->createBuildAndEntryName($jsFile['file']);
+                        [$first, $second] = $this->createBuildAndEntryName($jsFile['file']);
 
                         $buildName = $second ? $first : '_default';
                         $entryName = $second ?? $first;
@@ -74,7 +69,7 @@ final class PageRendererHooks
             if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $cssFile) {
                     if ($this->isEncoreEntryName($cssFile['file'])) {
-                        list($first, $second) = $this->createBuildAndEntryName($cssFile['file']);
+                        [$first, $second] = $this->createBuildAndEntryName($cssFile['file']);
 
                         $buildName = $second ? $first : '_default';
                         $entryName = $second ?? $first;
@@ -88,31 +83,16 @@ final class PageRendererHooks
         }
     }
 
-    /**
-     * @param string $file
-     *
-     * @return bool
-     */
     private function isEncoreEntryName(string $file): bool
     {
         return StringUtility::beginsWith($file, self::ENCORE_PREFIX);
     }
 
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
     private function removePrefix(string $file): string
     {
         return str_replace(self::ENCORE_PREFIX, '', $file);
     }
 
-    /**
-     * @param string $file
-     *
-     * @return array
-     */
     private function createBuildAndEntryName(string $file): array
     {
         return GeneralUtility::trimExplode(':', $this->removePrefix($file), 2);
