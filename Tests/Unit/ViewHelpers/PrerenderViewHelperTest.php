@@ -15,17 +15,17 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
+use PHPUnit\Framework\TestCase;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
-use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
+use Ssch\Typo3Encore\ViewHelpers\PrerenderViewHelper;
 
 /**
- * @covers \Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper
+ * @covers \Ssch\Typo3Encore\ViewHelpers\PrerenderViewHelper
  */
-final class PreloadViewHelperTest extends ViewHelperBaseTestcase
+class PrerenderViewHelperTest extends TestCase
 {
     /**
-     * @var PreloadViewHelper
+     * @var PrerenderViewHelper
      */
     protected $viewHelper;
 
@@ -38,7 +38,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     {
         parent::setUp();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->viewHelper = new PreloadViewHelper($this->assetRegistry);
+        $this->viewHelper = new PrerenderViewHelper($this->assetRegistry);
     }
 
     /**
@@ -47,7 +47,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     public function registerFileWithEmptyAttributes(): void
     {
         $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style']);
-        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'preload');
+        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'prerender');
         $this->viewHelper->initializeArgumentsAndRender();
     }
 
@@ -58,7 +58,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     {
         $attributes = ['type' => 'something'];
         $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
-        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'preload');
+        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'prerender');
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }

@@ -22,19 +22,19 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
-use Ssch\Typo3Encore\Middleware\PreloadAssetsMiddleware;
+use Ssch\Typo3Encore\Middleware\AssetsMiddleware;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * @covers \Ssch\Typo3Encore\Middleware\PreloadAssetsMiddleware
+ * @covers \Ssch\Typo3Encore\Middleware\AssetsMiddleware
  */
-final class PreloadAssetsMiddlewareTest extends UnitTestCase
+final class AssetsMiddlewareTest extends UnitTestCase
 {
     /**
-     * @var PreloadAssetsMiddleware
+     * @var AssetsMiddleware
      */
     protected $subject;
 
@@ -58,7 +58,7 @@ final class PreloadAssetsMiddlewareTest extends UnitTestCase
         $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->subject = new PreloadAssetsMiddleware($this->typoScriptFrontendController, $this->assetRegistry, $this->settingsService);
+        $this->subject = new AssetsMiddleware($this->typoScriptFrontendController, $this->assetRegistry, $this->settingsService);
     }
 
     /**
@@ -66,16 +66,36 @@ final class PreloadAssetsMiddlewareTest extends UnitTestCase
      */
     public function preloadingIsDisabled(): void
     {
-        $request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
+        $registeredFiles = [
+            'preload' => [
+                'files' => [
+                    'style' => [
+                        'file1.css' => [
+                            'crossorigin' => true,
+                        ],
+                        'script' => [
+                            'file2.js' => [
+                                'crossorigin' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $request = new ServerRequest();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
-        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
+        $response = new Response();
         $handler->method('handle')->willReturn($response);
         $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(false);
-        $this->assetRegistry->expects($this->never())->method('getRegisteredFiles');
+        $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
+        $defaultAttributes = ['crossorigin' => true];
+        $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
         $returnedResponse = $this->subject->process($request, $handler);
 
-        $this->assertEquals($response, $returnedResponse);
+        $links = $returnedResponse->getHeader('Link');
+        $this->assertCount(0, $links);
     }
 
     /**
@@ -87,7 +107,6 @@ final class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(NullResponse::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(true);
         $this->typoScriptFrontendController->expects($this->once())->method('isOutputting')->willReturn(false);
         $this->assetRegistry->expects($this->never())->method('getRegisteredFiles');
 
@@ -105,7 +124,6 @@ final class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(true);
         $this->assetRegistry->expects($this->once())->method('getRegisteredFiles')->willReturn([]);
         $this->assetRegistry->expects($this->never())->method('getDefaultAttributes');
 
@@ -120,20 +138,36 @@ final class PreloadAssetsMiddlewareTest extends UnitTestCase
     public function addPreloadingHeader(): void
     {
         $registeredFiles = [
-            'style' => [
-                'file1.css' => [
-                    'crossorigin' => true
-                ],
-                'file2.css' => [
-                    'crossorigin' => true
+            'preload' => [
+                'files' => [
+                    'style' => [
+                        'file1.css' => [
+                            'crossorigin' => true,
+                        ],
+                        'file2.css' => [
+                            'crossorigin' => true,
+                        ],
+                    ],
+                    'script' => [
+                        'file1.js' => [
+                            'crossorigin' => true,
+                        ],
+                        'file2.js' => [
+                            'crossorigin' => true,
+                        ],
+                    ],
                 ],
             ],
-            'script' => [
-                'file1.js' => [
-                    'crossorigin' => true
-                ],
-                'file2.js' => [
-                    'crossorigin' => true
+            'dns-prefetch' => [
+                'files' => [
+                    'style' => [
+                        'file1.css' => [],
+                        'file2.css' => [],
+                    ],
+                    'script' => [
+                        'file1.js' => [],
+                        'file2.js' => [],
+                    ],
                 ],
             ],
         ];
@@ -142,7 +176,7 @@ final class PreloadAssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(true);
+        $this->settingsService->method('getBooleanByPath')->willReturn(true);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
         $defaultAttributes = ['crossorigin' => true];
         $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);

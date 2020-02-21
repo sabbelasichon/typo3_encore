@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\SingletonInterface;
 
 interface AssetRegistryInterface extends SingletonInterface
 {
-    public function registerFile(string $file, string $type, array $attributes = []);
+    public function registerFile(string $file, string $type, array $attributes = [], string $rel = 'preload'): void;
 
     public function getRegisteredFiles(): array;
 

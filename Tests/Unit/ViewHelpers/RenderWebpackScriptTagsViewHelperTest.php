@@ -34,7 +34,7 @@ final class RenderWebpackScriptTagsViewHelperTest extends ViewHelperBaseTestcase
      */
     protected $tagRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->tagRenderer = $this->getMockBuilder(TagRendererInterface::class)->getMock();
@@ -44,7 +44,7 @@ final class RenderWebpackScriptTagsViewHelperTest extends ViewHelperBaseTestcase
     /**
      * @test
      */
-    public function render()
+    public function render(): void
     {
         $this->viewHelper->setArguments(['entryName' => 'app', 'position' => 'footer', 'buildName' => '_default', 'parameters' => [], 'registerFile' => true]);
         $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'footer', '_default');

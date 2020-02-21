@@ -36,14 +36,18 @@ final class AssetRegistry implements AssetRegistryInterface
         $this->reset();
     }
 
-    public function registerFile(string $file, string $type, array $attributes = []): void
+    public function registerFile(string $file, string $type, array $attributes = [], string $rel = 'preload'): void
     {
-        if (!isset($this->registeredFiles[$type])) {
-            $this->registeredFiles[$type] = [];
+        if (!isset($this->registeredFiles[$rel])) {
+            $this->registeredFiles[$rel] = [];
+        }
+
+        if (!isset($this->registeredFiles[$rel]['files'][$type])) {
+            $this->registeredFiles[$rel]['files'][$type] = [];
         }
 
         $file = GeneralUtility::createVersionNumberedFilename($file);
-        $this->registeredFiles[$type][$file] = $attributes;
+        $this->registeredFiles[$rel]['files'][$type][$file] = $attributes;
     }
 
     public function getRegisteredFiles(): array

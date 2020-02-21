@@ -6,3 +6,7 @@ parameters:
   inferPrivatePropertyTypeFromConstructor: true
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
+
+  ignoreErrors:
+      - '#withAttribute\(\) expects string, bool given#'
+      - '#serialize\(\) expects iterable<Psr\\Link\\LinkInterface>&Traversable, array given#'
