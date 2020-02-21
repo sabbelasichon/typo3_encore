@@ -16,6 +16,8 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  */
 
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
 use Ssch\Typo3Encore\ViewHelpers\AssetViewHelper;
 use Symfony\Component\Asset\PackageInterface;
@@ -30,16 +32,24 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
      */
     protected $viewHelper;
 
+    /**
+     * @var MockObject|PackageInterface
+     */
     protected $package;
+
+    /**
+     * @var FilesystemInterface|MockObject
+     */
+    protected $filesystem;
 
     protected function setUp()
     {
         parent::setUp();
         $this->package = $this->getMockBuilder(PackageInterface::class)->getMock();
-
+        $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
         $packageFactory = $this->getMockBuilder(PackageFactoryInterface::class)->getMock();
         $packageFactory->method('getPackage')->willReturn($this->package);
-        $this->viewHelper = new AssetViewHelper($packageFactory);
+        $this->viewHelper = new AssetViewHelper($packageFactory, $this->filesystem);
     }
 
     /**
@@ -50,6 +60,7 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
         $pathToFile = 'EXT:typo3_encore/Tests/Build/UnitTests.xml';
         $this->viewHelper->setArguments(['pathToFile' => $pathToFile, 'package' => '_default']);
 
+        $this->filesystem->expects($this->once())->method('getRelativeFilePath')->willReturn($pathToFile);
         $this->package->expects($this->once())->method('getUrl')->willReturn($pathToFile);
         $this->assertEquals($pathToFile, $this->viewHelper->initializeArgumentsAndRender());
     }

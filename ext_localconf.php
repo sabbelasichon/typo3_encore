@@ -1,6 +1,5 @@
 <?php
 
-use TYPO3\CMS\Core\Core\Environment;
 
 if (! defined('TYPO3_MODE')) {
     die('Access denied.');

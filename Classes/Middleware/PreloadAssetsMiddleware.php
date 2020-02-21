@@ -28,7 +28,6 @@ use Symfony\Component\WebLink\Link;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
