@@ -1,6 +1,5 @@
 <?php
 
-
 if (! defined('TYPO3_MODE')) {
     die('Access denied.');
 }
@@ -29,3 +28,7 @@ call_user_func(static function ($packageKey) {
     // Enable for Frontend and Backend at the same time
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][$packageKey] = \Ssch\Typo3Encore\Integration\PageRendererHooks::class . '->renderPreProcess';
 }, 'typo3_encore');
+
+if (!\TYPO3\CMS\Core\Core\Environment::isComposerMode()) {
+    require \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('typo3_encore') . '/Resources/Private/Php/Libraries/vendor/autoload.php';
+}

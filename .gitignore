@@ -3,12 +3,8 @@
 /.php_cs
 /.php_cs.cache
 /composer.lock
-/Resources
-/!Resources/Private/Templates/*
-/TODO.md
+/Resources/Private/Page.html
+/Resources/Public
+/Resources/Private/Php/Libraries/vendor
 /phpunit.xml
-/build
 /var
-/Libraries/*
-!/Libraries/composer.json
-!/Libraries/composer.lock

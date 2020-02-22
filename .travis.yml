@@ -67,3 +67,25 @@ script:
     export typo3DatabaseUsername="root";
     export typo3DatabasePassword="";
     find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo "Running functional test suite {}"; .Build/bin/phpunit --colors  -c .Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml {}'
+
+jobs:
+  fast_finish: true
+  include:
+    - stage: 🚢 to TER
+      if: tag IS present
+      php: 7.2
+      install: skip
+      before_script: skip
+      script:
+        - |
+          if [ -n "$TYPO3_ORG_USERNAME" ] && [ -n "$TYPO3_ORG_PASSWORD" ]; then
+            echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
+            # Install ter client
+            composer global require helhum/ter-client
+            # Install dependencies
+            composer run-script extension-build
+            # Upload
+            TAG_MESSAGE=`git tag -n10 -l $TRAVIS_TAG | sed 's/^[0-9.]*[ ]*//g'`
+            echo "Uploading release ${TRAVIS_TAG} to TER"
+            $HOME/.composer/vendor/bin/ter-client upload typo3_encore . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
+          fi;

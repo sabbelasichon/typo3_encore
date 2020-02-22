@@ -55,6 +55,12 @@
     "post-autoload-dump": [
       "mkdir -p .Build/Web/typo3conf/ext/",
       "[ -L .Build/Web/typo3conf/ext/typo3_encore ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/typo3_encore"
+    ],
+    "extension-create-libs": [
+      "@composer install -d Resources/Private/Php/Libraries"
+    ],
+    "extension-build": [
+      "@extension-create-libs"
     ]
   },
   "extra": {
