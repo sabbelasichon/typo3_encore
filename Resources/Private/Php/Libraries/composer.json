@@ -1,0 +1,13 @@
+{
+  "config": {
+    "platform": {
+      "php": "7.2.5"
+    },
+    "classmap-authoritative": true,
+    "prepend-autoloader": false
+  },
+  "require": {
+    "symfony/web-link": "^4.3",
+    "symfony/asset": "^5.0"
+  }
+}
