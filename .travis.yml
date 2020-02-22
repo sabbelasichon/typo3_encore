@@ -9,7 +9,7 @@ env:
   - TYPO3_VERSION="^9.5.0"
   - TYPO3_VERSION="^10.2.0"
 
-sudo: false
+os: linux
 
 services:
   - mysql
