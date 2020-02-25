@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class PreloadAssetsMiddleware implements MiddlewareInterface
@@ -53,20 +54,19 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
 
-        if (!$settingsService instanceof SettingsServiceInterface || !$assetRegistry instanceof AssetRegistryInterface) {
-            // @codeCoverageIgnoreStart
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            // @codeCoverageIgnoreEnd
-        }
+        /** @var ObjectManagerInterface $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
         if (! $assetRegistry instanceof AssetRegistryInterface) {
             // @codeCoverageIgnoreStart
+            /** @var AssetRegistryInterface $assetRegistry */
             $assetRegistry = $objectManager->get(AssetRegistryInterface::class);
             // @codeCoverageIgnoreEnd
         }
 
         if (! $settingsService instanceof SettingsServiceInterface) {
             // @codeCoverageIgnoreStart
+            /** @var SettingsServiceInterface $settingsService */
             $settingsService = $objectManager->get(SettingsServiceInterface::class);
             // @codeCoverageIgnoreEnd
         }

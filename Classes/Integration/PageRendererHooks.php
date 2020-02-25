@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 final class PageRendererHooks
 {
@@ -35,7 +36,9 @@ final class PageRendererHooks
     {
         if (! $tagRenderer instanceof TagRendererInterface) {
             // @codeCoverageIgnoreStart
+            /** @var ObjectManagerInterface $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            /** @var TagRendererInterface $tagRenderer */
             $tagRenderer = $objectManager->get(TagRendererInterface::class);
             // @codeCoverageIgnoreEnd
         }

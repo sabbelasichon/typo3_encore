@@ -28,16 +28,6 @@ final class TagRenderer implements TagRendererInterface
     private $entrypointLookupCollection;
 
     /**
-     * @var array
-     */
-    private $defaultAttributes = [];
-
-    /**
-     * @var array
-     */
-    private $renderedFiles = [];
-
-    /**
      * @var AssetRegistryInterface
      */
     private $assetRegistry;
@@ -50,6 +40,7 @@ final class TagRenderer implements TagRendererInterface
 
     public function renderWebpackScriptTags(string $entryName, string $position = 'footer', string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
     {
+        /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
 
@@ -88,6 +79,7 @@ final class TagRenderer implements TagRendererInterface
 
     public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
     {
+        /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
         $files = $entryPointLookup->getCssFiles($entryName);

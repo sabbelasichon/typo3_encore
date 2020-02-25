@@ -138,7 +138,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             return $this->entriesData;
         }
 
-        if ($this->cache && $this->cache->has($this->cacheKey)) {
+        if ($this->cache !== null && $this->cache->has($this->cacheKey)) {
             return $this->cache->get($this->cacheKey);
         }
 
@@ -156,7 +156,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             throw new InvalidArgumentException(sprintf('Could not find an "entrypoints" key in the "%s" file', $this->entrypointJsonPath));
         }
 
-        if ($this->cache) {
+        if ($this->cache !== null) {
             $this->cache->set($this->cacheKey, $this->entriesData);
         }
 
