@@ -54,20 +54,17 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
 
-        /** @var ObjectManagerInterface $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
         if (! $assetRegistry instanceof AssetRegistryInterface) {
             // @codeCoverageIgnoreStart
             /** @var AssetRegistryInterface $assetRegistry */
-            $assetRegistry = $objectManager->get(AssetRegistryInterface::class);
+            $assetRegistry = GeneralUtility::makeInstance(ObjectManager::class)->get(AssetRegistryInterface::class);
             // @codeCoverageIgnoreEnd
         }
 
         if (! $settingsService instanceof SettingsServiceInterface) {
             // @codeCoverageIgnoreStart
             /** @var SettingsServiceInterface $settingsService */
-            $settingsService = $objectManager->get(SettingsServiceInterface::class);
+            $settingsService = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsServiceInterface::class);
             // @codeCoverageIgnoreEnd
         }
 
