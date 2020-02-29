@@ -98,6 +98,6 @@ final class PageRendererHooks
 
     private function createBuildAndEntryName(string $file): array
     {
-        return GeneralUtility::trimExplode(':', $this->removePrefix($file), 2);
+        return GeneralUtility::trimExplode(':', $this->removePrefix($file), true, 2);
     }
 }
