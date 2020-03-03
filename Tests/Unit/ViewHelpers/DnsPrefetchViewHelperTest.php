@@ -2,6 +2,10 @@
 
 namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 
+use PHPUnit\Framework\TestCase;
+use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ViewHelpers\DnsPrefetchViewHelper;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -15,17 +19,13 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
-use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
-use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
-
 /**
- * @covers \Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper
+ * @covers \Ssch\Typo3Encore\ViewHelpers\DnsPrefetchViewHelper
  */
-final class PreloadViewHelperTest extends ViewHelperBaseTestcase
+class DnsPrefetchViewHelperTest extends TestCase
 {
     /**
-     * @var PreloadViewHelper
+     * @var DnsPrefetchViewHelper
      */
     protected $viewHelper;
 
@@ -38,7 +38,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     {
         parent::setUp();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->viewHelper = new PreloadViewHelper($this->assetRegistry);
+        $this->viewHelper = new DnsPrefetchViewHelper($this->assetRegistry);
     }
 
     /**
@@ -47,7 +47,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     public function registerFileWithEmptyAttributes(): void
     {
         $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style']);
-        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'preload');
+        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'dns-prefetch');
         $this->viewHelper->initializeArgumentsAndRender();
     }
 
@@ -58,7 +58,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     {
         $attributes = ['type' => 'something'];
         $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
-        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'preload');
+        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'dns-prefetch');
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }

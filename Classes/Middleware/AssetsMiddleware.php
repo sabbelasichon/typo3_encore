@@ -29,11 +29,14 @@ use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
-final class PreloadAssetsMiddleware implements MiddlewareInterface
+final class AssetsMiddleware implements MiddlewareInterface
 {
+    /**
+     * @var array
+     */
+    private static $crossOriginAllowed = ['preload', 'preconnect'];
 
     /**
      * @var TypoScriptFrontendController
@@ -76,10 +79,6 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if ($this->settingsService->getBooleanByPath('preload.enable') === false) {
-            return $response;
-        }
-
         if (($response instanceof NullResponse && ! $this->controller->isOutputting())) {
             return $response;
         }
@@ -95,20 +94,27 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
         /** @var GenericLinkProvider $linkProvider */
         $linkProvider = $request->getAttribute('_links');
         $defaultAttributes = $this->assetRegistry->getDefaultAttributes();
-        $crossOrigin = $defaultAttributes['crossorigin'] ?? false;
+        $crossOrigin = $defaultAttributes['crossorigin'] ? (bool)$defaultAttributes['crossorigin'] : false;
 
-        foreach ($this->assetRegistry->getRegisteredFiles() as $type => $files) {
-            foreach ($files as $href => $attributes) {
-                $link = (new Link('preload', PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', $type);
-                if (false !== $crossOrigin && '' !== (string)$crossOrigin) {
-                    $link = $link->withAttribute('crossorigin', $crossOrigin);
+        foreach ($this->assetRegistry->getRegisteredFiles() as $rel => $relFiles) {
+            // You can disable or enable one of the resource hints via typoscript simply by adding something like that preload.enable = 1, dns-prefetch.enable = 1
+            if ($this->settingsService->getBooleanByPath(sprintf('%s.enable', $rel)) === false) {
+                continue;
+            }
+
+            foreach ($relFiles['files'] as $type => $files) {
+                foreach ($files as $href => $attributes) {
+                    $link = (new Link($rel, PathUtility::getAbsoluteWebPath($href)))->withAttribute('as', $type);
+                    if ($this->canAddCrossOriginAttribute($crossOrigin, $rel)) {
+                        $link = $link->withAttribute('crossorigin', $crossOrigin);
+                    }
+
+                    foreach ($attributes as $key => $value) {
+                        $link = $link->withAttribute($key, $value);
+                    }
+
+                    $linkProvider = $linkProvider->withLink($link);
                 }
-
-                foreach ($attributes as $key => $value) {
-                    $link = $link->withAttribute($key, $value);
-                }
-
-                $linkProvider = $linkProvider->withLink($link);
             }
         }
 
@@ -122,5 +128,10 @@ final class PreloadAssetsMiddleware implements MiddlewareInterface
         }
 
         return $response;
+    }
+
+    private function canAddCrossOriginAttribute(bool $crossOrigin, string $rel): bool
+    {
+        return false !== $crossOrigin && '' !== (string)$crossOrigin && in_array($rel, self::$crossOriginAllowed, true);
     }
 }

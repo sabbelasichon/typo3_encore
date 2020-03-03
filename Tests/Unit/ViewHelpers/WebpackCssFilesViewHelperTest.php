@@ -36,7 +36,7 @@ final class WebpackCssFilesViewHelperTest extends ViewHelperBaseTestcase
      */
     private $entrypointLookupCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->entrypointLookupCollection = $this->getMockBuilder(EntrypointLookupCollectionInterface::class)->getMock();
@@ -46,7 +46,7 @@ final class WebpackCssFilesViewHelperTest extends ViewHelperBaseTestcase
     /**
      * @test
      */
-    public function render()
+    public function render(): void
     {
         $this->viewHelper->setArguments(['entryName' => 'app', 'buildName' => '_default']);
         $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();

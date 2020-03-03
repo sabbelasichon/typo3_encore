@@ -40,15 +40,15 @@ final class AssetRegistryTest extends UnitTestCase
     /**
      * @test
      */
-    public function registerFilesSuccessFully()
+    public function registerFilesSuccessFully(): void
     {
         $this->subject->registerFile('file1.css', 'style');
         $this->subject->registerFile('file2.css', 'style');
         $this->subject->registerFile('file.js', 'script');
 
         $registeredFiles = $this->subject->getRegisteredFiles();
-        $this->assertCount(2, $registeredFiles['style']);
-        $this->assertCount(1, $registeredFiles['script']);
+        $this->assertCount(2, $registeredFiles['preload']['files']['style']);
+        $this->assertCount(1, $registeredFiles['preload']['files']['script']);
 
         $this->assertSame(['crossorigin' => 'anonymus'], $this->subject->getDefaultAttributes());
     }

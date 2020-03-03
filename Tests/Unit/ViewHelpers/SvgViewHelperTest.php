@@ -50,7 +50,7 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
      */
     private $idGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->viewHelper = $this->getAccessibleMock(SvgViewHelper::class, ['renderChildren']);
@@ -71,7 +71,7 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
      * @param string $expected
      * @dataProvider renderDataProvider
      */
-    public function render(array $arguments, string $expected)
+    public function render(array $arguments, string $expected): void
     {
         $arguments = array_merge($arguments, ['src' => 'somefile.svg']);
         $image = $this->getMockBuilder(FileInterface::class)->getMock();

@@ -19,7 +19,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-final class PreloadViewHelper extends AbstractViewHelper
+final class DnsPrefetchViewHelper extends AbstractViewHelper
 {
     /**
      * @var AssetRegistryInterface
@@ -33,14 +33,14 @@ final class PreloadViewHelper extends AbstractViewHelper
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('uri', 'string', 'The uri to preload', true);
+        $this->registerArgument('uri', 'string', 'The uri to dsn-prefetch', true);
         $this->registerArgument('as', 'string', 'The type like style or script', true);
-        $this->registerArgument('attributes', 'array', 'The attributes of this link (e.g. "[\'as\' => true]", "[\'crossorigin\' => \'use-credentials\']")', false, []);
+        $this->registerArgument('attributes', 'array', 'The attributes of this link (e.g. "[\'as\' => true]", "[\'pr\' => 0.5]")', false, []);
     }
 
     public function render(): void
     {
         $attributes = $this->arguments['attributes'] ?? [];
-        $this->assetRegistry->registerFile($this->arguments['uri'], $this->arguments['as'], $attributes, 'preload');
+        $this->assetRegistry->registerFile($this->arguments['uri'], $this->arguments['as'], $attributes, 'dns-prefetch');
     }
 }
