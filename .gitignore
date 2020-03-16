@@ -3,8 +3,7 @@
 /.php_cs
 /.php_cs.cache
 /composer.lock
-/Resources/Private/Page.html
-/Resources/Public
+/Resources/Public/Private
 /Resources/Private/Php/Libraries/vendor
 /phpunit.xml
 /var
