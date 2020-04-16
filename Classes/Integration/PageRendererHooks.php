@@ -59,7 +59,7 @@ final class PageRendererHooks
 
                         $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? 'footer' : '';
 
-                        unset($params[$includeType][$key], $jsFile['file'], $jsFile['section']);
+                        unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
 
                         $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile);
                     }

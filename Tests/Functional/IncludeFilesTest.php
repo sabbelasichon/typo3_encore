@@ -57,5 +57,6 @@ final class IncludeFilesTest extends FunctionalTestCase
         $this->assertStringContainsString('TYPO3 Webpack Encore - Modern Frontend Development', $response->getContent());
         $this->assertStringContainsString('main.css', $response->getContent());
         $this->assertStringContainsString('main.js', $response->getContent());
+        $this->assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $response->getContent());
     }
 }

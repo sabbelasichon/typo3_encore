@@ -16,9 +16,11 @@ namespace Ssch\Typo3Encore\Tests\Unit\Asset;
  */
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
+use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -34,95 +36,168 @@ final class TagRendererTest extends UnitTestCase
     protected $subject;
 
     /**
-     * @var MockObject|PageRenderer
+     * @var ObjectProphecy|PageRenderer
      */
     protected $pageRenderer;
 
     /**
-     * @var EntrypointLookupCollectionInterface|MockObject
+     * @var EntrypointLookupCollectionInterface|ObjectProphecy
      */
     protected $entryLookupCollection;
 
     /**
-     * @var AssetRegistryInterface|MockObject
+     * @var AssetRegistryInterface|ObjectProphecy
      */
     private $assetRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->pageRenderer = $this->getMockBuilder(PageRenderer::class)->getMock();
-        $this->entryLookupCollection = $this->getMockBuilder(EntrypointLookupCollectionInterface::class)->getMock();
-        $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->subject = new TagRenderer($this->entryLookupCollection, $this->assetRegistry);
+        $this->pageRenderer = $this->prophesize(PageRenderer::class);
+        $this->entryLookupCollection = $this->prophesize(EntrypointLookupCollectionInterface::class);
+        $this->assetRegistry = $this->prophesize(AssetRegistryInterface::class);
+        $this->subject = new TagRenderer($this->entryLookupCollection->reveal(), $this->assetRegistry->reveal());
     }
 
     /**
      * @test
      */
-    public function renderWebpackScriptTagsWithDefaultBuild()
+    public function renderWebpackScriptTagsWithDefaultBuild(): void
     {
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->method('getJavaScriptFiles')->with('app')->willReturn(['file.js']);
-        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addJsFile');
+        $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->assetRegistry->expects($this->once())->method('registerFile');
-        $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer);
+        $this->addJsFileShouldBeCalledOnce();
+
+        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer->reveal());
     }
 
     /**
      * @test
      */
-    public function renderWebpackScriptTagsWithDefaultBuildWithoutAssetRegistration()
+    public function renderWebpackScriptTagsWithDefaultBuildWithoutAssetRegistration(): void
     {
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->method('getJavaScriptFiles')->with('app')->willReturn(['file.js']);
-        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addJsFile');
+        $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->assetRegistry->expects($this->never())->method('registerFile');
-        $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer, [], false);
+        $this->addJsFileShouldBeCalledOnce();
+
+        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer->reveal(), [], false);
     }
 
     /**
      * @test
      */
-    public function renderWebpackScriptTagsWithDefaultBuildInFooter()
+    public function renderWebpackScriptTagsWithDefaultBuildInFooter(): void
     {
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->method('getJavaScriptFiles')->with('app')->willReturn(['file.js']);
-        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addJsFooterFile')->with('file.js', 'text/javascript', true, false, '', false, '|', false, '', false, '');
+        $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->assetRegistry->expects($this->once())->method('registerFile');
-        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer, ['compress' => true, 'excludeFromConcatenation' => false]);
+        $this->pageRenderer->addJsFooterFile(
+            'file.js',
+            'text/javascript',
+            true,
+            false,
+            '',
+            false,
+            '|',
+            false,
+            'foobarbaz',
+            false,
+            ''
+        )->shouldBeCalledOnce();
+
+        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
     }
 
     /**
      * @test
      */
-    public function renderWebpackLinkTagsWithDefaultBuild()
+    public function renderWebpackLinkTagsWithDefaultBuild(): void
     {
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->method('getCssFiles')->with('app')->willReturn(['file.css']);
-        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addCssFile')->with('file.css', 'stylesheet', 'all', '', true, true, '', true, '|', false);
+        $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->assetRegistry->expects($this->once())->method('registerFile');
-        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer, ['forceOnTop' => true, 'compress' => true]);
+        $this->pageRenderer->addCssFile(
+            'file.css',
+            'stylesheet',
+            'all',
+            '',
+            true,
+            true,
+            '',
+            true,
+            '|',
+            false
+        )->shouldBeCalledOnce();
+
+        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true]);
     }
 
     /**
      * @test
      */
-    public function renderWebpackLinkTagsWithDefaultBuildWithoutAssetRegistration()
+    public function renderWebpackLinkTagsWithDefaultBuildWithoutAssetRegistration(): void
     {
-        $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $entrypointLookup->method('getCssFiles')->with('app')->willReturn(['file.css']);
-        $this->entryLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
-        $this->pageRenderer->expects($this->once())->method('addCssFile')->with('file.css', 'stylesheet', 'all', '', true, true, '', true, '|', false);
+        $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->assetRegistry->expects($this->never())->method('registerFile');
-        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer, ['forceOnTop' => true, 'compress' => true], false);
+        $this->pageRenderer->addCssFile(
+            'file.css',
+            'stylesheet',
+            'all',
+            '',
+            true,
+            true,
+            '',
+            true,
+            '|',
+            false
+        )->shouldBeCalledOnce();
+
+        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
+    }
+
+    private function addJsFileShouldBeCalledOnce(): void
+    {
+        $this->pageRenderer->addJsFile(
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any()
+        )->shouldBeCalledOnce();
+    }
+
+    private function createEntrypointLookUpClass(): EntrypointLookupInterface
+    {
+        return new class implements EntrypointLookupInterface, IntegrityDataProviderInterface {
+            public function getJavaScriptFiles(string $entryName): array
+            {
+                return ['file.js'];
+            }
+
+            public function getCssFiles(string $entryName): array
+            {
+                return ['file.css'];
+            }
+
+            public function reset()
+            {
+            }
+
+            public function getIntegrityData(): array
+            {
+                return [
+                    'file.js' => 'foobarbaz'
+                ];
+            }
+        };
     }
 }
