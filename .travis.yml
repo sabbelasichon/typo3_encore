@@ -7,7 +7,7 @@ php:
 
 env:
   - TYPO3_VERSION="^9.5.0"
-  - TYPO3_VERSION="^10.3.0"
+  - TYPO3_VERSION="^10.4.0"
 
 os: linux
 

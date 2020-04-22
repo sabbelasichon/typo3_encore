@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = [
+$EM_CONF['typo3_encore'] = [
     'title' => 'TYPO3 with Webpack Encore',
     'description' => 'Webpack Encore from Symfony for TYPO3',
     'category' => 'fe',
@@ -8,7 +8,7 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'breakpoint@schreibersebastian.de',
     'state' => 'stable',
     'clearCacheOnLoad' => false,
-    'version' => '2.1.0',
+    'version' => '2.2.0',
     'constraints' => [
         'depends' => [
             'php' => '7.2.5-7.4.999',
