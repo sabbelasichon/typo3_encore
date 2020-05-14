@@ -75,6 +75,7 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
     {
         $arguments = array_merge($arguments, ['src' => 'somefile.svg']);
         $image = $this->getMockBuilder(FileInterface::class)->getMock();
+        $image->method('getContents')->willReturn($this->getMockSvg());
         $this->viewHelper->setArguments($arguments);
         $this->imageService->expects($this->once())->method('getImage')->with($arguments['src'])->willReturn($image);
         $this->assertEquals($expected, $this->viewHelper->render());
@@ -99,6 +100,22 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
                 ['name' => 'name', 'title' => 'Title', 'description' => 'Description', 'width' => 100, 'height' => 100, 'role' => 'foo'],
                 sprintf('<svg aria-labelledby="title-%1$s description-%1$s" width="100" height="100" xmlns="http://www.w3.org/2000/svg" focusable="false" role="foo"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><use xlink:href="#name" /></svg>', self::ID)
             ],
+            [
+                ['name' => 'foobar', 'title' => 'Title', 'description' => 'Description', 'width' => 100, 'height' => 100, 'inline' => true],
+                sprintf('<svg aria-labelledby="title-%1$s description-%1$s" viewBox="0 0 45 45" width="100" height="100" xmlns="http://www.w3.org/2000/svg" focusable="false"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red"/></svg>', self::ID)
+            ],
+            [
+                ['name' => 'id-invalid', 'title' => 'Title', 'description' => 'Description', 'width' => 100, 'height' => 100, 'inline' => true],
+                sprintf('<svg aria-labelledby="title-%1$s description-%1$s" width="100" height="100" xmlns="http://www.w3.org/2000/svg" focusable="false"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc></svg>', self::ID)
+            ],
         ];
+    }
+
+    /**
+     * @return string
+     */
+    private function getMockSvg(): string
+    {
+        return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><symbol viewBox="0 0 45 45" id="foobar"><circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red"/></symbol></defs><use id="foobar-usage" xlink:href="#foobar" class="sprite-symbol-usage"/></svg>';
     }
 }
