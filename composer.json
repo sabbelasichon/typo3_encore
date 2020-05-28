@@ -19,8 +19,8 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.2.0 <8.0",
-    "typo3/cms-core": "^9.5 || ^10.4",
+    "php": ">=7.2.5 <8.0",
+    "typo3/cms-core": "^9.5.17 || ^10.4.2",
     "symfony/web-link": "^4.3",
     "symfony/asset": "^5.0",
     "ext-dom": "*"
@@ -67,7 +67,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0.0-dev"
+      "dev-master": "2.x-dev"
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",
