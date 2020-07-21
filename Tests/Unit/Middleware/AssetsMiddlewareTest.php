@@ -87,7 +87,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getBooleanByPath')->willReturn(false);
+        $this->settingsService->expects($this->once())->method('getSettings')->willReturn([]);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
         $defaultAttributes = ['crossorigin' => true];
         $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
@@ -176,6 +176,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')->willReturn($response);
+        $this->settingsService->method('getSettings')->willReturn(['array' => 'should-not-be-empty']);
         $this->settingsService->method('getBooleanByPath')->willReturn(true);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
         $defaultAttributes = ['crossorigin' => true];
