@@ -17,6 +17,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  */
 
 use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use TYPO3\CMS\Extbase\Service\ImageService;
@@ -33,14 +34,9 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     protected $tagName = 'svg';
 
     /**
-     * @var bool
-     */
-    protected $forceClosingTag = true;
-
-    /**
      * @var ImageService
      */
-    protected $imageService;
+    private $imageService;
 
     /**
      * @var IdGeneratorInterface
@@ -114,7 +110,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             $doc->loadXML($image->getContents());
             $xpath = new DOMXPath($doc);
             if (($icon = $xpath->query("//*[@id='{$name}']")->item(0)) !== null) {
-                if ($icon->hasAttribute('viewBox')) {
+                if ($icon instanceof DOMElement && $icon->hasAttribute('viewBox')) {
                     $this->tag->addAttribute('viewBox', $icon->getAttribute('viewBox'));
                 }
                 foreach ($icon->childNodes as $node) {
