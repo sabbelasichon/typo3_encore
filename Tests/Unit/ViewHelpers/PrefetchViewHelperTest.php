@@ -15,14 +15,14 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use PHPUnit\Framework\TestCase;
+use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ViewHelpers\PrefetchViewHelper;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\PrefetchViewHelper
  */
-class PrefetchViewHelperTest extends TestCase
+class PrefetchViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
      * @var PrefetchViewHelper
@@ -46,7 +46,7 @@ class PrefetchViewHelperTest extends TestCase
      */
     public function registerFileWithEmptyAttributes(): void
     {
-        $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style']);
+        $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style']);
         $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'prefetch');
         $this->viewHelper->initializeArgumentsAndRender();
     }
@@ -57,7 +57,7 @@ class PrefetchViewHelperTest extends TestCase
     public function registerFileWithAdditionalAttributes(): void
     {
         $attributes = ['type' => 'something'];
-        $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
+        $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
         $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'prefetch');
         $this->viewHelper->initializeArgumentsAndRender();
     }

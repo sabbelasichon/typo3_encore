@@ -46,7 +46,7 @@ final class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
      */
     public function render(): void
     {
-        $this->viewHelper->setArguments(['entryName' => 'app', 'media' => 'all', 'buildName' => '_default', 'parameters' => [], 'registerFile' => true]);
+        $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'media' => 'all', 'buildName' => '_default', 'parameters' => [], 'registerFile' => true]);
         $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', '_default', null, []);
         $this->viewHelper->initializeArgumentsAndRender();
     }

@@ -58,7 +58,7 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
     public function returnResolvedPathForFile()
     {
         $pathToFile = 'EXT:typo3_encore/Tests/Build/UnitTests.xml';
-        $this->viewHelper->setArguments(['pathToFile' => $pathToFile, 'package' => '_default']);
+        $this->setArgumentsUnderTest($this->viewHelper, ['pathToFile' => $pathToFile, 'package' => '_default']);
 
         $this->filesystem->expects($this->once())->method('getRelativeFilePath')->willReturn($pathToFile);
         $this->package->expects($this->once())->method('getUrl')->willReturn($pathToFile);

@@ -46,7 +46,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
      */
     public function registerFileWithEmptyAttributes(): void
     {
-        $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style']);
+        $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style']);
         $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'preload');
         $this->viewHelper->initializeArgumentsAndRender();
     }
@@ -57,7 +57,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     public function registerFileWithAdditionalAttributes(): void
     {
         $attributes = ['type' => 'something'];
-        $this->viewHelper->setArguments(['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
+        $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
         $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'preload');
         $this->viewHelper->initializeArgumentsAndRender();
     }
