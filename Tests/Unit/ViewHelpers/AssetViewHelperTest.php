@@ -15,12 +15,12 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
 use Ssch\Typo3Encore\ViewHelpers\AssetViewHelper;
 use Symfony\Component\Asset\PackageInterface;
+use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\AssetViewHelper
@@ -42,7 +42,7 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
      */
     protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->package = $this->getMockBuilder(PackageInterface::class)->getMock();
@@ -55,7 +55,7 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
     /**
      * @test
      */
-    public function returnResolvedPathForFile()
+    public function returnResolvedPathForFile(): void
     {
         $pathToFile = 'EXT:typo3_encore/Tests/Build/UnitTests.xml';
         $this->setArgumentsUnderTest($this->viewHelper, ['pathToFile' => $pathToFile, 'package' => '_default']);

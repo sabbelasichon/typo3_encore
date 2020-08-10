@@ -15,12 +15,12 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerHooks;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerHooks
@@ -35,19 +35,19 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
     /**
      * @var MockObject|TypoScriptFrontendController
      */
-    private $typoScriptFrontendController;
+    protected $typoScriptFrontendController;
 
     /**
      * @var MockObject|SettingsServiceInterface
      */
-    private $settingsService;
+    protected $settingsService;
 
     /**
      * @var AssetRegistryInterface|MockObject
      */
-    private $assetRegistry;
+    protected $assetRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
@@ -58,7 +58,7 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
     /**
      * @test
      */
-    public function registryDoesNotContainFiles()
+    public function registryDoesNotContainFiles(): void
     {
         $this->assetRegistry->expects($this->once())->method('getRegisteredFiles')->willReturn([]);
         $this->assetRegistry->expects($this->never())->method('getDefaultAttributes');
@@ -71,7 +71,7 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
     /**
      * @test
      */
-    public function registryContainsFiles()
+    public function registryContainsFiles(): void
     {
         $registeredFiles = [
             'preload' => [

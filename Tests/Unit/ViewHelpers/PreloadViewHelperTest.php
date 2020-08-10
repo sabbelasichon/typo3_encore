@@ -15,9 +15,9 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
+use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper

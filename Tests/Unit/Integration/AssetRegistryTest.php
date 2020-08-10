@@ -15,10 +15,10 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\AssetRegistry;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\AssetRegistry
@@ -30,7 +30,7 @@ final class AssetRegistryTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $settingsService->method('getStringByPath')->with('preload.crossorigin')->willReturn('anonymus');

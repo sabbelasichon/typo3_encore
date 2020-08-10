@@ -15,16 +15,16 @@ namespace Ssch\Typo3Encore\Tests\Unit\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
-use PHPUnit\Framework\TestCase;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollection;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\UndefinedBuildException;
 use Ssch\Typo3Encore\Integration\EntryLookupFactoryInterface;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Asset\EntrypointLookupCollection
  */
-final class EntrypointLookupCollectionTest extends TestCase
+final class EntrypointLookupCollectionTest extends UnitTestCase
 {
     /**
      * @var EntrypointLookupCollection
@@ -36,7 +36,7 @@ final class EntrypointLookupCollectionTest extends TestCase
      */
     protected $entryLookupFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entryLookupFactory = $this->getMockBuilder(EntryLookupFactoryInterface::class)->getMock();
         $buildEntrypoints = [
@@ -50,7 +50,7 @@ final class EntrypointLookupCollectionTest extends TestCase
      * @test
      * @throws UndefinedBuildException
      */
-    public function getEntrypointLookupWithoutDefaultBuildNameThrowsException()
+    public function getEntrypointLookupWithoutDefaultBuildNameThrowsException(): void
     {
         $this->expectException(UndefinedBuildException::class);
         $this->subject->getEntrypointLookup();
@@ -60,7 +60,7 @@ final class EntrypointLookupCollectionTest extends TestCase
      * @test
      * @throws UndefinedBuildException
      */
-    public function getEntrypointLookupWithWrongBuildNameThrowsException()
+    public function getEntrypointLookupWithWrongBuildNameThrowsException(): void
     {
         $this->expectException(UndefinedBuildException::class);
         $this->subject->getEntrypointLookup('nonexisting');
@@ -71,7 +71,7 @@ final class EntrypointLookupCollectionTest extends TestCase
      * @testdox Get defined EntryPointLookup instance successfully
      * @throws UndefinedBuildException
      */
-    public function getEntrypointLookup()
+    public function getEntrypointLookup(): void
     {
         $this->assertInstanceOf(EntrypointLookupInterface::class, $this->subject->getEntrypointLookup('existing'));
     }
@@ -80,7 +80,7 @@ final class EntrypointLookupCollectionTest extends TestCase
      * @test
      * @throws UndefinedBuildException
      */
-    public function getEntrypointLookupWithDefinedDefaultBuild()
+    public function getEntrypointLookupWithDefinedDefaultBuild(): void
     {
         $subject = new EntrypointLookupCollection($this->entryLookupFactory, 'existing');
         $this->assertInstanceOf(EntrypointLookupInterface::class, $subject->getEntrypointLookup());

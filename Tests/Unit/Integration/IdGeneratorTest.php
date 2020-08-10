@@ -15,8 +15,8 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\IdGenerator;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\IdGenerator
@@ -26,7 +26,7 @@ final class IdGeneratorTest extends UnitTestCase
     /**
      * @test
      */
-    public function idGeneratorReturnsString()
+    public function idGeneratorReturnsString(): void
     {
         $idGenerator = new IdGenerator();
         $this->assertTrue(is_string($idGenerator->generate()));

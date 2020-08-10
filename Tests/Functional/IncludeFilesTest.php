@@ -16,11 +16,15 @@ namespace Ssch\Typo3Encore\Tests\Functional;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\Exception\Exception;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\TestingFramework\Core\Exception;
+use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class IncludeFilesTest extends FunctionalTestCase
 {
+    /**
+     * @var int
+     */
     private const ROOT_PAGE_UID = 1;
 
     /**
@@ -30,7 +34,7 @@ final class IncludeFilesTest extends FunctionalTestCase
         'typo3conf/ext/typo3_encore',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         try {
@@ -50,13 +54,13 @@ final class IncludeFilesTest extends FunctionalTestCase
                 'typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/MainRenderer.typoscript',
             ]
         );
-        $response = $this->getFrontendResponse(
-            self::ROOT_PAGE_UID
-        );
 
-        $this->assertStringContainsString('TYPO3 Webpack Encore - Modern Frontend Development', $response->getContent());
-        $this->assertStringContainsString('main.css', $response->getContent());
-        $this->assertStringContainsString('main.js', $response->getContent());
-        $this->assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $response->getContent());
+        $response = $this->executeFrontendRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_UID));
+
+        $content = $response->getBody()->getContents();
+        $this->assertStringContainsString('TYPO3 Webpack Encore - Modern Frontend Development', $content);
+        $this->assertStringContainsString('main.css', $content);
+        $this->assertStringContainsString('main.js', $content);
+        $this->assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $content);
     }
 }

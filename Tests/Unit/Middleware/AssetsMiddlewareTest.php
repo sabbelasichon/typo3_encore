@@ -15,7 +15,6 @@ namespace Ssch\Typo3Encore\Tests\Unit\Middleware;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,6 +26,7 @@ use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Middleware\AssetsMiddleware
@@ -41,19 +41,19 @@ final class AssetsMiddlewareTest extends UnitTestCase
     /**
      * @var MockObject|TypoScriptFrontendController
      */
-    private $typoScriptFrontendController;
+    protected $typoScriptFrontendController;
 
     /**
      * @var MockObject|SettingsServiceInterface
      */
-    private $settingsService;
+    protected $settingsService;
 
     /**
      * @var AssetRegistryInterface|MockObject
      */
-    private $assetRegistry;
+    protected $assetRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();

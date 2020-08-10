@@ -25,6 +25,9 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 final class PageRendererHooks
 {
+    /**
+     * @var string
+     */
     private const ENCORE_PREFIX = 'typo3_encore:';
 
     /**
@@ -52,12 +55,19 @@ final class PageRendererHooks
             if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $jsFile) {
                     if ($this->isEncoreEntryName($jsFile['file'])) {
-                        [$first, $second] = $this->createBuildAndEntryName($jsFile['file']);
+                        $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
+                        $buildName = '_default';
 
-                        $buildName = $second ? $first : '_default';
-                        $entryName = $second ?? $first;
+                        if (count($buildAndEntryName) === 2) {
+                            [$buildName, $entryName] = $buildAndEntryName;
+                        } else {
+                            $entryName = $buildAndEntryName[0];
+                        }
 
-                        $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? 'footer' : '';
+                        $position = '';
+                        if (array_key_exists('section', $params[$includeType][$key])) {
+                            $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? 'footer' : '';
+                        }
 
                         unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
 
@@ -72,10 +82,14 @@ final class PageRendererHooks
             if (! empty($params[$includeType])) {
                 foreach ($params[$includeType] as $key => $cssFile) {
                     if ($this->isEncoreEntryName($cssFile['file'])) {
-                        [$first, $second] = $this->createBuildAndEntryName($cssFile['file']);
+                        $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
+                        $buildName = '_default';
 
-                        $buildName = $second ? $first : '_default';
-                        $entryName = $second ?? $first;
+                        if (count($buildAndEntryName) === 2) {
+                            [$buildName, $entryName] = $buildAndEntryName;
+                        } else {
+                            $entryName = $buildAndEntryName[0];
+                        }
 
                         unset($params[$includeType][$key], $cssFile['file']);
 

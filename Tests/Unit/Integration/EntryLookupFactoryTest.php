@@ -15,13 +15,13 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Integration\EntryLookupFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\EntryLookupFactory
@@ -46,9 +46,9 @@ final class EntryLookupFactoryTest extends UnitTestCase
     /**
      * @var FilesystemInterface|MockObject
      */
-    private $filesystem;
+    protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
@@ -59,7 +59,7 @@ final class EntryLookupFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function getCollectionWithDefaultCollection()
+    public function getCollectionWithDefaultCollection(): void
     {
         $builds = [
             'config1' => 'path/to/config1'

@@ -15,12 +15,12 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\PackageFactory;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Symfony\Component\Asset\PackageInterface;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\PackageFactory
@@ -35,14 +35,14 @@ final class PackageFactoryTest extends UnitTestCase
     /**
      * @var MockObject|SettingsServiceInterface
      */
-    private $settingsService;
+    protected $settingsService;
 
     /**
      * @var FilesystemInterface|MockObject
      */
-    private $filesystem;
+    protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
@@ -52,7 +52,7 @@ final class PackageFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function returnsPackageWithDefaultManifestPath()
+    public function returnsPackageWithDefaultManifestPath(): void
     {
         $this->settingsService->method('getStringByPath')->with('manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
@@ -62,7 +62,7 @@ final class PackageFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function returnsPackageWithSpecificManifestPath()
+    public function returnsPackageWithSpecificManifestPath(): void
     {
         $this->settingsService->method('getStringByPath')->with('packages.custom.manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');

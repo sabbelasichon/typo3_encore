@@ -15,9 +15,9 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoder;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\JsonDecoder
@@ -27,9 +27,9 @@ final class JsonDecoderTest extends UnitTestCase
     /**
      * @var JsonDecoder
      */
-    private $subject;
+    protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new JsonDecoder();
     }
@@ -37,7 +37,7 @@ final class JsonDecoderTest extends UnitTestCase
     /**
      * @test
      */
-    public function decodingThrowsException()
+    public function decodingThrowsException(): void
     {
         $this->expectException(JsonDecodeException::class);
         $this->subject->decode('can');
@@ -46,7 +46,7 @@ final class JsonDecoderTest extends UnitTestCase
     /**
      * @test
      */
-    public function decodeSuccessfully()
+    public function decodeSuccessfully(): void
     {
         $this->assertEquals(['homepage' => ['js' => ['file.js'], 'css' => ['file.css']]], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
     }

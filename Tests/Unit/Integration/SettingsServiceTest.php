@@ -15,10 +15,10 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\SettingsService;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\SettingsService
@@ -28,14 +28,14 @@ final class SettingsServiceTest extends UnitTestCase
     /**
      * @var SettingsService
      */
-    private $subject;
+    protected $subject;
 
     /**
      * @var ConfigurationManagerInterface|MockObject
      */
-    private $configurationManager;
+    protected $configurationManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurationManager = $this->createMock(ConfigurationManagerInterface::class);
         $this->subject = new SettingsService($this->configurationManager);
@@ -44,7 +44,7 @@ final class SettingsServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getExistingSettingByPathReturnsCorrectValue()
+    public function getExistingSettingByPathReturnsCorrectValue(): void
     {
         $settings = [
             'entrypointJsonPath' => 'pathToFile',
@@ -61,7 +61,7 @@ final class SettingsServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getNonExistingSettingStringByPathReturnsString()
+    public function getNonExistingSettingStringByPathReturnsString(): void
     {
         $this->expectEmptySettingsAreReturned();
         $this->assertIsString($this->subject->getStringByPath('entrypointJsonPath'));
@@ -70,7 +70,7 @@ final class SettingsServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getNonExistingSettingArrayByPathReturnsArray()
+    public function getNonExistingSettingArrayByPathReturnsArray(): void
     {
         $this->expectEmptySettingsAreReturned();
         $this->assertIsArray($this->subject->getArrayByPath('entrypointJsonPath'));
@@ -79,7 +79,7 @@ final class SettingsServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getNonExistingSettingBooleanByPathReturnsBoolean()
+    public function getNonExistingSettingBooleanByPathReturnsBoolean(): void
     {
         $this->expectEmptySettingsAreReturned();
         $this->assertIsBool($this->subject->getBooleanByPath('entrypointJsonPath'));

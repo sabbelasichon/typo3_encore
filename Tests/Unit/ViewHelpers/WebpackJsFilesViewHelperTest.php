@@ -15,11 +15,11 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\ViewHelpers\WebpackJsFilesViewHelper;
+use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\WebpackJsFilesViewHelper
