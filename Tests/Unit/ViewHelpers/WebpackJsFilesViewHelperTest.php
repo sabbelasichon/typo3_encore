@@ -30,10 +30,11 @@ final class WebpackJsFilesViewHelperTest extends ViewHelperBaseTestcase
      * @var MockObject|WebpackJsFilesViewHelper
      */
     protected $viewHelper;
+
     /**
      * @var EntrypointLookupCollectionInterface|MockObject
      */
-    private $entrypointLookupCollection;
+    protected $entrypointLookupCollection;
 
     protected function setUp(): void
     {
@@ -47,7 +48,7 @@ final class WebpackJsFilesViewHelperTest extends ViewHelperBaseTestcase
      */
     public function render(): void
     {
-        $this->viewHelper->setArguments(['entryName' => 'app', 'buildName' => '_default']);
+        $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'buildName' => '_default']);
         $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
         $this->entrypointLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $entrypointLookup->expects($this->once())->method('getJavaScriptFiles')->with('app');

@@ -48,7 +48,7 @@ final class WebpackCssFilesViewHelperTest extends ViewHelperBaseTestcase
      */
     public function render(): void
     {
-        $this->viewHelper->setArguments(['entryName' => 'app', 'buildName' => '_default']);
+        $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'buildName' => '_default']);
         $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
         $this->entrypointLookupCollection->expects($this->once())->method('getEntrypointLookup')->with('_default')->willReturn($entrypointLookup);
         $entrypointLookup->expects($this->once())->method('getCssFiles')->with('app');

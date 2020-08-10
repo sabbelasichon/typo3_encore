@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\ViewHelpers;
 
@@ -17,7 +17,6 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  */
 
 use DOMDocument;
-use DOMNode;
 use DOMXPath;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use TYPO3\CMS\Extbase\Service\ImageService;
