@@ -48,7 +48,6 @@ final class FilesystemTest extends UnitTestCase
         $pathToFile = 'thisisnotafile';
 
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessageMatches('#' . $pathToFile . '#');
         $this->subject->get($pathToFile);
     }
 

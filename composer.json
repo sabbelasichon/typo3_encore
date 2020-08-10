@@ -41,7 +41,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Ssch\\Typo3Encore\\Tests\\": "Tests"
+      "Ssch\\Typo3Encore\\Tests\\": "Tests",
+      "TYPO3\\JsonResponse\\": ".Build/vendor/typo3/testing-framework/Resources/Core/Functional/Extensions/json_response/Classes"
     }
   },
   "config": {
@@ -55,8 +56,7 @@
   },
   "scripts": {
     "post-autoload-dump": [
-      "mkdir -p .Build/Web/typo3conf/ext/",
-      "[ -L .Build/Web/typo3conf/ext/typo3_encore ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/typo3_encore"
+      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
     ],
     "extension-create-libs": [
       "@composer install -d Resources/Private/Php/Libraries"
@@ -72,7 +72,7 @@
     "typo3/cms": {
       "extension-key": "typo3_encore",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web"
+      "web-dir": ".Build"
     }
   }
 }
