@@ -15,7 +15,6 @@ namespace Ssch\Typo3Encore\Tests\Unit\Asset;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
@@ -24,6 +23,7 @@ use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Asset\TagRenderer
@@ -48,7 +48,7 @@ final class TagRendererTest extends UnitTestCase
     /**
      * @var AssetRegistryInterface|ObjectProphecy
      */
-    private $assetRegistry;
+    protected $assetRegistry;
 
     protected function setUp(): void
     {

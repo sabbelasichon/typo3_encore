@@ -27,8 +27,8 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.0",
-    "nimut/testing-framework": "^4.0 || dev-master",
     "phpstan/phpstan": "^0.12",
+    "typo3/testing-framework": "^4.0 || ^5.0",
     "saschaegerer/phpstan-typo3": "^0.13.1"
   },
   "replace": {

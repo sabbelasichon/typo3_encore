@@ -15,11 +15,11 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\Integration\PageRendererHooks;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\PageRendererHooks
@@ -41,7 +41,12 @@ final class PageRendererHooksTest extends UnitTestCase
      */
     protected $pageRenderer;
 
-    protected function setUp()
+    /**
+     * @var bool
+     */
+    protected $resetSingletonInstances = true;
+
+    protected function setUp(): void
     {
         $this->tagRenderer = $this->getMockBuilder(TagRendererInterface::class)->getMock();
         $this->pageRenderer = $this->getMockBuilder(PageRenderer::class)->getMock();
@@ -51,7 +56,7 @@ final class PageRendererHooksTest extends UnitTestCase
     /**
      * @test
      */
-    public function renderPreProcessWithDefaultBuild()
+    public function renderPreProcessWithDefaultBuild(): void
     {
         $params = [
             'jsFiles' => [
@@ -76,7 +81,7 @@ final class PageRendererHooksTest extends UnitTestCase
     /**
      * @test
      */
-    public function renderPreProcessWithDefinedBuild()
+    public function renderPreProcessWithDefinedBuild(): void
     {
         $params = [
             'jsFiles' => [

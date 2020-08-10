@@ -7,3 +7,4 @@
 /Resources/Private/Php/Libraries/vendor
 /phpunit.xml
 /var
+.phpunit.result.cache

@@ -2,9 +2,9 @@
 
 namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 
-use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ViewHelpers\DnsPrefetchViewHelper;
+use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
 /*
  * This file is part of the TYPO3 CMS project.

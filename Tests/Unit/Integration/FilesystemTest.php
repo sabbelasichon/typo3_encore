@@ -15,8 +15,8 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Ssch\Typo3Encore\Integration\Filesystem;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\Filesystem
@@ -27,14 +27,14 @@ final class FilesystemTest extends UnitTestCase
     /**
      * @var Filesystem
      */
-    private $subject;
+    protected $subject;
 
     /**
      * @var string
      */
-    private $fixtureFile;
+    protected $fixtureFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Filesystem();
         $this->fixtureFile = __DIR__ . '/../Fixtures/testfile.txt';
@@ -43,19 +43,19 @@ final class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function canNotReadFileContentThrowsException()
+    public function canNotReadFileContentThrowsException(): void
     {
         $pathToFile = 'thisisnotafile';
 
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('#' . $pathToFile . '#');
+        $this->expectExceptionMessageMatches('#' . $pathToFile . '#');
         $this->subject->get($pathToFile);
     }
 
     /**
      * @test
      */
-    public function canReadFileContent()
+    public function canReadFileContent(): void
     {
         $this->assertStringEqualsFile($this->fixtureFile, $this->subject->get($this->fixtureFile));
     }
@@ -63,7 +63,7 @@ final class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function fileDoesNotExistsReturnsFalse()
+    public function fileDoesNotExistsReturnsFalse(): void
     {
         $this->assertFalse($this->subject->exists('doesnotexistsfile.txt'));
     }
@@ -71,7 +71,7 @@ final class FilesystemTest extends UnitTestCase
     /**
      * @test
      */
-    public function fileExistsReturnsTrue()
+    public function fileExistsReturnsTrue(): void
     {
         $this->assertTrue($this->subject->exists($this->fixtureFile));
     }

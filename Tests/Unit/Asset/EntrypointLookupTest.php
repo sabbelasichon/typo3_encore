@@ -16,7 +16,6 @@ namespace Ssch\Typo3Encore\Tests\Unit\Asset;
  */
 
 use InvalidArgumentException;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointNotFoundException;
@@ -26,41 +25,49 @@ use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @covers \Ssch\Typo3Encore\Asset\EntrypointLookup
  */
 final class EntrypointLookupTest extends UnitTestCase
 {
-    const CACHE_KEY_PREFIX = 'cacheKeyPrefix';
-    private $subject;
+    /**
+     * @var string
+     */
+    private const CACHE_KEY_PREFIX = 'cacheKeyPrefix';
+
+    /**
+     * @var EntrypointLookup
+     */
+    protected $subject;
 
     /**
      * @var JsonDecoderInterface|MockObject
      */
-    private $jsonDecoder;
+    protected $jsonDecoder;
 
     /**
      * @var FilesystemInterface|MockObject
      */
-    private $filesystem;
+    protected $filesystem;
 
     /**
      * @var CacheFactory|MockObject
      */
-    private $cacheFactory;
+    protected $cacheFactory;
 
     /**
      * @var string
      */
-    private $cacheKey;
+    protected $cacheKey;
 
     /**
      * @var FrontendInterface|MockObject
      */
-    private $cache;
+    protected $cache;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
@@ -74,7 +81,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function noSuchCacheExceptionIsThrown()
+    public function noSuchCacheExceptionIsThrown(): void
     {
         $cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
         $cacheFactory->method('createInstance')->willThrowException(new NoSuchCacheException());
@@ -85,7 +92,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function integrityDataReturnsEmptyArray()
+    public function integrityDataReturnsEmptyArray(): void
     {
         $this->filesystem->method('exists')->willReturn(true);
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []]]);
@@ -95,7 +102,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function integrityDataReturnsCorrectValues()
+    public function integrityDataReturnsCorrectValues(): void
     {
         $integrity = ['/typo3conf/ext/typo3_encore/Resources/Public/runtime.js' => 'sha384-GRXz+AZB+AWfcuTJbK9EZ+Na2Qa53hmwUKqRNr19Sma1DV1sYa0W7k44N7Y11Whg'];
 
@@ -107,7 +114,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function getCssFiles()
+    public function getCssFiles(): void
     {
         $this->filesystem->method('exists')->willReturn(true);
         $entrypoints = [
@@ -124,7 +131,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFilesWithNonExistingType()
+    public function getFilesWithNonExistingType(): void
     {
         $this->filesystem->method('exists')->willReturn(true);
         $entrypoints = [
@@ -141,7 +148,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFromCache()
+    public function getFromCache(): void
     {
         $this->filesystem->expects($this->never())->method('exists');
         $entrypoints = [
@@ -161,7 +168,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionIfJsonCannotBeParsed()
+    public function throwsExceptionIfJsonCannotBeParsed(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->filesystem->method('exists')->willReturn(true);
@@ -172,7 +179,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionOnEntryWithExtension()
+    public function throwsExceptionOnEntryWithExtension(): void
     {
         $this->expectException(EntrypointNotFoundException::class);
         $this->filesystem->method('exists')->willReturn(true);
@@ -190,7 +197,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionIfEntrypointsFileDoesNotExist()
+    public function throwsExceptionIfEntrypointsFileDoesNotExist(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->filesystem->method('exists')->willReturn(false);
@@ -200,7 +207,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionIfJsonCanNotBeRetrieved()
+    public function throwsExceptionIfJsonCanNotBeRetrieved(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->filesystem->method('exists')->willReturn(true);
@@ -210,7 +217,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionOnMissingEntrypoint()
+    public function throwsExceptionOnMissingEntrypoint(): void
     {
         $this->expectException(EntrypointNotFoundException::class);
         $this->filesystem->method('exists')->willReturn(true);
@@ -228,7 +235,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function getJsFiles()
+    public function getJsFiles(): void
     {
         $this->filesystem->method('exists')->willReturn(true);
         $entrypoints = [
@@ -245,7 +252,7 @@ final class EntrypointLookupTest extends UnitTestCase
     /**
      * @test
      */
-    public function reset()
+    public function reset(): void
     {
         $this->assertNull($this->subject->reset());
     }
