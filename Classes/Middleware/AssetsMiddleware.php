@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class AssetsMiddleware implements MiddlewareInterface
@@ -83,7 +84,8 @@ final class AssetsMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        if ($this->assetRegistry->getRegisteredFiles() === []) {
+        $registeredFiles = $this->collectRegisteredFiles();
+        if ($registeredFiles === []) {
             return $response;
         }
 
@@ -93,12 +95,12 @@ final class AssetsMiddleware implements MiddlewareInterface
 
         /** @var GenericLinkProvider $linkProvider */
         $linkProvider = $request->getAttribute('_links');
-        $defaultAttributes = $this->assetRegistry->getDefaultAttributes();
+        $defaultAttributes = $this->collectDefaultAttributes();
         $crossOrigin = $defaultAttributes['crossorigin'] ? (bool)$defaultAttributes['crossorigin'] : false;
 
-        foreach ($this->assetRegistry->getRegisteredFiles() as $rel => $relFiles) {
+        foreach ($registeredFiles as $rel => $relFiles) {
             // You can disable or enable one of the resource hints via typoscript simply by adding something like that preload.enable = 1, dns-prefetch.enable = 1
-            if ($this->settingsService->getBooleanByPath(sprintf('%s.enable', $rel)) === false) {
+            if ($this->getBooleanConfigByPath(sprintf('%s.enable', $rel)) === false) {
                 continue;
             }
 
@@ -133,5 +135,32 @@ final class AssetsMiddleware implements MiddlewareInterface
     private function canAddCrossOriginAttribute(bool $crossOrigin, string $rel): bool
     {
         return false !== $crossOrigin && '' !== (string)$crossOrigin && in_array($rel, self::$crossOriginAllowed, true);
+    }
+
+    private function collectRegisteredFiles(): array
+    {
+        return array_replace(
+            $this->controller->config['encore_asset_registry']['registered_files'] ?? [],
+            $this->assetRegistry->getRegisteredFiles()
+        );
+    }
+
+    private function collectDefaultAttributes(): array
+    {
+        return array_replace(
+            $this->controller->config['encore_asset_registry']['default_attributes'] ?? [],
+            $this->assetRegistry->getDefaultAttributes()
+        );
+    }
+
+    private function getBooleanConfigByPath(string $path): bool
+    {
+        if ($this->settingsService->getSettings() !== []) {
+            return $this->settingsService->getBooleanByPath($path);
+        }
+
+        $cachedSettings = $this->controller->config['encore_asset_registry']['settings'] ?? [];
+
+        return (bool)ObjectAccess::getPropertyPath($cachedSettings, $path);
     }
 }
