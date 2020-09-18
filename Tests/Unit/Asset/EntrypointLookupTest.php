@@ -71,11 +71,12 @@ final class EntrypointLookupTest extends UnitTestCase
     {
         $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
+        $this->filesystem->method('createHash')->willReturn('foobarbaz');
         $this->cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)->getMock();
         $this->cacheFactory->method('createInstance')->willReturn($this->cache);
         $this->subject = new EntrypointLookup(__DIR__ . '/../Fixtures/entrypoints.json', self::CACHE_KEY_PREFIX, $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
-        $this->cacheKey = sprintf('%s-%s', self::CACHE_KEY_PREFIX, CacheFactory::CACHE_KEY);
+        $this->cacheKey = sprintf('%s-%s-%s', self::CACHE_KEY_PREFIX, CacheFactory::CACHE_KEY, 'foobarbaz');
     }
 
     /**
@@ -151,6 +152,7 @@ final class EntrypointLookupTest extends UnitTestCase
     public function getFromCache(): void
     {
         $this->filesystem->expects($this->never())->method('exists');
+
         $entrypoints = [
             'app' => [
                 'css' => [
