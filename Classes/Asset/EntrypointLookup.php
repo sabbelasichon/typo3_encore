@@ -67,7 +67,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
         $this->cache = $cacheFactory->createInstance();
-        $this->cacheKey = sprintf('%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY);
+        $this->cacheKey = sprintf('%s-%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY, $filesystem->createHash($this->entrypointJsonPath));
     }
 
     public function getJavaScriptFiles(string $entryName): array

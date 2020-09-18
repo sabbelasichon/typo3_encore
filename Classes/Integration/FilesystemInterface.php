@@ -25,4 +25,6 @@ interface FilesystemInterface
     public function getFileAbsFileName(string $pathToFile): string;
 
     public function getRelativeFilePath(string $pathToFile): string;
+
+    public function createHash(string $entrypointJsonPath): string;
 }
