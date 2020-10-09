@@ -73,7 +73,7 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'footer', '_default', $this->pageRenderer, ['forceOnTop' => true]);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'jsFiles', '_default', $this->pageRenderer, ['forceOnTop' => true]);
         $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', '_default', $this->pageRenderer);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
@@ -96,7 +96,7 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', '', 'config', $this->pageRenderer);
+        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'jsFiles', 'config', $this->pageRenderer);
         $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', 'config', $this->pageRenderer);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }

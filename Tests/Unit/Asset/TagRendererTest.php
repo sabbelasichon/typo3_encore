@@ -50,12 +50,29 @@ final class TagRendererTest extends UnitTestCase
      */
     protected $assetRegistry;
 
+    protected $addJsCallArguments = [];
+
     protected function setUp(): void
     {
         $this->pageRenderer = $this->prophesize(PageRenderer::class);
         $this->entryLookupCollection = $this->prophesize(EntrypointLookupCollectionInterface::class);
         $this->assetRegistry = $this->prophesize(AssetRegistryInterface::class);
         $this->subject = new TagRenderer($this->entryLookupCollection->reveal(), $this->assetRegistry->reveal());
+
+        $this->addJsCallArguments = [
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any()
+        ];
     }
 
     /**
@@ -65,7 +82,7 @@ final class TagRendererTest extends UnitTestCase
     {
         $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->addJsFileShouldBeCalledOnce();
+        $this->pageRenderer->addJsFile(...$this->addJsCallArguments)->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
         $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer->reveal());
@@ -78,7 +95,7 @@ final class TagRendererTest extends UnitTestCase
     {
         $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->addJsFileShouldBeCalledOnce();
+        $this->pageRenderer->addJsFile(...$this->addJsCallArguments)->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
         $this->subject->renderWebpackScriptTags('app', 'header', '_default', $this->pageRenderer->reveal(), [], false);
@@ -106,7 +123,32 @@ final class TagRendererTest extends UnitTestCase
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
-        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
+        $this->subject->renderWebpackScriptTags('app', 'jsFooterFiles', '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
+    }
+
+    /**
+     * @test
+     */
+    public function renderWebpackScriptTagsWithDefaultBuildInFooterLibs(): void
+    {
+        $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
+
+        $this->pageRenderer->addJsFooterLibrary(
+            'file.js',
+            'text/javascript',
+            true,
+            false,
+            '',
+            false,
+            '|',
+            false,
+            'foobarbaz',
+            false,
+            ''
+        )->shouldBeCalledOnce();
+
+        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->subject->renderWebpackScriptTags('app', 'jsFooterLibs', '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
     }
 
     /**
@@ -155,24 +197,6 @@ final class TagRendererTest extends UnitTestCase
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
         $this->subject->renderWebpackLinkTags('app', 'all', '_default', $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
-    }
-
-    private function addJsFileShouldBeCalledOnce(): void
-    {
-        $this->pageRenderer->addJsFile(
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any(),
-            Argument::any()
-        )->shouldBeCalledOnce();
     }
 
     private function createEntrypointLookUpClass(): EntrypointLookupInterface

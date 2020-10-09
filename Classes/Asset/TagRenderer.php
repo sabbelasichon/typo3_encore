@@ -49,7 +49,7 @@ final class TagRenderer implements TagRendererInterface
 
         unset($parameters['file']);
         foreach ($files as $file) {
-            $attributes = [
+            $attributes = array_replace([
                 'file' => $file,
                 'type' => 'text/javascript',
                 'compress' => false,
@@ -61,14 +61,24 @@ final class TagRenderer implements TagRendererInterface
                 'integrity' => $integrityHashes[$file] ?? '',
                 'defer' => false,
                 'crossorigin' => ''
-            ];
+            ], $parameters);
 
-            $attributes = array_values(array_replace($attributes, $parameters));
+            $attributes = array_values($attributes);
 
-            if ($position === 'footer') {
-                $pageRenderer->addJsFooterFile(...$attributes);
-            } else {
-                $pageRenderer->addJsFile(...$attributes);
+            switch ($position) {
+                default:
+                case 'jsFiles':
+                    $pageRenderer->addJsFile(...$attributes);
+                    break;
+                case 'jsLibs':
+                    $pageRenderer->addJsLibrary(...$attributes);
+                    break;
+                case 'jsFooterFiles':
+                    $pageRenderer->addJsFooterFile(...$attributes);
+                    break;
+                case 'jsFooterLibs':
+                    $pageRenderer->addJsFooterLibrary(...$attributes);
+                    break;
             }
 
             if ($registerFile === true) {

@@ -51,51 +51,54 @@ final class PageRendererHooks
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
         // Add JavaScript Files by entryNames
-        foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {
-            if (! empty($params[$includeType])) {
-                foreach ($params[$includeType] as $key => $jsFile) {
-                    if ($this->isEncoreEntryName($jsFile['file'])) {
-                        $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
-                        $buildName = '_default';
+        foreach (['jsFiles', 'jsLibs', 'jsFooterFiles', 'jsFooterLibs'] as $includeType) {
+            if (empty($params[ $includeType ])) {
+                continue;
+            }
 
-                        if (count($buildAndEntryName) === 2) {
-                            [$buildName, $entryName] = $buildAndEntryName;
-                        } else {
-                            $entryName = $buildAndEntryName[0];
-                        }
-
-                        $position = '';
-                        if (array_key_exists('section', $params[$includeType][$key])) {
-                            $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? 'footer' : '';
-                        }
-
-                        unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
-
-                        $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile);
-                    }
+            foreach ($params[ $includeType ] as $key => $jsFile) {
+                if (!$this->isEncoreEntryName($jsFile['file'])) {
+                    continue;
                 }
+
+                $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
+                $buildName = '_default';
+
+                if (count($buildAndEntryName) === 2) {
+                    [ $buildName, $entryName ] = $buildAndEntryName;
+                } else {
+                    $entryName = $buildAndEntryName[0];
+                }
+
+                unset($params[ $includeType ][ $key ], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
+
+                $this->tagRenderer->renderWebpackScriptTags($entryName, $includeType, $buildName, $pageRenderer, $jsFile);
             }
         }
 
         // Add CSS-Files by entryNames
         foreach (['cssFiles'] as $includeType) {
-            if (! empty($params[$includeType])) {
-                foreach ($params[$includeType] as $key => $cssFile) {
-                    if ($this->isEncoreEntryName($cssFile['file'])) {
-                        $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
-                        $buildName = '_default';
+            if (empty($params[ $includeType ])) {
+                continue;
+            }
 
-                        if (count($buildAndEntryName) === 2) {
-                            [$buildName, $entryName] = $buildAndEntryName;
-                        } else {
-                            $entryName = $buildAndEntryName[0];
-                        }
-
-                        unset($params[$includeType][$key], $cssFile['file']);
-
-                        $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
-                    }
+            foreach ($params[ $includeType ] as $key => $cssFile) {
+                if (!$this->isEncoreEntryName($cssFile['file'])) {
+                    continue;
                 }
+
+                $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
+                $buildName = '_default';
+
+                if (count($buildAndEntryName) === 2) {
+                    [ $buildName, $entryName ] = $buildAndEntryName;
+                } else {
+                    $entryName = $buildAndEntryName[0];
+                }
+
+                unset($params[ $includeType ][ $key ], $cssFile['file']);
+
+                $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
             }
         }
     }
