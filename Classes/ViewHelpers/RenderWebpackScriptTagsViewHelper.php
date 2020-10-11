@@ -16,6 +16,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -35,7 +36,7 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
-        $this->registerArgument('position', 'string', 'The position to render the files', false, 'footer');
+        $this->registerArgument('position', 'string', 'The position to render the files', false, 'jsFooterFiles');
         $this->registerArgument('buildName', 'string', 'The build name', false, '_default');
         $this->registerArgument('parameters', 'array', 'Additional parameters for the PageRenderer', false, []);
         $this->registerArgument('registerFile', 'bool', 'Register file for HTTP/2 push functionality', false, true);

@@ -26,6 +26,7 @@ final class AssetViewHelper extends AbstractViewHelper
      * @var PackageFactoryInterface
      */
     private $packageFactory;
+
     /**
      * @var FilesystemInterface
      */
@@ -43,7 +44,7 @@ final class AssetViewHelper extends AbstractViewHelper
         $this->registerArgument('package', 'string', 'The package configuration to use', false, '_default');
     }
 
-    public function render()
+    public function render(): string
     {
         return $this->packageFactory->getPackage($this->arguments['package'])->getUrl($this->filesystem->getRelativeFilePath($this->arguments['pathToFile']));
     }

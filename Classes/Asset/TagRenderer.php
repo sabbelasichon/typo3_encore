@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Asset;
 
@@ -23,6 +23,29 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 final class TagRenderer implements TagRendererInterface
 {
     /**
+     * @var array
+     */
+    public const ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL = [
+        'jsFiles' => 'addJsFile',
+        'jsFooterLibs' => 'addJsFooterLibrary',
+        'jsLibs' => 'addJsLibrary',
+        'jsFooterFiles' => 'addJsFooterFile',
+    ];
+
+    /**
+     * @var array
+     */
+    public const ALLOWED_CSS_POSITIONS = [
+        'cssFiles',
+        'cssLibs'
+    ];
+
+    /**
+     * @var string
+     */
+    public const POSITION_FOOTER = 'footer';
+
+    /**
      * @var EntrypointLookupCollectionInterface
      */
     private $entrypointLookupCollection;
@@ -38,8 +61,11 @@ final class TagRenderer implements TagRendererInterface
         $this->assetRegistry = $assetRegistry;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
+    public function renderWebpackScriptTags(string $entryName, string $position = self::POSITION_FOOTER, string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
     {
+        // Keep this for backwards compatibility
+        $position = $position === self::POSITION_FOOTER ? 'jsFooterFiles' : $position;
+
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -49,7 +75,7 @@ final class TagRenderer implements TagRendererInterface
 
         unset($parameters['file']);
         foreach ($files as $file) {
-            $attributes = [
+            $attributes = array_replace([
                 'file' => $file,
                 'type' => 'text/javascript',
                 'compress' => false,
@@ -60,16 +86,18 @@ final class TagRenderer implements TagRendererInterface
                 'async' => false,
                 'integrity' => $integrityHashes[$file] ?? '',
                 'defer' => false,
-                'crossorigin' => ''
-            ];
+                'crossorigin' => '',
+            ], $parameters);
 
-            $attributes = array_values(array_replace($attributes, $parameters));
+            $attributes = array_values($attributes);
 
-            if ($position === 'footer') {
-                $pageRenderer->addJsFooterFile(...$attributes);
-            } else {
-                $pageRenderer->addJsFile(...$attributes);
+            $pageRendererMethodCall = TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL['jsFiles'];
+
+            if(array_key_exists($position, TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL)) {
+                $pageRendererMethodCall = TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL[$position];
             }
+
+            $pageRenderer->{$pageRendererMethodCall}(...$attributes);
 
             if ($registerFile === true) {
                 $this->assetRegistry->registerFile($file, 'script');
@@ -86,7 +114,7 @@ final class TagRenderer implements TagRendererInterface
 
         unset($parameters['file']);
         foreach ($files as $file) {
-            $attributes = [
+            $attributes = array_replace([
                 'file' => $file,
                 'rel' => 'stylesheet',
                 'media' => $media,
@@ -96,10 +124,10 @@ final class TagRenderer implements TagRendererInterface
                 'allWrap' => '',
                 'excludeFromConcatenation' => true,
                 'splitChar' => '|',
-                'inline' => false
-            ];
+                'inline' => false,
+            ], $parameters);
 
-            $attributes = array_values(array_replace($attributes, $parameters));
+            $attributes = array_values($attributes);
 
             $pageRenderer->addCssFile(...$attributes);
 

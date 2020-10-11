@@ -86,12 +86,13 @@ final class TagRendererTest extends UnitTestCase
 
     /**
      * @test
+     * @dataProvider scriptTagsWithPosition
      */
-    public function renderWebpackScriptTagsWithDefaultBuildInFooter(): void
+    public function renderWebpackScriptTagsWithDefaultBuildInPosition(string $position, string $expectedPageRendererCall): void
     {
         $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->pageRenderer->addJsFooterFile(
+        $this->pageRenderer->{$expectedPageRendererCall}(
             'file.js',
             'text/javascript',
             true,
@@ -106,7 +107,18 @@ final class TagRendererTest extends UnitTestCase
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
-        $this->subject->renderWebpackScriptTags('app', 'footer', '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
+        $this->subject->renderWebpackScriptTags('app', $position, '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
+    }
+
+    public function scriptTagsWithPosition(): array
+    {
+        return [
+            ['footer', 'addJsFooterFile'],
+            ['jsFiles', 'addJsFile'],
+            ['jsFooterFiles', 'addJsFooterFile'],
+            ['jsFooterLibs', 'addJsFooterLibrary'],
+            ['jsLibs', 'addJsLibrary'],
+        ];
     }
 
     /**
