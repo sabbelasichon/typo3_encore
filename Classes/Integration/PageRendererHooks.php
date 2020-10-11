@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
@@ -16,6 +16,7 @@ namespace Ssch\Typo3Encore\Integration;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -37,7 +38,7 @@ final class PageRendererHooks
 
     public function __construct(TagRendererInterface $tagRenderer = null)
     {
-        if (! $tagRenderer instanceof TagRendererInterface) {
+        if ( ! $tagRenderer instanceof TagRendererInterface) {
             // @codeCoverageIgnoreStart
             /** @var ObjectManagerInterface $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -51,52 +52,62 @@ final class PageRendererHooks
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
         // Add JavaScript Files by entryNames
-        foreach (['jsFiles', 'jsFooterLibs', 'jsLibs'] as $includeType) {
-            if (! empty($params[$includeType])) {
-                foreach ($params[$includeType] as $key => $jsFile) {
-                    if ($this->isEncoreEntryName($jsFile['file'])) {
-                        $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
-                        $buildName = '_default';
+        $allowedJavascriptPositions = array_keys(TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL);
+        foreach ($allowedJavascriptPositions as $includeType) {
+            if (empty($params[$includeType])) {
+                continue;
+            }
 
-                        if (count($buildAndEntryName) === 2) {
-                            [$buildName, $entryName] = $buildAndEntryName;
-                        } else {
-                            $entryName = $buildAndEntryName[0];
-                        }
-
-                        $position = '';
-                        if (array_key_exists('section', $params[$includeType][$key])) {
-                            $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? 'footer' : '';
-                        }
-
-                        unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
-
-                        $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile);
-                    }
+            foreach ($params[$includeType] as $key => $jsFile) {
+                if ( ! $this->isEncoreEntryName($jsFile['file'])) {
+                    continue;
                 }
+
+                $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
+                $buildName = '_default';
+
+                if (count($buildAndEntryName) === 2) {
+                    [$buildName, $entryName] = $buildAndEntryName;
+                } else {
+                    $entryName = $buildAndEntryName[0];
+                }
+
+                $position = '';
+                if (array_key_exists('section', $params[$includeType][$key])) {
+                    $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? TagRenderer::POSITION_FOOTER : '';
+                }
+
+                unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
+
+                $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile);
+
             }
         }
 
         // Add CSS-Files by entryNames
-        foreach (['cssFiles'] as $includeType) {
-            if (! empty($params[$includeType])) {
-                foreach ($params[$includeType] as $key => $cssFile) {
-                    if ($this->isEncoreEntryName($cssFile['file'])) {
-                        $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
-                        $buildName = '_default';
-
-                        if (count($buildAndEntryName) === 2) {
-                            [$buildName, $entryName] = $buildAndEntryName;
-                        } else {
-                            $entryName = $buildAndEntryName[0];
-                        }
-
-                        unset($params[$includeType][$key], $cssFile['file']);
-
-                        $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
-                    }
-                }
+        foreach (TagRenderer::ALLOWED_CSS_POSITIONS as $includeType) {
+            if (empty($params[$includeType])) {
+                continue;
             }
+
+            foreach ($params[$includeType] as $key => $cssFile) {
+                if ( ! $this->isEncoreEntryName($cssFile['file'])) {
+                    continue;
+                }
+                $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
+                $buildName = '_default';
+
+                if (count($buildAndEntryName) === 2) {
+                    [$buildName, $entryName] = $buildAndEntryName;
+                } else {
+                    $entryName = $buildAndEntryName[0];
+                }
+
+                unset($params[$includeType][$key], $cssFile['file']);
+
+                $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
+            }
+
         }
     }
 

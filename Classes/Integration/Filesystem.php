@@ -61,6 +61,9 @@ final class Filesystem implements FilesystemInterface
         return $pathToFile;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function createHash(string $entrypointJsonPath): string
     {
         return md5_file($entrypointJsonPath);

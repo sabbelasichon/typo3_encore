@@ -56,6 +56,49 @@ final class PageRendererHooksTest extends UnitTestCase
     /**
      * @test
      */
+    public function doNothingNoEncoreFiles(): void
+    {
+        $params = [
+            'jsFiles' => [
+                [
+                    'file' => 'somefile_not_managed_by_encore.js',
+                    'forceOnTop' => true,
+                    'section' => 2
+                ],
+            ],
+            'cssFiles' => [
+                [
+                    'file' => 'somefile_not_managed_by_encore.css',
+                ],
+            ],
+        ];
+
+        $this->tagRenderer->expects($this->never())->method('renderWebpackScriptTags');
+        $this->tagRenderer->expects($this->never())->method('renderWebpackLinkTags');
+        $this->subject->renderPreProcess($params, $this->pageRenderer);
+    }
+
+    /**
+     * @test
+     */
+    public function doNothingNoMatchingType(): void
+    {
+        $params = [
+            'foo' => [
+                [
+                    'file' => 'somefile_not_managed_by_encore.css',
+                ],
+            ],
+        ];
+
+        $this->tagRenderer->expects($this->never())->method('renderWebpackScriptTags');
+        $this->tagRenderer->expects($this->never())->method('renderWebpackLinkTags');
+        $this->subject->renderPreProcess($params, $this->pageRenderer);
+    }
+
+    /**
+     * @test
+     */
     public function renderPreProcessWithDefaultBuild(): void
     {
         $params = [
