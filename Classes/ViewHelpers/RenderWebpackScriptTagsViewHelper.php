@@ -40,10 +40,19 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
         $this->registerArgument('buildName', 'string', 'The build name', false, '_default');
         $this->registerArgument('parameters', 'array', 'Additional parameters for the PageRenderer', false, []);
         $this->registerArgument('registerFile', 'bool', 'Register file for HTTP/2 push functionality', false, true);
+        $this->registerArgument('isLibrary', 'bool', 'Defines if the entry should be loaded as a library (i.e. before other files)', false, false);
     }
 
     public function render(): void
     {
-        $this->tagRenderer->renderWebpackScriptTags($this->arguments['entryName'], $this->arguments['position'], $this->arguments['buildName'], null, $this->arguments['parameters'], $this->arguments['registerFile']);
+        $this->tagRenderer->renderWebpackScriptTags(
+            $this->arguments['entryName'],
+            $this->arguments['position'],
+            $this->arguments['buildName'],
+            null,
+            $this->arguments['parameters'],
+            $this->arguments['registerFile'],
+            $this->arguments['isLibrary']
+        );
     }
 }

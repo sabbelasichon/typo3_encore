@@ -88,11 +88,11 @@ final class TagRendererTest extends UnitTestCase
      * @test
      * @dataProvider scriptTagsWithPosition
      */
-    public function renderWebpackScriptTagsWithDefaultBuildInPosition(string $position, string $expectedPageRendererCall): void
+    public function renderWebpackScriptTagsWithDefaultBuildInPosition(string $position, $isLibrary, string $expectedPageRendererCall): void
     {
         $this->entryLookupCollection->getEntrypointLookup('_default')->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
-        $this->pageRenderer->{$expectedPageRendererCall}(
+        $arguments = [
             'file.js',
             'text/javascript',
             true,
@@ -104,20 +104,26 @@ final class TagRendererTest extends UnitTestCase
             'foobarbaz',
             false,
             ''
-        )->shouldBeCalledOnce();
+        ];
+
+        if ($isLibrary) {
+            array_unshift($arguments, 'file.js');
+        }
+
+        $this->pageRenderer->{$expectedPageRendererCall}(...$arguments)->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
-        $this->subject->renderWebpackScriptTags('app', $position, '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false]);
+        $this->subject->renderWebpackScriptTags('app', $position, '_default', $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false], true, $isLibrary);
     }
 
     public function scriptTagsWithPosition(): array
     {
         return [
-            ['footer', 'addJsFooterFile'],
-            ['jsFiles', 'addJsFile'],
-            ['jsFooterFiles', 'addJsFooterFile'],
-            ['jsFooterLibs', 'addJsFooterLibrary'],
-            ['jsLibs', 'addJsLibrary'],
+            // $position, $isLibrary, $expectedPageRendererCall
+            ['footer', false, 'addJsFooterFile'],
+            ['footer', true, 'addJsFooterLibrary'],
+            ['', false, 'addJsFile'],
+            ['', true, 'addJsLibrary'],
         ];
     }
 

@@ -25,25 +25,28 @@ final class TagRenderer implements TagRendererInterface
     /**
      * @var array
      */
-    public const ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL = [
-        'jsFiles' => 'addJsFile',
-        'jsFooterLibs' => 'addJsFooterLibrary',
-        'jsLibs' => 'addJsLibrary',
-        'jsFooterFiles' => 'addJsFooterFile',
-    ];
-
-    /**
-     * @var array
-     */
     public const ALLOWED_CSS_POSITIONS = [
         'cssFiles',
         'cssLibs'
     ];
 
     /**
+     * @var array
+     */
+    public const ALLOWED_JS_POSITIONS = [
+        'jsFiles',
+        'jsLibs'
+    ];
+
+    /**
      * @var string
      */
     public const POSITION_FOOTER = 'footer';
+
+    /**
+     * @var string
+     */
+    public const POSITION_JS_LIBRARY = 'jsLibs';
 
     /**
      * @var EntrypointLookupCollectionInterface
@@ -61,11 +64,8 @@ final class TagRenderer implements TagRendererInterface
         $this->assetRegistry = $assetRegistry;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = self::POSITION_FOOTER, string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
+    public function renderWebpackScriptTags(string $entryName, string $position = self::POSITION_FOOTER, string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false): void
     {
-        // Keep this for backwards compatibility
-        $position = $position === self::POSITION_FOOTER ? 'jsFooterFiles' : $position;
-
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -74,6 +74,12 @@ final class TagRenderer implements TagRendererInterface
         $files = $entryPointLookup->getJavaScriptFiles($entryName);
 
         unset($parameters['file']);
+
+        // We do not want to replace null values in $attributes
+        $parameters = array_filter($parameters, static function ($param) {
+            return !is_null($param);
+        });
+
         foreach ($files as $file) {
             $attributes = array_replace([
                 'file' => $file,
@@ -91,13 +97,16 @@ final class TagRenderer implements TagRendererInterface
 
             $attributes = array_values($attributes);
 
-            $pageRendererMethodCall = TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL['jsFiles'];
+            $pageRendererMethodName = "addJS" . ($position === self::POSITION_FOOTER ? 'Footer' : '');
 
-            if(array_key_exists($position, TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL)) {
-                $pageRendererMethodCall = TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL[$position];
+            if ($isLibrary) {
+                $pageRendererMethodName .= "Library";
+                $filename = basename($file);
+                $pageRenderer->{$pageRendererMethodName}($filename, ...$attributes);
+            } else {
+                $pageRendererMethodName .= "File";
+                $pageRenderer->{$pageRendererMethodName}(...$attributes);
             }
-
-            $pageRenderer->{$pageRendererMethodCall}(...$attributes);
 
             if ($registerFile === true) {
                 $this->assetRegistry->registerFile($file, 'script');
