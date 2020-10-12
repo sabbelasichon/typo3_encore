@@ -51,12 +51,14 @@ final class PageRendererHooks
 
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
-        // Add JavaScript Files by entryNames
-        $allowedJavascriptPositions = array_keys(TagRenderer::ALLOWED_JAVASCRIPT_POSITIONS_WITH_CORRESPONDING_PAGE_RENDERER_METHOD_CALL);
-        foreach ($allowedJavascriptPositions as $includeType) {
+        // At this point, TYPO3 provides all javascript includes in only 'Files' or 'Libs'
+        foreach (TagRenderer::ALLOWED_JS_POSITIONS as $includeType) {
             if (empty($params[$includeType])) {
                 continue;
             }
+
+            // Is the include type 'jsLibs' and should be treated as a library
+            $isLibrary = $includeType === TagRenderer::POSITION_JS_LIBRARY;
 
             foreach ($params[$includeType] as $key => $jsFile) {
                 if ( ! $this->isEncoreEntryName($jsFile['file'])) {
@@ -72,15 +74,11 @@ final class PageRendererHooks
                     $entryName = $buildAndEntryName[0];
                 }
 
-                $position = '';
-                if (array_key_exists('section', $params[$includeType][$key])) {
-                    $position = (int)$params[$includeType][$key]['section'] === PageRenderer::PART_FOOTER ? TagRenderer::POSITION_FOOTER : '';
-                }
+                $position = ($jsFile['section'] ?? '') === PageRenderer::PART_FOOTER ? TagRenderer::POSITION_FOOTER : '';
 
                 unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
 
-                $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile);
-
+                $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile, true, $isLibrary);
             }
         }
 
