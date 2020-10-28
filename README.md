@@ -37,18 +37,18 @@ plugin.tx_typo3encore {
 
 4. In your Page templates/layout you can then use the ViewHelpers to integrate the CSS- and JS-Files in your website
 ```html
-{namespace e = Ssch\Typo3Encore\ViewHelpers}
+{namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<e:renderWebpackLinkTags entryName="app"/>
-<e:renderWebpackScriptTags entryName="app"/>
+<encore:renderWebpackLinkTags entryName="app"/>
+<encore:renderWebpackScriptTags entryName="app"/>
 ```
 
 If you have defined multiple entries you can define the desired entryName in the ViewHelpers
 ```html
-{namespace e = Ssch\Typo3Encore\ViewHelpers}
+{namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<e:renderWebpackLinkTags entryName="secondEntryName"/>
-<e:renderWebpackScriptTags entryName="secondEntryName"/>
+<encore:renderWebpackLinkTags entryName="secondEntryName"/>
+<encore:renderWebpackScriptTags entryName="secondEntryName"/>
 ```
 
 
@@ -94,9 +94,9 @@ Technically this is done by a PSR-15 Middleware.
 If you want to add additional files to the AssetRegistry you can use the PreloadViewHelper:
 
 ```html
-{namespace e = Ssch\Typo3Encore\ViewHelpers}
+{namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<e:preload attributes="{type: 'font/woff2'}" as="font" uri="{e:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
+<encore:preload attributes="{type: 'font/woff2'}" as="font" uri="{e:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
 ```
 
 Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file.
@@ -135,9 +135,9 @@ page.includeCSS {
 ```
 
 ```html
-{namespace e = Ssch\Typo3Encore\ViewHelpers}
+{namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<e:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
+<encore:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
 ```
 
 ## Getting Started with Webpack Encore
@@ -328,7 +328,7 @@ requireAll(require.context('./relative-path-to-svg-folder/svg-sprite/', true, /\
 The extension ships with a SvgViewHelper in order to simplify the usage of svg in fluid.
 
 ```html
-{namespace e = Ssch\Typo3Encore\ViewHelpers}
+{namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<e:svg title="Title" description="Description" src="EXT:typo3_encore/Resources/Public/sprite.svg" name="icon-fax-contact"/>
+<encore:svg title="Title" description="Description" src="EXT:typo3_encore/Resources/Public/sprite.svg" name="icon-fax-contact"/>
 ```
