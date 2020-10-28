@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF['typo3_encore'] = [
+$EM_CONF[$_EXTKEY] = [
     'title' => 'TYPO3 with Webpack Encore',
     'description' => 'Webpack Encore from Symfony for TYPO3',
     'category' => 'fe',
