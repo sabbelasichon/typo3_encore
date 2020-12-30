@@ -29,7 +29,8 @@
     "friendsofphp/php-cs-fixer": "^2.0",
     "phpstan/phpstan": "^0.12",
     "typo3/testing-framework": "^4.0 || ^5.0",
-    "saschaegerer/phpstan-typo3": "^0.13.1"
+    "saschaegerer/phpstan-typo3": "^0.13.1",
+    "php-parallel-lint/php-parallel-lint": "^1.2"
   },
   "replace": {
     "typo3-ter/typo3-encore": "self.version"
@@ -63,6 +64,23 @@
     ],
     "extension-build": [
       "@extension-create-libs"
+    ],
+    "test-php-lint": [
+      ".Build/bin/parallel-lint ./Classes/",
+      ".Build/bin/parallel-lint ./Configuration/TCA/",
+      ".Build/bin/parallel-lint ./Tests/"
+    ],
+    "test-php-cs-fixer": [
+      "php-cs-fixer fix -v --dry-run --using-cache false --diff --diff-format=udiff"
+    ],
+    "php-cs-fixer": [
+      "php-cs-fixer fix -v --using-cache false --diff --diff-format=udiff"
+    ],
+    "test-unit": [
+      ".Build/bin/phpunit --configuration Build/UnitTests.xml"
+    ],
+    "test-functional": [
+      ".Build/bin/phpunit --configuration Build/FunctionalTests.xml"
     ]
   },
   "extra": {

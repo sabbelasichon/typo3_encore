@@ -1,0 +1,137 @@
+---
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  php-lint:
+    name: "PHP linter"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ 7.2, 7.3, 7.4 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: "Install PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-versions }}"
+      - name: "Cache composer dependencies"
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-versions }}
+            -composer-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php-versions }}-composer-
+      - name: "Install composer dependencies"
+        run: composer install --no-progress
+      - name: "Run PHP lint"
+        run: composer run-script test-php-lint
+  php-cs-fixer:
+    name: "PHP-CS-Fixer"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ 7.4 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: "Install PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-versions }}"
+      - name: "Cache composer dependencies"
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-versions }}
+            -composer-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php-versions }}-composer-
+      - name: "Install composer dependencies"
+        run: composer install --no-progress
+      - name: "Run PHP-CS-Fixer"
+        run: "composer run-script test-php-cs-fixer"
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 2
+      matrix:
+        php-versions: [ 7.2, 7.3, 7.4 ]
+        typo3-versions:
+          - { typo3: 9, testing: 4 }
+          - { typo3: 10, testing: 5 }
+
+    name: "Run tests with PHP ${{ matrix.php-versions }}
+          using TYPO3 ${{ matrix.typo3-versions.typo3 }}
+          with testing framework version ${{ matrix.typo3-versions.testing }}"
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, mbstring, pdo_sqlite, pdo_mysql
+
+      - name: Start MySQL
+        run: sudo /etc/init.d/mysql start
+
+      - name: "Cache composer dependencies"
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-versions }}
+            -typo3-${{ matrix.typo3-versions.typo3 }}
+            -testing-${{ matrix.typo3-versions.testing }}
+            -composer-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php-versions }}
+            -typo3-${{ matrix.typo3-versions.typo3 }}
+            -testing-${{ matrix.typo3-versions.testing }}composer-
+            php-${{ matrix.php-versions }}-typo3-
+
+      - name: "Install composer dependencies"
+        run: composer require typo3/minimal
+          "^${{ matrix.typo3-versions.typo3 }}"
+          typo3/testing-framework "^${{ matrix.typo3-versions.testing }}"
+          --prefer-dist --no-progress --no-suggest
+
+      - name: "Run Unit tests"
+        run: composer run-script test-unit
+
+      - name: "Functional tests"
+        run: |
+          export typo3DatabaseName="typo3";
+          export typo3DatabaseHost="127.0.0.1";
+          export typo3DatabaseUsername="root";
+          export typo3DatabasePassword="root";
+          composer run-script test-functional
+
+  code_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.0.0
+      - id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: 7.3
+          coverage: none
+
+      - run: composer install --no-progress
+
+      - run: |
+          phpdbg -qrr -d memory_limit=-1 .Build/bin/phpunit -c Build/UnitTests.xml --coverage-clover build/logs/clover.xml
+          # Coveralls.io
+          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+          php php-coveralls.phar --verbose
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Asset;
 
@@ -91,14 +91,14 @@ final class TagRenderer implements TagRendererInterface
 
             $attributes = array_values($attributes);
 
-            $pageRendererMethodName = "addJS" . ($position === self::POSITION_FOOTER ? 'Footer' : '');
+            $pageRendererMethodName = 'addJS' . ($position === self::POSITION_FOOTER ? 'Footer' : '');
 
             if ($isLibrary) {
-                $pageRendererMethodName .= "Library";
+                $pageRendererMethodName .= 'Library';
                 $filename = basename($file);
                 $pageRenderer->{$pageRendererMethodName}($filename, ...$attributes);
             } else {
-                $pageRendererMethodName .= "File";
+                $pageRendererMethodName .= 'File';
                 $pageRenderer->{$pageRendererMethodName}(...$attributes);
             }
 

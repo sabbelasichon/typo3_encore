@@ -9,7 +9,6 @@ namespace Ssch\Typo3Encore\Integration;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
 final class IdGenerator implements IdGeneratorInterface
 {
     public function generate(): string
