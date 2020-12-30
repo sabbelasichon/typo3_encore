@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Ssch\Typo3Encore\Integration;
 
@@ -32,7 +32,7 @@ final class PageRendererHooks
 
     public function __construct(TagRendererInterface $tagRenderer = null)
     {
-        if ( ! $tagRenderer instanceof TagRendererInterface) {
+        if (! $tagRenderer instanceof TagRendererInterface) {
             // @codeCoverageIgnoreStart
             /** @var ObjectManagerInterface $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -55,7 +55,7 @@ final class PageRendererHooks
             $isLibrary = $includeType === TagRenderer::POSITION_JS_LIBRARY;
 
             foreach ($params[$includeType] as $key => $jsFile) {
-                if ( ! $this->isEncoreEntryName($jsFile['file'])) {
+                if (! $this->isEncoreEntryName($jsFile['file'])) {
                     continue;
                 }
 
@@ -83,7 +83,7 @@ final class PageRendererHooks
             }
 
             foreach ($params[$includeType] as $key => $cssFile) {
-                if ( ! $this->isEncoreEntryName($cssFile['file'])) {
+                if (! $this->isEncoreEntryName($cssFile['file'])) {
                     continue;
                 }
                 $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
@@ -99,7 +99,6 @@ final class PageRendererHooks
 
                 $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
             }
-
         }
     }
 

@@ -8,7 +8,6 @@ namespace Ssch\Typo3Encore\Asset;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
 interface EntrypointLookupCollectionInterface
 {
     /**

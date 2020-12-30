@@ -10,7 +10,6 @@ namespace Ssch\Typo3Encore\ViewHelpers;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
