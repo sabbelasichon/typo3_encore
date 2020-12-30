@@ -1,14 +1,15 @@
 <?php
-declare(strict_types = 1);
 
-namespace Ssch\Typo3Encore\Middleware;
+declare(strict_types=1);
 
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,9 +21,7 @@ use Symfony\Component\WebLink\GenericLinkProvider;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use Symfony\Component\WebLink\Link;
 use TYPO3\CMS\Core\Http\NullResponse;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -48,24 +47,9 @@ final class AssetsMiddleware implements MiddlewareInterface
      */
     private $settingsService;
 
-    public function __construct(TypoScriptFrontendController $controller = null, AssetRegistryInterface $assetRegistry = null, SettingsServiceInterface $settingsService = null)
+    public function __construct(AssetRegistryInterface $assetRegistry, SettingsServiceInterface $settingsService, TypoScriptFrontendController $controller = null)
     {
         $this->controller = $controller ?? $GLOBALS['TSFE'];
-
-        if (! $assetRegistry instanceof AssetRegistryInterface) {
-            // @codeCoverageIgnoreStart
-            /** @var AssetRegistryInterface $assetRegistry */
-            $assetRegistry = GeneralUtility::makeInstance(ObjectManager::class)->get(AssetRegistryInterface::class);
-            // @codeCoverageIgnoreEnd
-        }
-
-        if (! $settingsService instanceof SettingsServiceInterface) {
-            // @codeCoverageIgnoreStart
-            /** @var SettingsServiceInterface $settingsService */
-            $settingsService = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsServiceInterface::class);
-            // @codeCoverageIgnoreEnd
-        }
-
         $this->settingsService = $settingsService;
         $this->assetRegistry = $assetRegistry;
     }
@@ -74,7 +58,7 @@ final class AssetsMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if (($response instanceof NullResponse && ! $this->controller->isOutputting())) {
+        if (($response instanceof NullResponse)) {
             return $response;
         }
 

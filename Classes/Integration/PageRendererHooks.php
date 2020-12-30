@@ -1,22 +1,22 @@
 <?php
-declare(strict_types = 1);
 
-namespace Ssch\Typo3Encore\Integration;
+declare(strict_types=1);
 
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Ssch\Typo3Encore\Integration;
+
+use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 final class PageRendererHooks
 {
@@ -26,20 +26,17 @@ final class PageRendererHooks
     private const ENCORE_PREFIX = 'typo3_encore:';
 
     /**
+     * @var int
+     */
+    private const PART_FOOTER = 2;
+
+    /**
      * @var TagRendererInterface
      */
     private $tagRenderer;
 
-    public function __construct(TagRendererInterface $tagRenderer = null)
+    public function __construct(TagRendererInterface $tagRenderer)
     {
-        if (! $tagRenderer instanceof TagRendererInterface) {
-            // @codeCoverageIgnoreStart
-            /** @var ObjectManagerInterface $objectManager */
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var TagRendererInterface $tagRenderer */
-            $tagRenderer = $objectManager->get(TagRendererInterface::class);
-            // @codeCoverageIgnoreEnd
-        }
         $this->tagRenderer = $tagRenderer;
     }
 
@@ -60,7 +57,7 @@ final class PageRendererHooks
                 }
 
                 $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
-                $buildName = '_default';
+                $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
 
                 if (count($buildAndEntryName) === 2) {
                     [$buildName, $entryName] = $buildAndEntryName;
@@ -68,7 +65,7 @@ final class PageRendererHooks
                     $entryName = $buildAndEntryName[0];
                 }
 
-                $position = ($jsFile['section'] ?? '') === PageRenderer::PART_FOOTER ? TagRenderer::POSITION_FOOTER : '';
+                $position = ($jsFile['section'] ?? '') === self::PART_FOOTER ? TagRenderer::POSITION_FOOTER : '';
 
                 unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
 
@@ -87,7 +84,7 @@ final class PageRendererHooks
                     continue;
                 }
                 $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
-                $buildName = '_default';
+                $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
 
                 if (count($buildAndEntryName) === 2) {
                     [$buildName, $entryName] = $buildAndEntryName;

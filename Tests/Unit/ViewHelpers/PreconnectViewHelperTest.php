@@ -1,14 +1,15 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
+
+use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ViewHelpers\PreconnectViewHelper;
 use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
@@ -16,8 +17,10 @@ use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\PreconnectViewHelper
  */
-class PreconnectViewHelperTest extends ViewHelperBaseTestcase
+final class PreconnectViewHelperTest extends ViewHelperBaseTestcase
 {
+    use ProphecyTrait;
+
     /**
      * @var PreconnectViewHelper
      */
@@ -41,7 +44,7 @@ class PreconnectViewHelperTest extends ViewHelperBaseTestcase
     public function registerFileWithEmptyAttributes(): void
     {
         $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style']);
-        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', [], 'preconnect');
+        $this->assetRegistry->expects(self::once())->method('registerFile')->with('file.css', 'style', [], 'preconnect');
         $this->viewHelper->initializeArgumentsAndRender();
     }
 
@@ -52,7 +55,7 @@ class PreconnectViewHelperTest extends ViewHelperBaseTestcase
     {
         $attributes = ['type' => 'something'];
         $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
-        $this->assetRegistry->expects($this->once())->method('registerFile')->with('file.css', 'style', $attributes, 'preconnect');
+        $this->assetRegistry->expects(self::once())->method('registerFile')->with('file.css', 'style', $attributes, 'preconnect');
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }

@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Ssch\Typo3Encore\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Asset/EntrypointLookup.php'

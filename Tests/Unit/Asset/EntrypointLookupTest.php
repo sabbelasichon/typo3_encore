@@ -1,13 +1,13 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Asset;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Unit\Asset;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -91,7 +91,7 @@ final class EntrypointLookupTest extends UnitTestCase
     {
         $this->filesystem->method('exists')->willReturn(true);
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []]]);
-        $this->assertEmpty($this->subject->getIntegrityData());
+        self::assertEmpty($this->subject->getIntegrityData());
     }
 
     /**
@@ -103,7 +103,7 @@ final class EntrypointLookupTest extends UnitTestCase
 
         $this->filesystem->method('exists')->willReturn(true);
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []], 'integrity' => $integrity]);
-        $this->assertEquals($integrity, $this->subject->getIntegrityData());
+        self::assertEquals($integrity, $this->subject->getIntegrityData());
     }
 
     /**
@@ -120,7 +120,7 @@ final class EntrypointLookupTest extends UnitTestCase
             ],
         ];
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
-        $this->assertContains('file.css', $this->subject->getCssFiles('app'));
+        self::assertContains('file.css', $this->subject->getCssFiles('app'));
     }
 
     /**
@@ -137,7 +137,7 @@ final class EntrypointLookupTest extends UnitTestCase
             ],
         ];
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
-        $this->assertEmpty($this->subject->getCssFiles('app'));
+        self::assertEmpty($this->subject->getCssFiles('app'));
     }
 
     /**
@@ -145,7 +145,7 @@ final class EntrypointLookupTest extends UnitTestCase
      */
     public function getFromCache(): void
     {
-        $this->filesystem->expects($this->never())->method('exists');
+        $this->filesystem->expects(self::never())->method('exists');
 
         $entrypoints = [
             'app' => [
@@ -158,7 +158,7 @@ final class EntrypointLookupTest extends UnitTestCase
         $this->cache->method('has')->with($this->cacheKey)->willReturn(true);
         $this->cache->method('get')->with($this->cacheKey)->willReturn(['entrypoints' => $entrypoints]);
 
-        $this->assertContains('file.css', $this->subject->getCssFiles('app'));
+        self::assertContains('file.css', $this->subject->getCssFiles('app'));
     }
 
     /**
@@ -187,7 +187,7 @@ final class EntrypointLookupTest extends UnitTestCase
             ],
         ];
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
-        $this->assertEmpty($this->subject->getJavaScriptFiles('app.js'));
+        self::assertEmpty($this->subject->getJavaScriptFiles('app.js'));
     }
 
     /**
@@ -197,7 +197,7 @@ final class EntrypointLookupTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->filesystem->method('exists')->willReturn(false);
-        $this->assertEmpty($this->subject->getJavaScriptFiles('foo'));
+        self::assertEmpty($this->subject->getJavaScriptFiles('foo'));
     }
 
     /**
@@ -207,7 +207,7 @@ final class EntrypointLookupTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->filesystem->method('exists')->willReturn(true);
-        $this->assertEmpty($this->subject->getJavaScriptFiles('foo'));
+        self::assertEmpty($this->subject->getJavaScriptFiles('foo'));
     }
 
     /**
@@ -225,7 +225,7 @@ final class EntrypointLookupTest extends UnitTestCase
             ],
         ];
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
-        $this->assertEmpty($this->subject->getJavaScriptFiles('doesnotexist'));
+        self::assertEmpty($this->subject->getJavaScriptFiles('doesnotexist'));
     }
 
     /**
@@ -242,7 +242,7 @@ final class EntrypointLookupTest extends UnitTestCase
             ],
         ];
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
-        $this->assertContains('file.js', $this->subject->getJavaScriptFiles('app'));
+        self::assertContains('file.js', $this->subject->getJavaScriptFiles('app'));
     }
 
     /**
@@ -250,6 +250,6 @@ final class EntrypointLookupTest extends UnitTestCase
      */
     public function reset(): void
     {
-        $this->assertNull($this->subject->reset());
+        self::assertNull($this->subject->reset());
     }
 }

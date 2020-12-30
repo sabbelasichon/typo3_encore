@@ -19,18 +19,21 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.2.5 <8.0",
-    "typo3/cms-core": "^9.5.17 || ^10.4.2",
+    "php": ">=7.3",
+    "typo3/cms-core": "^10.4.2 || ^11.0",
     "symfony/web-link": "^4.3",
     "symfony/asset": "^5.0",
     "ext-dom": "*"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.0",
+    "friendsofphp/php-cs-fixer": "^2.16",
     "phpstan/phpstan": "^0.12",
-    "typo3/testing-framework": "^4.0 || ^5.0",
-    "saschaegerer/phpstan-typo3": "^0.13.1",
-    "php-parallel-lint/php-parallel-lint": "^1.2"
+    "php-coveralls/php-coveralls": "^2.2",
+    "typo3/coding-standards": "^0.2",
+    "typo3/testing-framework": "^6.2",
+    "typo3/minimal": "^10.4 || ^11.0",
+    "php-parallel-lint/php-parallel-lint": "^1.2",
+    "phpspec/prophecy-phpunit": "^2.0"
   },
   "replace": {
     "typo3-ter/typo3-encore": "self.version"
@@ -85,7 +88,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.x-dev"
+      "dev-master": "3.x-dev"
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",

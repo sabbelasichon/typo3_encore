@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
 namespace Ssch\Typo3Encore\Tests\Unit\Asset;
 
 /**
@@ -67,7 +74,7 @@ final class EntrypointLookupCollectionTest extends UnitTestCase
      */
     public function getEntrypointLookup(): void
     {
-        $this->assertInstanceOf(EntrypointLookupInterface::class, $this->subject->getEntrypointLookup('existing'));
+        self::assertInstanceOf(EntrypointLookupInterface::class, $this->subject->getEntrypointLookup('existing'));
     }
 
     /**
@@ -77,6 +84,6 @@ final class EntrypointLookupCollectionTest extends UnitTestCase
     public function getEntrypointLookupWithDefinedDefaultBuild(): void
     {
         $subject = new EntrypointLookupCollection($this->entryLookupFactory, 'existing');
-        $this->assertInstanceOf(EntrypointLookupInterface::class, $subject->getEntrypointLookup());
+        self::assertInstanceOf(EntrypointLookupInterface::class, $subject->getEntrypointLookup());
     }
 }

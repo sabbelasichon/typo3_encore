@@ -1,15 +1,16 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Integration;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Ssch\Typo3Encore\Tests\Unit\Integration;
+
 use PHPUnit\Framework\MockObject\MockObject;
+use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\PackageFactory;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
@@ -50,7 +51,7 @@ final class PackageFactoryTest extends UnitTestCase
     {
         $this->settingsService->method('getStringByPath')->with('manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
-        $this->assertInstanceOf(PackageInterface::class, $this->subject->getPackage('_default'));
+        self::assertInstanceOf(PackageInterface::class, $this->subject->getPackage(EntrypointLookupInterface::DEFAULT_BUILD));
     }
 
     /**
@@ -60,6 +61,6 @@ final class PackageFactoryTest extends UnitTestCase
     {
         $this->settingsService->method('getStringByPath')->with('packages.custom.manifestJsonPath')->willReturn('manifest.json');
         $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
-        $this->assertInstanceOf(PackageInterface::class, $this->subject->getPackage('custom'));
+        self::assertInstanceOf(PackageInterface::class, $this->subject->getPackage('custom'));
     }
 }

@@ -1,6 +1,5 @@
 /.idea
 /.Build
-/.php_cs
 /.php_cs.cache
 /composer.lock
 /Resources/Public/Private
@@ -9,3 +8,4 @@
 /var
 .phpunit.result.cache
 .ddev/
+config

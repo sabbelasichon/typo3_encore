@@ -1,13 +1,13 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Integration;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use Ssch\Typo3Encore\Integration\IdGenerator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -23,6 +23,6 @@ final class IdGeneratorTest extends UnitTestCase
     public function idGeneratorReturnsString(): void
     {
         $idGenerator = new IdGenerator();
-        $this->assertTrue(is_string($idGenerator->generate()));
+        self::assertTrue(is_string($idGenerator->generate()));
     }
 }

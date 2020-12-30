@@ -8,13 +8,15 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'breakpoint@schreibersebastian.de',
     'state' => 'stable',
     'clearCacheOnLoad' => false,
-    'version' => '2.3.1',
+    'version' => '3.0.0',
     'constraints' => [
         'depends' => [
-            'php' => '7.2.5-7.4.999',
-            'typo3' => '9.5.0-10.4.99',
+            'typo3' => '10.4.2-11.5.99',
         ],
         'conflicts' => [],
         'suggests' => [],
+    ],
+    'autoload' => [
+        'psr-4' => ['Ssch\\Typo3Encore\\' => 'Classes']
     ],
 ];

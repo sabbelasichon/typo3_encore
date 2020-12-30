@@ -1,14 +1,15 @@
 <?php
-declare(strict_types = 1);
 
-namespace Ssch\Typo3Encore\Tests\Functional;
+declare(strict_types=1);
 
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Functional;
 
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -54,10 +55,10 @@ final class IncludeFilesTest extends FunctionalTestCase
         $response = $this->executeFrontendRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_UID));
 
         $content = $response->getBody()->__toString();
-        $this->assertStringContainsString('TYPO3 Webpack Encore - Modern Frontend Development', $content);
-        $this->assertStringContainsString('main.css', $content);
-        $this->assertStringContainsString('main.js', $content);
-        $this->assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $content);
+        self::assertStringContainsString('TYPO3 Webpack Encore - Modern Frontend Development', $content);
+        self::assertStringContainsString('main.css', $content);
+        self::assertStringContainsString('main.js', $content);
+        self::assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $content);
     }
 
     /**

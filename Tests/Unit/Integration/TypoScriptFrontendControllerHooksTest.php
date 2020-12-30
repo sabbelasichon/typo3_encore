@@ -1,13 +1,13 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Integration;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
@@ -46,7 +46,7 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
         $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->subject = new TypoScriptFrontendControllerHooks($this->typoScriptFrontendController, $this->assetRegistry, $this->settingsService);
+        $this->subject = new TypoScriptFrontendControllerHooks($this->assetRegistry, $this->settingsService, $this->typoScriptFrontendController);
     }
 
     /**
@@ -54,12 +54,12 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
      */
     public function registryDoesNotContainFiles(): void
     {
-        $this->assetRegistry->expects($this->once())->method('getRegisteredFiles')->willReturn([]);
-        $this->assetRegistry->expects($this->never())->method('getDefaultAttributes');
-        $this->settingsService->expects($this->never())->method('getSettings');
+        $this->assetRegistry->expects(self::once())->method('getRegisteredFiles')->willReturn([]);
+        $this->assetRegistry->expects(self::never())->method('getDefaultAttributes');
+        $this->settingsService->expects(self::never())->method('getSettings');
         $this->subject->contentPostProcAll([], $this->typoScriptFrontendController);
 
-        $this->assertArrayNotHasKey('encore_asset_registry', $this->typoScriptFrontendController->config);
+        self::assertArrayNotHasKey('encore_asset_registry', $this->typoScriptFrontendController->config);
     }
 
     /**
@@ -90,14 +90,14 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->assetRegistry->expects($this->exactly(2))->method('getRegisteredFiles')->willReturn($registeredFiles);
-        $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
-        $this->settingsService->expects($this->once())->method('getSettings')->willReturn($settings);
+        $this->assetRegistry->expects(self::exactly(2))->method('getRegisteredFiles')->willReturn($registeredFiles);
+        $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
+        $this->settingsService->expects(self::once())->method('getSettings')->willReturn($settings);
         $this->subject->contentPostProcAll([], $this->typoScriptFrontendController);
 
-        $this->assertArrayHasKey('encore_asset_registry', $this->typoScriptFrontendController->config);
-        $this->assertSame($registeredFiles, $this->typoScriptFrontendController->config['encore_asset_registry']['registered_files']);
-        $this->assertSame($defaultAttributes, $this->typoScriptFrontendController->config['encore_asset_registry']['default_attributes']);
-        $this->assertSame($settings, $this->typoScriptFrontendController->config['encore_asset_registry']['settings']);
+        self::assertArrayHasKey('encore_asset_registry', $this->typoScriptFrontendController->config);
+        self::assertSame($registeredFiles, $this->typoScriptFrontendController->config['encore_asset_registry']['registered_files']);
+        self::assertSame($defaultAttributes, $this->typoScriptFrontendController->config['encore_asset_registry']['default_attributes']);
+        self::assertSame($settings, $this->typoScriptFrontendController->config['encore_asset_registry']['settings']);
     }
 }
