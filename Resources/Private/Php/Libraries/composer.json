@@ -1,8 +1,5 @@
 {
   "config": {
-    "platform": {
-      "php": "7.2.5"
-    },
     "classmap-authoritative": true,
     "prepend-autoloader": false
   },
