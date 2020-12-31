@@ -1,13 +1,13 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Integration;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Integration\CacheFactory;
@@ -42,8 +42,8 @@ final class CacheFactoryTest extends UnitTestCase
      */
     public function nullFrontendIsReturnedBecauseNoSuchCacheExceptionIsThrown(): void
     {
-        $this->cacheManager->expects($this->once())->method('getCache')->willThrowException(new NoSuchCacheException());
-        $this->assertNull($this->subject->createInstance());
+        $this->cacheManager->expects(self::once())->method('getCache')->willThrowException(new NoSuchCacheException());
+        self::assertNull($this->subject->createInstance());
     }
 
     /**
@@ -52,7 +52,7 @@ final class CacheFactoryTest extends UnitTestCase
     public function definedCacheIsReturned(): void
     {
         $cache = $this->getMockBuilder(FrontendInterface::class)->getMock();
-        $this->cacheManager->expects($this->once())->method('getCache')->willReturn($cache);
-        $this->assertSame($cache, $this->subject->createInstance());
+        $this->cacheManager->expects(self::once())->method('getCache')->willReturn($cache);
+        self::assertSame($cache, $this->subject->createInstance());
     }
 }

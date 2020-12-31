@@ -1,15 +1,16 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Integration;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Ssch\Typo3Encore\Tests\Unit\Integration;
+
 use PHPUnit\Framework\MockObject\MockObject;
+use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\Integration\PageRendererHooks;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -67,8 +68,8 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->tagRenderer->expects($this->never())->method('renderWebpackScriptTags');
-        $this->tagRenderer->expects($this->never())->method('renderWebpackLinkTags');
+        $this->tagRenderer->expects(self::never())->method('renderWebpackScriptTags');
+        $this->tagRenderer->expects(self::never())->method('renderWebpackLinkTags');
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
@@ -85,8 +86,8 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->tagRenderer->expects($this->never())->method('renderWebpackScriptTags');
-        $this->tagRenderer->expects($this->never())->method('renderWebpackLinkTags');
+        $this->tagRenderer->expects(self::never())->method('renderWebpackScriptTags');
+        $this->tagRenderer->expects(self::never())->method('renderWebpackLinkTags');
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
@@ -110,8 +111,8 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', 'footer', '_default', $this->pageRenderer, ['forceOnTop' => true]);
-        $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', '_default', $this->pageRenderer);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer, ['forceOnTop' => true]);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
@@ -133,8 +134,8 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $this->tagRenderer->expects($this->once())->method('renderWebpackScriptTags')->with('app', '', 'config', $this->pageRenderer);
-        $this->tagRenderer->expects($this->once())->method('renderWebpackLinkTags')->with('app', 'all', 'config', $this->pageRenderer);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with('app', '', 'config', $this->pageRenderer);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with('app', 'all', 'config', $this->pageRenderer);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 }

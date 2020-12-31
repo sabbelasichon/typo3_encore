@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
 namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 /**
@@ -59,19 +66,19 @@ final class EntryLookupFactoryTest extends UnitTestCase
             'config1' => 'path/to/config1'
         ];
 
-        $this->settingsService->expects($this->at(0))->method('getArrayByPath')->with($this->equalTo('builds'))->willReturn($builds);
-        $this->settingsService->expects($this->at(1))->method('getStringByPath')->with($this->equalTo('entrypointJsonPath'))->willReturn('path/to/entrypoints.json');
+        $this->settingsService->expects(self::atLeastOnce())->method('getArrayByPath')->with(self::equalTo('builds'))->willReturn($builds);
+        $this->settingsService->expects(self::atLeastOnce())->method('getStringByPath')->with(self::equalTo('entrypointJsonPath'))->willReturn('path/to/entrypoints.json');
 
-        $this->objectManager->expects($this->at(0))->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
-        $this->objectManager->expects($this->at(1))->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
+        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
+        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
 
         $this->filesystem->method('exists')->willReturn(true);
 
         $collection = $this->subject->getCollection();
 
-        $this->assertContainsOnlyInstancesOf(EntrypointLookupInterface::class, $collection);
-        $this->assertArrayHasKey('_default', $collection);
+        self::assertContainsOnlyInstancesOf(EntrypointLookupInterface::class, $collection);
+        self::assertArrayHasKey('_default', $collection);
 
-        $this->assertSame($collection, $this->subject->getCollection());
+        self::assertSame($collection, $this->subject->getCollection());
     }
 }

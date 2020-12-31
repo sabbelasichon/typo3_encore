@@ -1,13 +1,13 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Middleware;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Unit\Middleware;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
@@ -52,7 +52,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->subject = new AssetsMiddleware($this->typoScriptFrontendController, $this->assetRegistry, $this->settingsService);
+        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService, $this->typoScriptFrontendController);
     }
 
     /**
@@ -81,15 +81,15 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')->willReturn($response);
-        $this->settingsService->expects($this->once())->method('getSettings')->willReturn([]);
+        $this->settingsService->expects(self::once())->method('getSettings')->willReturn([]);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
         $defaultAttributes = ['crossorigin' => true];
-        $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
+        $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
         $returnedResponse = $this->subject->process($request, $handler);
 
         $links = $returnedResponse->getHeader('Link');
-        $this->assertCount(0, $links);
+        self::assertCount(0, $links);
     }
 
     /**
@@ -101,12 +101,11 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(NullResponse::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->typoScriptFrontendController->expects($this->once())->method('isOutputting')->willReturn(false);
-        $this->assetRegistry->expects($this->never())->method('getRegisteredFiles');
+        $this->assetRegistry->expects(self::never())->method('getRegisteredFiles');
 
         $returnedResponse = $this->subject->process($request, $handler);
 
-        $this->assertEquals($response, $returnedResponse);
+        self::assertEquals($response, $returnedResponse);
     }
 
     /**
@@ -118,12 +117,12 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $handler->method('handle')->willReturn($response);
-        $this->assetRegistry->expects($this->once())->method('getRegisteredFiles')->willReturn([]);
-        $this->assetRegistry->expects($this->never())->method('getDefaultAttributes');
+        $this->assetRegistry->expects(self::once())->method('getRegisteredFiles')->willReturn([]);
+        $this->assetRegistry->expects(self::never())->method('getDefaultAttributes');
 
         $returnedResponse = $this->subject->process($request, $handler);
 
-        $this->assertEquals($response, $returnedResponse);
+        self::assertEquals($response, $returnedResponse);
     }
 
     /**
@@ -174,11 +173,11 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $this->settingsService->method('getBooleanByPath')->willReturn(true);
         $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
         $defaultAttributes = ['crossorigin' => true];
-        $this->assetRegistry->expects($this->once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
+        $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
         $returnedResponse = $this->subject->process($request, $handler);
 
         $links = $returnedResponse->getHeader('Link');
-        $this->assertCount(1, $links);
+        self::assertCount(1, $links);
     }
 }

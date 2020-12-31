@@ -1,13 +1,13 @@
 <?php
 
-namespace Ssch\Typo3Encore\Tests\Unit\Integration;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use Ssch\Typo3Encore\Integration\AssetRegistry;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
@@ -41,9 +41,9 @@ final class AssetRegistryTest extends UnitTestCase
         $this->subject->registerFile('file.js', 'script');
 
         $registeredFiles = $this->subject->getRegisteredFiles();
-        $this->assertCount(2, $registeredFiles['preload']['files']['style']);
-        $this->assertCount(1, $registeredFiles['preload']['files']['script']);
+        self::assertCount(2, $registeredFiles['preload']['files']['style']);
+        self::assertCount(1, $registeredFiles['preload']['files']['script']);
 
-        $this->assertSame(['crossorigin' => 'anonymus'], $this->subject->getDefaultAttributes());
+        self::assertSame(['crossorigin' => 'anonymus'], $this->subject->getDefaultAttributes());
     }
 }

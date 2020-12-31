@@ -1,15 +1,16 @@
 <?php
 
-namespace Ssch\Typo3Encore\Unit\ViewHelpers;
-
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Ssch\Typo3Encore\Unit\ViewHelpers;
+
 use PHPUnit\Framework\MockObject\MockObject;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use Ssch\Typo3Encore\ViewHelpers\SvgViewHelper;
 use TYPO3\CMS\Core\Resource\FileInterface;
@@ -22,6 +23,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  */
 final class SvgViewHelperTest extends ViewHelperBaseTestcase
 {
+    use ProphecyTrait;
+
     /**
      * @var string
      */
@@ -73,8 +76,8 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
         $image = $this->getMockBuilder(FileInterface::class)->getMock();
         $image->method('getContents')->willReturn($this->getMockSvg());
         $this->setArgumentsUnderTest($this->viewHelper, $arguments);
-        $this->imageService->expects($this->once())->method('getImage')->with($arguments['src'])->willReturn($image);
-        $this->assertEquals($expected, $this->viewHelper->render());
+        $this->imageService->expects(self::once())->method('getImage')->with($arguments['src'])->willReturn($image);
+        self::assertEquals($expected, $this->viewHelper->render());
     }
 
     public function renderDataProvider(): array

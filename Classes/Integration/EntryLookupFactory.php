@@ -1,12 +1,14 @@
 <?php
-declare(strict_types = 1);
 
-/**
+declare(strict_types=1);
+
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
 namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
@@ -46,8 +48,8 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     public function getCollection(): array
     {
-        if (static::$collection !== null) {
-            return static::$collection;
+        if (self::$collection !== null) {
+            return self::$collection;
         }
 
         $buildConfigurations = $this->settingsService->getArrayByPath('builds');
@@ -66,7 +68,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
             $builds['_default'] =  $this->objectManager->get(EntrypointLookupInterface::class, $entrypointsPathDefaultBuild, '_default');
         }
 
-        static::$collection = $builds;
+        self::$collection = $builds;
 
         return $builds;
     }

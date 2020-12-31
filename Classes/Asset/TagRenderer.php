@@ -1,14 +1,15 @@
 <?php
-declare(strict_types = 1);
 
-namespace Ssch\Typo3Encore\Asset;
+declare(strict_types=1);
 
-/**
+/*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Ssch\Typo3Encore\Asset;
 
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -58,7 +59,7 @@ final class TagRenderer implements TagRendererInterface
         $this->assetRegistry = $assetRegistry;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = self::POSITION_FOOTER, string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false): void
+    public function renderWebpackScriptTags(string $entryName, string $position = self::POSITION_FOOTER, string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false): void
     {
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
@@ -108,7 +109,7 @@ final class TagRenderer implements TagRendererInterface
         }
     }
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = '_default', PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
+    public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
     {
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
