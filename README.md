@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/sabbelasichon/typo3_encore/master.svg?style=flat-square)](https://travis-ci.org/sabbelasichon/typo3_encore)
+[![CI Status](https://github.com/sabbelasichon/typo3_encore/workflows/CI/badge.svg)](https://github.com/sabbelasichon/typo3_encore/actions)
 [![Coverage Status](https://img.shields.io/coveralls/sabbelasichon/typo3_encore/master.svg?style=flat-square)](https://coveralls.io/github/sabbelasichon/typo3_encore?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/ssch/typo3-encore.svg?style=flat-square)](https://packagist.org/packages/ssch/typo3-encore)
 
