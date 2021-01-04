@@ -30,9 +30,9 @@ final class TypoScriptFrontendControllerHooks
      */
     private $settingsService;
 
-    public function __construct(AssetRegistryInterface $assetRegistry, SettingsServiceInterface $settingsService, TypoScriptFrontendController $controller = null)
+    public function __construct(AssetRegistryInterface $assetRegistry, SettingsServiceInterface $settingsService)
     {
-        $this->controller = $controller ?? $GLOBALS['TSFE'];
+        $this->controller = $GLOBALS['TSFE'];
         $this->settingsService = $settingsService;
         $this->assetRegistry = $assetRegistry;
     }

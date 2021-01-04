@@ -52,7 +52,8 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService, $this->typoScriptFrontendController);
+        $GLOBALS['TSFE'] = $this->typoScriptFrontendController;
+        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService);
     }
 
     /**
