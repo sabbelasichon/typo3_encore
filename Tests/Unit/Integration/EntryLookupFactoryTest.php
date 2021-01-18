@@ -68,6 +68,7 @@ final class EntryLookupFactoryTest extends UnitTestCase
 
         $this->settingsService->expects(self::atLeastOnce())->method('getArrayByPath')->with(self::equalTo('builds'))->willReturn($builds);
         $this->settingsService->expects(self::atLeastOnce())->method('getStringByPath')->with(self::equalTo('entrypointJsonPath'))->willReturn('path/to/entrypoints.json');
+        $this->settingsService->expects(self::atLeastOnce())->method('getBooleanByPath')->with(self::equalTo('strictMode'))->willReturn(true);
 
         $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
         $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());

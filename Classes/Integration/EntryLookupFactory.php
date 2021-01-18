@@ -54,22 +54,28 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
 
         $buildConfigurations = $this->settingsService->getArrayByPath('builds');
         $entrypointsPathDefaultBuild = $this->settingsService->getStringByPath('entrypointJsonPath');
+        $strictMode = $this->settingsService->getBooleanByPath('strictMode');
 
         $builds = [];
 
         if (! empty($buildConfigurations)) {
             foreach ($buildConfigurations as $buildConfigurationKey => $buildConfiguration) {
                 $entrypointsPath = sprintf('%s/entrypoints.json', $buildConfiguration);
-                $builds[$buildConfigurationKey] = $this->objectManager->get(EntrypointLookupInterface::class, $entrypointsPath, $buildConfigurationKey);
+                $builds[$buildConfigurationKey] = $this->createEntrypointLookUp($entrypointsPath, $buildConfigurationKey, $strictMode);
             }
         }
 
         if ($this->filesystem->exists($this->filesystem->getFileAbsFileName($entrypointsPathDefaultBuild))) {
-            $builds['_default'] =  $this->objectManager->get(EntrypointLookupInterface::class, $entrypointsPathDefaultBuild, '_default');
+            $builds['_default'] =  $this->createEntrypointLookUp($entrypointsPathDefaultBuild, '_default', $strictMode);
         }
 
         self::$collection = $builds;
 
         return $builds;
+    }
+
+    private function createEntrypointLookUp(string $entrypointJsonPath, string $cacheKeyPrefix, bool $strictMode): EntrypointLookupInterface
+    {
+        return $this->objectManager->get(EntrypointLookupInterface::class, $entrypointJsonPath, $cacheKeyPrefix, $strictMode);
     }
 }

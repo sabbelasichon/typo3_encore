@@ -31,11 +31,6 @@ class CacheFactory
      */
     protected $cacheManager;
 
-    /**
-     * CacheFactory constructor.
-     *
-     * @param CacheManager $cacheManager
-     */
     public function __construct(CacheManager $cacheManager)
     {
         $this->cacheManager = $cacheManager;

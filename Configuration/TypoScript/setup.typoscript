@@ -3,6 +3,14 @@ plugin.tx_typo3encore {
         entrypointJsonPath = {$plugin.tx_typo3encore.settings.entrypointJsonPath}
         manifestJsonPath = {$plugin.tx_typo3encore.settings.manifestJsonPath}
 
+        # if you have multiple builds:
+        # builds {
+        #    firstBuild = EXT:typo3_encore/Resources/Public/FirstBuild
+        #    secondBuild = EXT:typo3_encore/Resources/Public/SecondBuild
+        #}
+
+        strictMode = {$plugin.tx_typo3encore.settings.strictMode}
+
         preload {
             enable = {$plugin.tx_typo3encore.settings.preload.enable}
             crossorigin = {$plugin.tx_typo3encore.settings.preload.crossorigin}

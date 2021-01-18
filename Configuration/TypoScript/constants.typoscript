@@ -3,7 +3,11 @@ plugin.tx_typo3encore {
         entrypointJsonPath = EXT:typo3_encore/Resources/Public/entrypoints.json
         manifestJsonPath = EXT:typo3_encore/Resources/Public/manifest.json
 
+        # Throw an exception if the entrypoints.json file is missing or an entry is missing from the data
+        strictMode = 0
+
         preload {
+            # preload all rendered script and link tags automatically via the http2 Link header
             enable = 1
             crossorigin =
         }

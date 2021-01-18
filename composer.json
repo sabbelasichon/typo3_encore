@@ -76,7 +76,7 @@
     "test-php-cs-fixer": [
       "php-cs-fixer fix -v --dry-run --using-cache false --diff --diff-format=udiff"
     ],
-    "php-cs-fixer": [
+    "fix-style": [
       "php-cs-fixer fix -v --using-cache false --diff --diff-format=udiff"
     ],
     "test-unit": [
