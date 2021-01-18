@@ -55,14 +55,19 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
      * @var string
      */
     private $cacheKey;
+    /**
+     * @var bool
+     */
+    private $strictMode;
 
-    public function __construct(string $entrypointJsonPath, string $cacheKeyPrefix, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
+    public function __construct(string $entrypointJsonPath, string $cacheKeyPrefix, bool $strictMode, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
     {
         $this->entrypointJsonPath = $filesystem->getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
         $this->cache = $cacheFactory->createInstance();
         $this->cacheKey = sprintf('%s-%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY, $filesystem->createHash($this->entrypointJsonPath));
+        $this->strictMode = $strictMode;
     }
 
     public function getJavaScriptFiles(string $entryName): array
@@ -116,7 +121,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     private function validateEntryName(string $entryName)
     {
         $entriesData = $this->getEntriesData();
-        if (! isset($entriesData['entrypoints'][$entryName])) {
+        if (! isset($entriesData['entrypoints'][$entryName]) && $this->strictMode) {
             $withoutExtension = substr($entryName, 0, (int)strrpos($entryName, '.'));
 
             if (isset($entriesData['entrypoints'][$withoutExtension])) {
