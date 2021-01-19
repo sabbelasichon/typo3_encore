@@ -58,11 +58,15 @@ Alternatively you can also include the files via TypoScript
 page.includeCSS {
     # Pattern typo3_encore:entryName
     app = typo3_encore:app
+    # If you want to ensure that this file is loaded first uncomment the next line
+    # app.forceOnTop = 1
 }
 
 page.includeJS {
     # Pattern typo3_encore:entryName
     app = typo3_encore:app
+    # If you want to ensure that this file is loaded first uncomment the next line
+    # app.forceOnTop = 1
 }
 
 page.includeJSFooter {
