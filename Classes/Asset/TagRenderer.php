@@ -18,32 +18,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 final class TagRenderer implements TagRendererInterface
 {
     /**
-     * @var array
-     */
-    public const ALLOWED_CSS_POSITIONS = [
-        'cssFiles',
-        'cssLibs'
-    ];
-
-    /**
-     * @var array
-     */
-    public const ALLOWED_JS_POSITIONS = [
-        'jsFiles',
-        'jsLibs'
-    ];
-
-    /**
-     * @var string
-     */
-    public const POSITION_FOOTER = 'footer';
-
-    /**
-     * @var string
-     */
-    public const POSITION_JS_LIBRARY = 'jsLibs';
-
-    /**
      * @var EntrypointLookupCollectionInterface
      */
     private $entrypointLookupCollection;

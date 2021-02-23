@@ -100,7 +100,7 @@ If you want to add additional files to the AssetRegistry you can use the Preload
 ```html
 {namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<encore:preload attributes="{type: 'font/woff2'}" as="font" uri="{e:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
+<encore:preload attributes="{type: 'font/woff2', crossOrigin: 'anonymous'}" as="font" uri="{encore:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
 ```
 
 Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file.
