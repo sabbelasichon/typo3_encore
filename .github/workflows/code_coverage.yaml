@@ -1,0 +1,27 @@
+name: Code Coverage
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  code_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.0.0
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+          coverage: none
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # see https://github.com/ramsey/composer-install
+      - uses: "ramsey/composer-install@v1"
+      - run: .Build/bin/phpunit -c Build/UnitTests.xml --coverage-text --coverage-clover .Build/logs/clover.xml
+      - run: .Build/bin/php-coveralls --coverage_clover=.Build/logs/clover.xml -v
+        env:
+          COVERALLS_RUN_LOCALLY: 1
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
