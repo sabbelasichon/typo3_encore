@@ -11,9 +11,12 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Asset;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class TagRenderer implements TagRendererInterface
 {
@@ -27,8 +30,14 @@ final class TagRenderer implements TagRendererInterface
      */
     private $assetRegistry;
 
+    /**
+     * @var ApplicationType|null
+     */
+    private $applicationType;
+
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection, AssetRegistryInterface $assetRegistry)
     {
+        $this->applicationType = array_key_exists('TYPO3_REQUEST', $GLOBALS) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface ? ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']) : null;
         $this->entrypointLookupCollection = $entrypointLookupCollection;
         $this->assetRegistry = $assetRegistry;
     }
@@ -51,7 +60,7 @@ final class TagRenderer implements TagRendererInterface
 
         foreach ($files as $file) {
             $attributes = array_replace([
-                'file' => $file,
+                'file' => $this->canPrependAbsoluteRefPrefix($file) ? ltrim($file, '/') : $file,
                 'type' => 'text/javascript',
                 'compress' => false,
                 'forceOnTop' => false,
@@ -93,7 +102,7 @@ final class TagRenderer implements TagRendererInterface
         unset($parameters['file']);
         foreach ($files as $file) {
             $attributes = array_replace([
-                'file' => $file,
+                'file' => $this->canPrependAbsoluteRefPrefix($file) ? ltrim($file, '/') : $file,
                 'rel' => 'stylesheet',
                 'media' => $media,
                 'title' => '',
@@ -118,5 +127,27 @@ final class TagRenderer implements TagRendererInterface
     private function getEntrypointLookup(string $buildName): EntrypointLookupInterface
     {
         return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
+    }
+
+    private function canPrependAbsoluteRefPrefix($file): bool
+    {
+        if ($this->applicationType === null) {
+            return false;
+        }
+
+        if (!$this->applicationType->isFrontend()) {
+            return false;
+        }
+
+        if ($this->getTypoScriptFrontendController()->absRefPrefix === '') {
+            return false;
+        }
+
+        return !GeneralUtility::isValidUrl($file);
+    }
+
+    private function getTypoScriptFrontendController(): TypoScriptFrontendController
+    {
+        return $GLOBALS['TSFE'];
     }
 }
