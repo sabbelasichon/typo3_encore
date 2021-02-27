@@ -1,0 +1,4 @@
+@import 'EXT:typo3_encore/Configuration/TypoScript/setup.typoscript'
+@import './MainRenderer.typoscript'
+
+config.absRefPrefix = https://www.domain.com/foo/
