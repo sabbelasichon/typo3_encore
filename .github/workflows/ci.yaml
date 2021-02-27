@@ -109,25 +109,3 @@ jobs:
           export typo3DatabasePassword="root";
           composer run-script test-functional
 
-  code_coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.0.0
-      - id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-      - run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - run: .Build/bin/phpunit -c Build/UnitTests.xml --coverage-text --coverage-clover .Build/logs/clover.xml
-      - run: .Build/bin/php-coveralls --coverage_clover=.Build/logs/clover.xml -v
-        env:
-            COVERALLS_RUN_LOCALLY: 1
-            COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-
