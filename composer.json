@@ -62,12 +62,6 @@
     "post-autoload-dump": [
       "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
     ],
-    "extension-create-libs": [
-      "@composer install -d Resources/Private/Php/Libraries"
-    ],
-    "extension-build": [
-      "@extension-create-libs"
-    ],
     "test-php-lint": [
       ".Build/bin/parallel-lint ./Classes/",
       ".Build/bin/parallel-lint ./Configuration/TCA/",

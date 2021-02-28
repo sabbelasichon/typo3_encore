@@ -40,7 +40,7 @@ jobs:
           "^2.0" --prefer-dist --no-progress --no-suggest
 
       - name: Install TER dependencies
-        run: composer run-script extension-build
+        run: composer install -d Resources/Private/Php/Libraries
 
       - name: Remove .git folder
         run: rm -rf ./$TYPO3_EXTENSION_KEY/.git
