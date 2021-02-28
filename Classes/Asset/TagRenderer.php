@@ -60,7 +60,7 @@ final class TagRenderer implements TagRendererInterface
 
         foreach ($files as $file) {
             $attributes = array_replace([
-                'file' => $this->canPrependAbsoluteRefPrefix($file) ? ltrim($file, '/') : $file,
+                'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
                 'type' => 'text/javascript',
                 'compress' => false,
                 'forceOnTop' => false,
@@ -102,7 +102,7 @@ final class TagRenderer implements TagRendererInterface
         unset($parameters['file']);
         foreach ($files as $file) {
             $attributes = array_replace([
-                'file' => $this->canPrependAbsoluteRefPrefix($file) ? ltrim($file, '/') : $file,
+                'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
                 'rel' => 'stylesheet',
                 'media' => $media,
                 'title' => '',
@@ -129,8 +129,12 @@ final class TagRenderer implements TagRendererInterface
         return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
     }
 
-    private function canPrependAbsoluteRefPrefix($file): bool
+    private function removeLeadingSlash($file, array $parameters): bool
     {
+        if (array_key_exists('inline', $parameters) && (bool)$parameters['inline']) {
+            return true;
+        }
+
         if ($this->applicationType === null) {
             return false;
         }
