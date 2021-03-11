@@ -28,7 +28,6 @@
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.16",
     "phpstan/phpstan": "^0.12",
-    "php-coveralls/php-coveralls": "^2.2",
     "typo3/coding-standards": "^0.2",
     "typo3/testing-framework": "^6.2",
     "typo3/minimal": "^10.4 || ^11.0",
