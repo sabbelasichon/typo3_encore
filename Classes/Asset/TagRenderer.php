@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Asset;
 
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -37,7 +38,12 @@ final class TagRenderer implements TagRendererInterface
 
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection, AssetRegistryInterface $assetRegistry)
     {
-        $this->applicationType = array_key_exists('TYPO3_REQUEST', $GLOBALS) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface ? ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']) : null;
+        try {
+            $this->applicationType = array_key_exists('TYPO3_REQUEST', $GLOBALS) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface ? ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']) : null;
+        } catch (RuntimeException $e) {
+            $this->applicationType = null;
+        }
+
         $this->entrypointLookupCollection = $entrypointLookupCollection;
         $this->assetRegistry = $assetRegistry;
     }
