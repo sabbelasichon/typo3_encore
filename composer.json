@@ -88,7 +88,6 @@
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build"
     }
   }
