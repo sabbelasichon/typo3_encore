@@ -81,6 +81,24 @@ final class IncludeFilesTest extends FunctionalTestCase
         self::assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $content);
     }
 
+    /**
+     * @test
+     */
+    public function addFilesWithHtml5DocType(): void
+    {
+        $this->setUpFrontendRootPage(
+            self::ROOT_PAGE_UID,
+            [
+                'EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRendererHtml5.typoscript',
+            ]
+        );
+        $this->setUpSites(self::ROOT_PAGE_UID, []);
+        $response = $this->executeFrontendRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_UID));
+
+        $content = $response->getBody()->__toString();
+        self::assertStringNotContainsString('text/javascript', $content);
+    }
+
     protected function setUpSites(int $pageId, array $sites): void
     {
         if (empty($sites[$pageId])) {

@@ -79,6 +79,10 @@ final class TagRenderer implements TagRendererInterface
                 'crossorigin' => '',
             ], $parameters);
 
+            if ($this->removeType($parameters)) {
+                unset($attributes['type']);
+            }
+
             $attributes = array_values($attributes);
 
             $pageRendererMethodName = 'addJS' . ($position === self::POSITION_FOOTER ? 'Footer' : '');
@@ -159,5 +163,26 @@ final class TagRenderer implements TagRendererInterface
     private function getTypoScriptFrontendController(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
+    }
+
+    private function removeType(array $parameters): bool
+    {
+        if (array_key_exists('type', $parameters)) {
+            return false;
+        }
+
+        if ($this->applicationType === null) {
+            return false;
+        }
+
+        if (!$this->applicationType->isFrontend()) {
+            return false;
+        }
+
+        if ($this->getTypoScriptFrontendController()->config['config']['doctype'] !== 'html5') {
+            return false;
+        }
+
+        return true;
     }
 }
