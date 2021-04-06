@@ -63,11 +63,16 @@ final class TagRenderer implements TagRendererInterface
         $parameters = array_filter($parameters, static function ($param) {
             return !is_null($param);
         });
+        
+        $type = '';
+        if ($this->getTypoScriptFrontendController()->config['config']['doctype'] !== 'html5') {
+            type = 'text/javascript';
+        }
 
         foreach ($files as $file) {
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
-                'type' => 'text/javascript',
+                'type' => $type,
                 'compress' => false,
                 'forceOnTop' => false,
                 'allWrap' => '',
