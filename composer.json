@@ -23,7 +23,8 @@
     "typo3/cms-core": "^10.4.2 || ^11.0",
     "symfony/web-link": "^4.3",
     "symfony/asset": "^5.0",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "typo3/cms-tstemplate": "^10.4.2 || ^11.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.16",

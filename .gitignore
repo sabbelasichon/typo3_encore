@@ -2,10 +2,16 @@
 /.Build
 /.php_cs.cache
 /composer.lock
-/Resources/Public/Private
+/Resources/Public/Build
+/Resources/Private/Templates/Page.html
 /Resources/Private/Php/Libraries/vendor
 /phpunit.xml
 /var
 .phpunit.result.cache
 .ddev/
 config
+assets
+webpack.config.js
+node_modules
+package.json
+yarn.lock
