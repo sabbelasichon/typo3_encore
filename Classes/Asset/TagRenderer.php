@@ -67,7 +67,7 @@ final class TagRenderer implements TagRendererInterface
         foreach ($files as $file) {
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
-                'type' => 'text/javascript',
+                'type' => $this->removeType($parameters) ? '' : 'text/javascript',
                 'compress' => false,
                 'forceOnTop' => false,
                 'allWrap' => '',
@@ -78,10 +78,6 @@ final class TagRenderer implements TagRendererInterface
                 'defer' => false,
                 'crossorigin' => '',
             ], $parameters);
-
-            if ($this->removeType($parameters)) {
-                unset($attributes['type']);
-            }
 
             $attributes = array_values($attributes);
 
