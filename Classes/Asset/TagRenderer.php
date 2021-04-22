@@ -65,6 +65,8 @@ final class TagRenderer implements TagRendererInterface
         });
 
         foreach ($files as $file) {
+            $this->addAdditionalAbsRefPrefixDirectories($file);
+
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
                 'type' => $this->removeType($parameters) ? '' : 'text/javascript',
@@ -107,6 +109,8 @@ final class TagRenderer implements TagRendererInterface
 
         unset($parameters['file']);
         foreach ($files as $file) {
+            $this->addAdditionalAbsRefPrefixDirectories($file);
+
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
                 'rel' => 'stylesheet',
@@ -135,6 +139,21 @@ final class TagRenderer implements TagRendererInterface
         return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
     }
 
+    private function addAdditionalAbsRefPrefixDirectories(string $file)
+    {
+        $directories = GeneralUtility::trimExplode(
+            ',',
+            $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'],
+            true
+        );
+
+        $newDir = basename(dirname($file));
+
+        if (false === in_array($newDir, $directories)) {
+            $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'] .= ',' . $newDir;
+        }
+    }
+
     private function removeLeadingSlash($file, array $parameters): bool
     {
         if (array_key_exists('inline', $parameters) && (bool)$parameters['inline']) {
@@ -154,11 +173,8 @@ final class TagRenderer implements TagRendererInterface
         }
 
         if ($this->getTypoScriptFrontendController()->absRefPrefix === '/') {
-            return false;
-        }
-
-        if (GeneralUtility::isValidUrl($this->getTypoScriptFrontendController()->absRefPrefix . $file)) {
-            return false;
+            //avoid double //
+            return true;
         }
 
         return !GeneralUtility::isValidUrl($file);
