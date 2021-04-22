@@ -139,18 +139,22 @@ final class TagRenderer implements TagRendererInterface
         return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
     }
 
-    private function addAdditionalAbsRefPrefixDirectories(string $file)
+    private function addAdditionalAbsRefPrefixDirectories(string $file): void
     {
-        $directories = GeneralUtility::trimExplode(
-            ',',
-            $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'],
-            true
-        );
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories']) &&
+            is_string($GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'])
+        ) {
+            $directories = GeneralUtility::trimExplode(
+                ',',
+                $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'],
+                true
+            );
 
-        $newDir = basename(dirname($file));
+            $newDir = basename(dirname($file));
 
-        if (false === in_array($newDir, $directories)) {
-            $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'] .= ',' . $newDir;
+            if (false === in_array($newDir, $directories, true)) {
+                $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'] .= ',' . $newDir;
+            }
         }
     }
 
