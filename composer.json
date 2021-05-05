@@ -19,7 +19,7 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.4",
     "typo3/cms-core": "^10.4.2 || ^11.0",
     "symfony/web-link": "^4.3",
     "symfony/asset": "^5.0",
