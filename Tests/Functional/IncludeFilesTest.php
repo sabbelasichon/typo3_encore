@@ -114,7 +114,7 @@ final class IncludeFilesTest extends FunctionalTestCase
                     $file = GeneralUtility::getFileAbsFileName($file);
                 }
                 $fileContent = file_get_contents($file);
-                $fileContent = str_replace('\'{rootPageId}\'', $pageId, $fileContent);
+                $fileContent = str_replace('\'{rootPageId}\'', (string)$pageId, $fileContent);
                 GeneralUtility::writeFile($target, $fileContent);
             }
         }
