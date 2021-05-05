@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        php-versions: [ 7.4 ]
+        php-versions: [ 7.4, 8.0 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -59,7 +59,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        php-versions: [ 7.4 ]
+        php-versions: [ 7.4, 8.0 ]
         typo3-versions:
           - { typo3: 10, testing: 6 }
           - { typo3: 11, testing: 6 }
