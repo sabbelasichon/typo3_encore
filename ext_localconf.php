@@ -4,16 +4,6 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(static function ($packageKey) {
 
-    // Caching of user requests
-    if (! is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY])
-    ) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY] = [
-            'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
-            'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
-            'options' => [],
-        ];
-    }
-
     if (TYPO3_MODE === 'FE') {
         $GLOBALS['TYPO3_CONF_VARS']['FE']['addAllowedPaths'] .= ',' . $packageKey;
     }

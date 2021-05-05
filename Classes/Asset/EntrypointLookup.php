@@ -47,7 +47,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     private $filesystem;
 
     /**
-     * @var FrontendInterface
+     * @var FrontendInterface|null
      */
     private $cache;
 

@@ -143,6 +143,19 @@ page.includeCSS {
 <encore:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
 ```
 
+### Use an in memory cache for caching the entrypoints.json
+
+If you have an in memory cache in place like redis or memcached you could configure it to speed up the parsing of the entrypoints.json for subsequent requests:
+
+```php
+    // Caching of user requests
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][\Ssch\Typo3Encore\Integration\CacheFactory::CACHE_KEY] = [
+        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\RedisBackend::class,
+        'options' => [],
+    ];
+```
+
 ## Getting Started with Webpack Encore
 
 Although the documentation of Webpack Encore is awesome, i am going to provide a minimalistic how to install the frontend related things.
