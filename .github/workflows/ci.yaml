@@ -7,7 +7,7 @@ on:
 jobs:
   php-lint:
     name: "PHP linter"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         php-versions: [ 7.4 ]
@@ -32,7 +32,7 @@ jobs:
         run: composer run-script test-php-lint
   php-cs-fixer:
     name: "PHP-CS-Fixer"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         php-versions: [ 7.4 ]
@@ -56,7 +56,7 @@ jobs:
       - name: "Run PHP-CS-Fixer"
         run: "composer run-script test-php-cs-fixer"
   tests:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       max-parallel: 2
       matrix:
@@ -103,6 +103,7 @@ jobs:
         run: composer run-script test-unit
 
       - name: "Functional tests"
+        if: ${{ matrix.typo3-versions.typo3 == '10' }}
         run: |
           export typo3DatabaseName="typo3";
           export typo3DatabaseHost="127.0.0.1";
