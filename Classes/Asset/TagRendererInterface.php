@@ -18,16 +18,16 @@ interface TagRendererInterface extends SingletonInterface
      * @var array
      */
     public const ALLOWED_CSS_POSITIONS = [
-        'cssFiles',
-        'cssLibs'
+        'cssLibs',
+        'cssFiles'
     ];
 
     /**
      * @var array
      */
     public const ALLOWED_JS_POSITIONS = [
-        'jsFiles',
-        'jsLibs'
+        'jsLibs',
+        'jsFiles'
     ];
 
     /**
