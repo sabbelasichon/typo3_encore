@@ -59,20 +59,43 @@ final class TagRenderer implements TagRendererInterface
 
         unset($parameters['file']);
 
+        $wrapFirst = '';
+        $wrapLast = '';
+        $fileCount = count($files);
+        if (!empty($parameters['allWrap']) && $fileCount > 1) {
+            // If there are multiple files, allWrap should wrap all.
+            // To do this, it's split up into two parts. The first part wraps the first file
+            // and the second part wraps the last file.
+            $splitChar = !empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
+            $wrapArr = explode($splitChar, $parameters['allWrap'], 2);
+            $wrapFirst = $wrapArr[0] . $splitChar;
+            $wrapLast = $splitChar . $wrapArr[1];
+            unset($parameters['allWrap']);
+        }
+
         // We do not want to replace null values in $attributes
         $parameters = array_filter($parameters, static function ($param) {
             return !is_null($param);
         });
 
-        foreach ($files as $file) {
+        foreach ($files as $index => $file) {
             $this->addAdditionalAbsRefPrefixDirectories($file);
+
+            $allWrap = '';
+            if (!$index) {
+                // first file
+                $allWrap = $wrapFirst;
+            } elseif ($index === $fileCount - 1) {
+                // last file
+                $allWrap = $wrapLast;
+            }
 
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
                 'type' => $this->removeType($parameters) ? '' : 'text/javascript',
                 'compress' => false,
                 'forceOnTop' => false,
-                'allWrap' => '',
+                'allWrap' => $allWrap,
                 'excludeFromConcatenation' => true,
                 'splitChar' => '|',
                 'async' => false,
@@ -108,8 +131,32 @@ final class TagRenderer implements TagRendererInterface
         $files = $entryPointLookup->getCssFiles($entryName);
 
         unset($parameters['file']);
-        foreach ($files as $file) {
+
+        $wrapFirst = '';
+        $wrapLast = '';
+        $fileCount = count($files);
+        if (!empty($parameters['allWrap']) && $fileCount > 1) {
+            // If there are multiple files, allWrap should wrap all.
+            // To do this, it's split up into two parts. The first part wraps the first file
+            // and the second part wraps the last file.
+            $splitChar = !empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
+            $wrapArr = explode($splitChar, $parameters['allWrap'], 2);
+            $wrapFirst = $wrapArr[0] . $splitChar;
+            $wrapLast = $splitChar . $wrapArr[1];
+            unset($parameters['allWrap']);
+        }
+
+        foreach ($files as $index => $file) {
             $this->addAdditionalAbsRefPrefixDirectories($file);
+
+            $allWrap = '';
+            if (!$index) {
+                // first file
+                $allWrap = $wrapFirst;
+            } elseif ($index === $fileCount - 1) {
+                // last file
+                $allWrap = $wrapLast;
+            }
 
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
@@ -118,7 +165,7 @@ final class TagRenderer implements TagRendererInterface
                 'title' => '',
                 'compress' => false,
                 'forceOnTop' => false,
-                'allWrap' => '',
+                'allWrap' => $allWrap,
                 'excludeFromConcatenation' => true,
                 'splitChar' => '|',
                 'inline' => false,

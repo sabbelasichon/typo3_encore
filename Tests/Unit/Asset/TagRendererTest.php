@@ -172,6 +172,47 @@ final class TagRendererTest extends UnitTestCase
         $this->subject->renderWebpackLinkTags('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
     }
 
+    /**
+     * Test if an entry point with multiple files wraps all files, if allWrap was supplied
+     * @test
+     */
+    public function renderWebpackScriptTagsWithMultipleFilesAndAllWrap(): void
+    {
+        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClassWithMultipleEntries());
+
+        $this->pageRenderer->addJsFile(
+            'file1.js',
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            'BEFORE|',
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any()
+        )->shouldBeCalled();
+
+        $this->pageRenderer->addJsFile(
+            'file2.js',
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            '|AFTER',
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any()
+        )->shouldBeCalled();
+
+        $this->subject->renderWebpackScriptTags('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false, 'allWrap' => 'BEFORE|AFTER']);
+    }
+
     private function addJsFileShouldBeCalledOnce(): void
     {
         $this->pageRenderer->addJsFile(
@@ -211,6 +252,33 @@ final class TagRendererTest extends UnitTestCase
             {
                 return [
                     'file.js' => 'foobarbaz'
+                ];
+            }
+        };
+    }
+
+    private function createEntrypointLookUpClassWithMultipleEntries(): EntrypointLookupInterface
+    {
+        return new class() implements EntrypointLookupInterface, IntegrityDataProviderInterface {
+            public function getJavaScriptFiles(string $entryName): array
+            {
+                return ['file1.js', 'file2.js'];
+            }
+
+            public function getCssFiles(string $entryName): array
+            {
+                return ['file1.css', 'file2.css'];
+            }
+
+            public function reset()
+            {
+            }
+
+            public function getIntegrityData(): array
+            {
+                return [
+                    'file1.js' => 'foobarbaz1',
+                    'file2.js' => 'foobarbaz2',
                 ];
             }
         };
