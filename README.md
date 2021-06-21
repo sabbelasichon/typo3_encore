@@ -323,7 +323,7 @@ Install [svg-sprite-loader](https://github.com/kisenka/svg-sprite-loader#install
 const SpritePlugin = require('svg-sprite-loader/plugin');
 
 Encore.addLoader({
-    test: /\.svg$/,
+    test: /\src\/icons\/.svg$/,
     loader: 'svg-sprite-loader',
     options: {
         extract: true,
