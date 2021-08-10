@@ -27,10 +27,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class AssetsMiddlewareTest extends UnitTestCase
 {
-    /**
-     * @var AssetsMiddleware
-     */
-    protected $subject;
+    protected AssetsMiddleware $subject;
 
     /**
      * @var MockObject|TypoScriptFrontendController

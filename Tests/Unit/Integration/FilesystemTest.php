@@ -11,22 +11,16 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use Ssch\Typo3Encore\Integration\Filesystem;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use UnexpectedValueException;
 
 /**
  * @covers \Ssch\Typo3Encore\Integration\Filesystem
  */
 final class FilesystemTest extends UnitTestCase
 {
+    protected Filesystem $subject;
 
-    /**
-     * @var Filesystem
-     */
-    protected $subject;
-
-    /**
-     * @var string
-     */
-    protected $fixtureFile;
+    protected string $fixtureFile;
 
     protected function setUp(): void
     {
@@ -41,7 +35,7 @@ final class FilesystemTest extends UnitTestCase
     {
         $pathToFile = 'thisisnotafile';
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->subject->get($pathToFile);
     }
 

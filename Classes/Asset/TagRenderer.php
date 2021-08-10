@@ -14,6 +14,7 @@ namespace Ssch\Typo3Encore\Asset;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\File;
 use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Http\ApplicationType;
@@ -119,7 +120,7 @@ final class TagRenderer implements TagRendererInterface
             }
 
             if ($registerFile === true) {
-                $this->assetRegistry->registerFile($file, 'script');
+                $this->assetRegistry->registerFile(new File($file, 'script'));
             }
         }
     }
@@ -184,7 +185,7 @@ final class TagRenderer implements TagRendererInterface
             $pageRenderer->addCssFile(...$attributes);
 
             if ($registerFile === true) {
-                $this->assetRegistry->registerFile($file, 'style');
+                $this->assetRegistry->registerFile(new File($file, 'style'));
             }
         }
     }

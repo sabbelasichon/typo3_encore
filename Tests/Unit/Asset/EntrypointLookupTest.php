@@ -31,10 +31,7 @@ final class EntrypointLookupTest extends UnitTestCase
      */
     private const CACHE_KEY_PREFIX = 'cacheKeyPrefix';
 
-    /**
-     * @var EntrypointLookup
-     */
-    protected $subject;
+    protected EntrypointLookup $subject;
 
     /**
      * @var JsonDecoderInterface|MockObject
@@ -51,10 +48,7 @@ final class EntrypointLookupTest extends UnitTestCase
      */
     protected $cacheFactory;
 
-    /**
-     * @var string
-     */
-    protected $cacheKey;
+    protected string $cacheKey;
 
     /**
      * @var FrontendInterface|MockObject

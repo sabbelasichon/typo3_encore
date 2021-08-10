@@ -22,10 +22,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class PackageFactoryTest extends UnitTestCase
 {
-    /**
-     * @var PackageFactory
-     */
-    protected $subject;
+    protected PackageFactory $subject;
 
     /**
      * @var MockObject|SettingsServiceInterface

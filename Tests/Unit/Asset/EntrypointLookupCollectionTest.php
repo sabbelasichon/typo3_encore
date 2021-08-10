@@ -27,10 +27,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class EntrypointLookupCollectionTest extends UnitTestCase
 {
-    /**
-     * @var EntrypointLookupCollection
-     */
-    protected $subject;
+    protected EntrypointLookupCollection $subject;
 
     /**
      * @var EntryLookupFactoryInterface

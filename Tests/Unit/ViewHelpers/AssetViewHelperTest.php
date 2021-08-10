@@ -25,10 +25,7 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AssetViewHelper
-     */
-    protected $viewHelper;
+    protected AssetViewHelper $viewHelper;
 
     /**
      * @var MockObject|PackageInterface

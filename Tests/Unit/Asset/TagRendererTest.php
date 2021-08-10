@@ -29,25 +29,13 @@ final class TagRendererTest extends UnitTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var TagRenderer
-     */
-    protected $subject;
+    protected TagRenderer $subject;
 
-    /**
-     * @var ObjectProphecy|PageRenderer
-     */
-    protected $pageRenderer;
+    protected ObjectProphecy $pageRenderer;
 
-    /**
-     * @var EntrypointLookupCollectionInterface|ObjectProphecy
-     */
-    protected $entryLookupCollection;
+    protected ObjectProphecy $entryLookupCollection;
 
-    /**
-     * @var AssetRegistryInterface|ObjectProphecy
-     */
-    protected $assetRegistry;
+    protected ObjectProphecy $assetRegistry;
 
     protected function setUp(): void
     {
@@ -66,7 +54,7 @@ final class TagRendererTest extends UnitTestCase
 
         $this->addJsFileShouldBeCalledOnce();
 
-        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
 
         $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal());
         $this->subject->renderWebpackScriptTags($scriptTag);
@@ -81,7 +69,7 @@ final class TagRendererTest extends UnitTestCase
 
         $this->addJsFileShouldBeCalledOnce();
 
-        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->assetRegistry->registerFile(Argument::any())->shouldNotBeCalled();
         $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [], false);
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
@@ -114,7 +102,7 @@ final class TagRendererTest extends UnitTestCase
 
         $this->pageRenderer->{$expectedPageRendererCall}(...$arguments)->shouldBeCalledOnce();
 
-        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
         $scriptTag = new ScriptTag('app', $position, EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false], true, $isLibrary);
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
@@ -150,7 +138,7 @@ final class TagRendererTest extends UnitTestCase
             false
         )->shouldBeCalledOnce();
 
-        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
+        $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
 
         $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true]);
         $this->subject->renderWebpackLinkTags($linkTag);
@@ -176,7 +164,7 @@ final class TagRendererTest extends UnitTestCase
             false
         )->shouldBeCalledOnce();
 
-        $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->assetRegistry->registerFile(Argument::any())->shouldNotBeCalled();
         $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
         $this->subject->renderWebpackLinkTags($linkTag);
     }

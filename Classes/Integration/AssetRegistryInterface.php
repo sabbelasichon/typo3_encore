@@ -9,11 +9,12 @@
 
 namespace Ssch\Typo3Encore\Integration;
 
+use Ssch\Typo3Encore\ValueObject\File;
 use TYPO3\CMS\Core\SingletonInterface;
 
 interface AssetRegistryInterface extends SingletonInterface
 {
-    public function registerFile(string $file, string $type, array $attributes = [], string $rel = 'preload'): void;
+    public function registerFile(File $file): void;
 
     public function getRegisteredFiles(): array;
 

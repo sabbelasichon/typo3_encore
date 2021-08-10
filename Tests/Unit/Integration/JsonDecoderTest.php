@@ -18,10 +18,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class JsonDecoderTest extends UnitTestCase
 {
-    /**
-     * @var JsonDecoder
-     */
-    protected $subject;
+    protected JsonDecoder $subject;
 
     protected function setUp(): void
     {

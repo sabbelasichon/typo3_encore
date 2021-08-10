@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\ViewHelpers;
 
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\File;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class PreconnectViewHelper extends AbstractViewHelper
@@ -33,6 +34,9 @@ final class PreconnectViewHelper extends AbstractViewHelper
     public function render(): void
     {
         $attributes = $this->arguments['attributes'] ?? [];
-        $this->assetRegistry->registerFile($this->arguments['uri'], $this->arguments['as'], $attributes, 'preconnect');
+
+        $file = new File($this->arguments['uri'], $this->arguments['as'], $attributes, 'preconnect');
+
+        $this->assetRegistry->registerFile($file);
     }
 }

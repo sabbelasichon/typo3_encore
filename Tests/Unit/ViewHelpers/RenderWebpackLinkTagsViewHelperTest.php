@@ -23,10 +23,7 @@ final class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
 
-    /**
-     * @var MockObject|RenderWebpackLinkTagsViewHelper
-     */
-    protected $viewHelper;
+    protected RenderWebpackLinkTagsViewHelper $viewHelper;
 
     /**
      * @var TagRendererInterface
