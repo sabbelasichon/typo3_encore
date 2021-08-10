@@ -10,8 +10,8 @@
 namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 
 use Ssch\Typo3Encore\Integration\AssetRegistry;
-use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
+use Ssch\Typo3Encore\ValueObject\File;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
@@ -19,10 +19,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class AssetRegistryTest extends UnitTestCase
 {
-    /**
-     * @var AssetRegistryInterface
-     */
-    protected $subject;
+    protected AssetRegistry $subject;
 
     protected function setUp(): void
     {
@@ -36,9 +33,9 @@ final class AssetRegistryTest extends UnitTestCase
      */
     public function registerFilesSuccessFully(): void
     {
-        $this->subject->registerFile('file1.css', 'style');
-        $this->subject->registerFile('file2.css', 'style');
-        $this->subject->registerFile('file.js', 'script');
+        $this->subject->registerFile(new File('file1.css', 'style'));
+        $this->subject->registerFile(new File('file2.css', 'style'));
+        $this->subject->registerFile(new File('file.js', 'script'));
 
         $registeredFiles = $this->subject->getRegisteredFiles();
         self::assertCount(2, $registeredFiles['preload']['files']['style']);

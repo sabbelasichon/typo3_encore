@@ -29,10 +29,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class EntryLookupFactoryTest extends UnitTestCase
 {
-    /**
-     * @var EntryLookupFactory
-     */
-    protected $subject;
+    protected EntryLookupFactory $subject;
 
     /**
      * @var SettingsServiceInterface

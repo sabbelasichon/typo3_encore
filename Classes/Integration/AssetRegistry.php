@@ -11,19 +11,14 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
+use Ssch\Typo3Encore\ValueObject\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class AssetRegistry implements AssetRegistryInterface
 {
-    /**
-     * @var array
-     */
-    private $registeredFiles = [];
+    private array $registeredFiles = [];
 
-    /**
-     * @var array
-     */
-    private $defaultAttributes = [];
+    private array $defaultAttributes = [];
 
     public function __construct(SettingsServiceInterface $settingsService)
     {
@@ -31,17 +26,22 @@ final class AssetRegistry implements AssetRegistryInterface
         $this->reset();
     }
 
-    public function registerFile(string $file, string $type, array $attributes = [], string $rel = 'preload'): void
+    public function registerFile(File $file): void
     {
-        if (!isset($this->registeredFiles[$rel])) {
+        $rel = $file->getRel();
+        $type = $file->getType();
+        $fileName = $file->getFile();
+        $attributes = $file->getAttributes();
+
+        if (! isset($this->registeredFiles[$rel])) {
             $this->registeredFiles[$rel] = [];
         }
 
-        if (!isset($this->registeredFiles[$rel]['files'][$type])) {
+        if (! isset($this->registeredFiles[$rel]['files'][$type])) {
             $this->registeredFiles[$rel]['files'][$type] = [];
         }
 
-        $file = GeneralUtility::createVersionNumberedFilename($file);
+        $file = GeneralUtility::createVersionNumberedFilename($fileName);
         $this->registeredFiles[$rel]['files'][$type][$file] = $attributes;
     }
 

@@ -17,7 +17,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
     $parameters->set(Option::PATHS, [
-        __DIR__ .'/Classes'
+        __DIR__ .'/Classes',
+        __DIR__ .'/Tests'
     ]);
     // Define what rule sets will be applied
 

@@ -23,10 +23,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class PageRendererHooksTest extends UnitTestCase
 {
-    /**
-     * @var PageRendererHooks
-     */
-    protected $subject;
+    protected PageRendererHooks $subject;
 
     /**
      * @var MockObject|TagRendererInterface

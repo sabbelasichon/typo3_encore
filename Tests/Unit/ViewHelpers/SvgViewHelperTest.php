@@ -66,8 +66,6 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
     /**
      * @test
      *
-     * @param array $arguments
-     * @param string $expected
      * @dataProvider renderDataProvider
      */
     public function render(array $arguments, string $expected): void
@@ -110,9 +108,6 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
         ];
     }
 
-    /**
-     * @return string
-     */
     private function getMockSvg(): string
     {
         return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><symbol viewBox="0 0 45 45" id="foobar"><circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red"/></symbol></defs><use id="foobar-usage" xlink:href="#foobar" class="sprite-symbol-usage"/></svg>';

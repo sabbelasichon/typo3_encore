@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\ViewHelpers;
 
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\File;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class DnsPrefetchViewHelper extends AbstractViewHelper
@@ -33,6 +34,8 @@ final class DnsPrefetchViewHelper extends AbstractViewHelper
     public function render(): void
     {
         $attributes = $this->arguments['attributes'] ?? [];
-        $this->assetRegistry->registerFile($this->arguments['uri'], $this->arguments['as'], $attributes, 'dns-prefetch');
+        $file = new File($this->arguments['uri'], $this->arguments['as'], $attributes, 'dns-prefetch');
+
+        $this->assetRegistry->registerFile($file);
     }
 }

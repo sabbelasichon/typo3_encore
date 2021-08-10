@@ -19,10 +19,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class SettingsServiceTest extends UnitTestCase
 {
-    /**
-     * @var SettingsService
-     */
-    protected $subject;
+    protected SettingsService $subject;
 
     /**
      * @var ConfigurationManagerInterface|MockObject

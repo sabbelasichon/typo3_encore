@@ -21,10 +21,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class CacheFactoryTest extends UnitTestCase
 {
-    /**
-     * @var CacheFactory
-     */
-    protected $subject;
+    protected CacheFactory $subject;
 
     /**
      * @var CacheManager|MockObject

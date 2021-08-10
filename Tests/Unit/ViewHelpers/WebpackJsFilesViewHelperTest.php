@@ -23,10 +23,7 @@ final class WebpackJsFilesViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
 
-    /**
-     * @var MockObject|WebpackJsFilesViewHelper
-     */
-    protected $viewHelper;
+    protected WebpackJsFilesViewHelper $viewHelper;
 
     /**
      * @var EntrypointLookupCollectionInterface|MockObject

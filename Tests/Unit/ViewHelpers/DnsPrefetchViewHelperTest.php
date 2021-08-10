@@ -11,6 +11,7 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\File;
 use Ssch\Typo3Encore\ViewHelpers\DnsPrefetchViewHelper;
 use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
@@ -21,10 +22,7 @@ final class DnsPrefetchViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
 
-    /**
-     * @var DnsPrefetchViewHelper
-     */
-    protected $viewHelper;
+    protected DnsPrefetchViewHelper $viewHelper;
 
     /**
      * @var AssetRegistryInterface
@@ -44,7 +42,7 @@ final class DnsPrefetchViewHelperTest extends ViewHelperBaseTestcase
     public function registerFileWithEmptyAttributes(): void
     {
         $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style']);
-        $this->assetRegistry->expects(self::once())->method('registerFile')->with('file.css', 'style', [], 'dns-prefetch');
+        $this->assetRegistry->expects(self::once())->method('registerFile')->with(new File('file.css', 'style', [], 'dns-prefetch'));
         $this->viewHelper->initializeArgumentsAndRender();
     }
 
@@ -55,7 +53,7 @@ final class DnsPrefetchViewHelperTest extends ViewHelperBaseTestcase
     {
         $attributes = ['type' => 'something'];
         $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
-        $this->assetRegistry->expects(self::once())->method('registerFile')->with('file.css', 'style', $attributes, 'dns-prefetch');
+        $this->assetRegistry->expects(self::once())->method('registerFile')->with(new File('file.css', 'style', $attributes, 'dns-prefetch'));
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }

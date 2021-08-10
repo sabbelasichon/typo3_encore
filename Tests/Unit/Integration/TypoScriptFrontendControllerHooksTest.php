@@ -21,10 +21,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
 {
-    /**
-     * @var TypoScriptFrontendControllerHooks
-     */
-    protected $subject;
+    protected TypoScriptFrontendControllerHooks $subject;
 
     /**
      * @var MockObject|TypoScriptFrontendController
