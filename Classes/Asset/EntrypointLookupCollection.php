@@ -25,12 +25,9 @@ class EntrypointLookupCollection implements EntrypointLookupCollectionInterface
     /**
      * @var array|EntrypointLookupInterface[]
      */
-    private $buildEntrypoints;
+    private array $buildEntrypoints;
 
-    /**
-     * @var string
-     */
-    private $defaultBuildName;
+    private ?string $defaultBuildName;
 
     public function __construct(EntryLookupFactoryInterface $entryLookupFactory, string $defaultBuildName = null)
     {

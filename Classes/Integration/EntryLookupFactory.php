@@ -16,25 +16,16 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 final class EntryLookupFactory implements EntryLookupFactoryInterface
 {
-    /**
-     * @var SettingsServiceInterface
-     */
-    private $settingsService;
+    private SettingsServiceInterface $settingsService;
 
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     /**
      * @var array|EntrypointLookupInterface[]
      */
-    private static $collection;
+    private static ?array $collection = null;
 
     public function __construct(SettingsServiceInterface $settingsService, ObjectManagerInterface $objectManager, FilesystemInterface $filesystem)
     {

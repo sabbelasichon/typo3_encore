@@ -17,11 +17,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class WebpackJsFilesViewHelper extends AbstractViewHelper
 {
-
-    /**
-     * @var EntrypointLookupCollectionInterface
-     */
-    private $entrypointLookupCollection;
+    private EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection)
     {

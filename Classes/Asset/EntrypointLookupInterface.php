@@ -16,18 +16,8 @@ interface EntrypointLookupInterface
      */
     public const DEFAULT_BUILD = '_default';
 
-    /**
-     * @param string $entryName
-     *
-     * @return array
-     */
     public function getJavaScriptFiles(string $entryName): array;
 
-    /**
-     * @param string $entryName
-     *
-     * @return array
-     */
     public function getCssFiles(string $entryName): array;
 
     /**

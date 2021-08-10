@@ -26,10 +26,7 @@ class CacheFactory
      */
     const CACHE_KEY = 'typo3_encore';
 
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
+    protected CacheManager $cacheManager;
 
     public function __construct(CacheManager $cacheManager)
     {
