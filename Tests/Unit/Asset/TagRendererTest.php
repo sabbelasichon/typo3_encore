@@ -17,6 +17,7 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -65,7 +66,9 @@ final class TagRendererTest extends UnitTestCase
         $this->addJsFileShouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
-        $this->subject->renderWebpackScriptTags('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal());
+
+        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal());
+        $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
     /**
@@ -78,7 +81,8 @@ final class TagRendererTest extends UnitTestCase
         $this->addJsFileShouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
-        $this->subject->renderWebpackScriptTags('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [], false);
+        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [], false);
+        $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
     /**
@@ -110,7 +114,8 @@ final class TagRendererTest extends UnitTestCase
         $this->pageRenderer->{$expectedPageRendererCall}(...$arguments)->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
-        $this->subject->renderWebpackScriptTags('app', $position, EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false], true, $isLibrary);
+        $scriptTag = new ScriptTag('app', $position, EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false], true, $isLibrary);
+        $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
     public function scriptTagsWithPosition(): array
@@ -210,7 +215,8 @@ final class TagRendererTest extends UnitTestCase
             Argument::any()
         )->shouldBeCalled();
 
-        $this->subject->renderWebpackScriptTags('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false, 'allWrap' => 'BEFORE|AFTER']);
+        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false, 'allWrap' => 'BEFORE|AFTER']);
+        $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
     private function addJsFileShouldBeCalledOnce(): void

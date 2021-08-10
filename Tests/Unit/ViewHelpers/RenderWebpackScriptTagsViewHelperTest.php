@@ -12,6 +12,7 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use Ssch\Typo3Encore\ViewHelpers\RenderWebpackScriptTagsViewHelper;
 use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
@@ -45,7 +46,8 @@ final class RenderWebpackScriptTagsViewHelperTest extends ViewHelperBaseTestcase
     public function render(): void
     {
         $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'position' => 'footer', 'buildName' => EntrypointLookupInterface::DEFAULT_BUILD, 'parameters' => [], 'registerFile' => true]);
-        $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD);
+        $scriptTag = new ScriptTag('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with($scriptTag);
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }
