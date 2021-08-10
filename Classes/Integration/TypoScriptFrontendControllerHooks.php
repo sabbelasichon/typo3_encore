@@ -31,7 +31,7 @@ final class TypoScriptFrontendControllerHooks
         $this->assetRegistry = $assetRegistry;
     }
 
-    public function contentPostProcAll(array $params, TypoScriptFrontendController $tsfe)
+    public function contentPostProcAll(array $params, TypoScriptFrontendController $tsfe): void
     {
         if (! $this->assetRegistry->getRegisteredFiles()) {
             return;
