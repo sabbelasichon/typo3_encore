@@ -14,6 +14,8 @@ namespace Ssch\Typo3Encore\Asset;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
+use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,8 +50,16 @@ final class TagRenderer implements TagRendererInterface
         $this->assetRegistry = $assetRegistry;
     }
 
-    public function renderWebpackScriptTags(string $entryName, string $position = self::POSITION_FOOTER, string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false): void
+    public function renderWebpackScriptTags(ScriptTag $scriptTag): void
     {
+        $entryName = $scriptTag->getEntryName();
+        $position = $scriptTag->getPosition();
+        $buildName = $scriptTag->getBuildName();
+        $pageRenderer = $scriptTag->getPageRenderer();
+        $parameters = $scriptTag->getParameters();
+        $registerFile = $scriptTag->isRegisterFile();
+        $isLibrary = $scriptTag->isLibrary();
+
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
@@ -123,8 +133,15 @@ final class TagRenderer implements TagRendererInterface
         }
     }
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true): void
+    public function renderWebpackLinkTags(LinkTag $linkTag): void
     {
+        $entryName = $linkTag->getEntryName();
+        $media = $linkTag->getMedia();
+        $buildName = $linkTag->getBuildName();
+        $pageRenderer = $linkTag->getPageRenderer();
+        $parameters = $linkTag->getParameters();
+        $registerFile = $linkTag->isRegisterFile();
+
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);

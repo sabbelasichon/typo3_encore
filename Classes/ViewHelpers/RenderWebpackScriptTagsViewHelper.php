@@ -13,6 +13,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
@@ -40,7 +41,7 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
 
     public function render(): void
     {
-        $this->tagRenderer->renderWebpackScriptTags(
+        $scriptTag = new ScriptTag(
             $this->arguments['entryName'],
             $this->arguments['position'],
             $this->arguments['buildName'],
@@ -48,6 +49,10 @@ final class RenderWebpackScriptTagsViewHelper extends AbstractViewHelper
             $this->arguments['parameters'],
             $this->arguments['registerFile'],
             $this->arguments['isLibrary']
+        );
+
+        $this->tagRenderer->renderWebpackScriptTags(
+            $scriptTag
         );
     }
 }

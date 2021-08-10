@@ -6,4 +6,6 @@ services:
 
   Ssch\Typo3Encore\:
     resource: '../Classes/*'
-    exclude: '../Classes/Asset/EntrypointLookup.php'
+    exclude:
+      - '../Classes/ValueObject'
+      - '../Classes/Asset/EntrypointLookup.php'

@@ -9,7 +9,8 @@
 
 namespace Ssch\Typo3Encore\Asset;
 
-use TYPO3\CMS\Core\Page\PageRenderer;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
+use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\SingletonInterface;
 
 interface TagRendererInterface extends SingletonInterface
@@ -40,7 +41,7 @@ interface TagRendererInterface extends SingletonInterface
      */
     public const POSITION_JS_LIBRARY = 'jsLibs';
 
-    public function renderWebpackScriptTags(string $entryName, string $position = 'footer', string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false);
+    public function renderWebpackScriptTags(ScriptTag $scriptTag): void;
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true);
+    public function renderWebpackLinkTags(LinkTag $linkTag);
 }

@@ -12,8 +12,9 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
-use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
+use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
@@ -69,7 +70,9 @@ final class PageRendererHooks
 
                 unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
 
-                $this->tagRenderer->renderWebpackScriptTags($entryName, $position, $buildName, $pageRenderer, $jsFile, true, $isLibrary);
+                $scriptTag = new ScriptTag($entryName, $position, $buildName, $pageRenderer, $jsFile, true, $isLibrary);
+
+                $this->tagRenderer->renderWebpackScriptTags($scriptTag);
             }
         }
 
@@ -94,7 +97,8 @@ final class PageRendererHooks
 
                 unset($params[$includeType][$key], $cssFile['file']);
 
-                $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
+                $linkTag = new LinkTag($entryName, 'all', $buildName, $pageRenderer, $cssFile);
+                $this->tagRenderer->renderWebpackLinkTags($linkTag);
             }
         }
     }
