@@ -43,13 +43,13 @@ final class PageRendererHooks
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
         // At this point, TYPO3 provides all javascript includes in only 'Files' or 'Libs'
-        foreach (TagRenderer::ALLOWED_JS_POSITIONS as $includeType) {
+        foreach (TagRendererInterface::ALLOWED_JS_POSITIONS as $includeType) {
             if (empty($params[$includeType])) {
                 continue;
             }
 
             // Is the include type 'jsLibs' and should be treated as a library
-            $isLibrary = $includeType === TagRenderer::POSITION_JS_LIBRARY;
+            $isLibrary = $includeType === TagRendererInterface::POSITION_JS_LIBRARY;
 
             foreach ($params[$includeType] as $key => $jsFile) {
                 if (! $this->isEncoreEntryName($jsFile['file'])) {
@@ -65,7 +65,7 @@ final class PageRendererHooks
                     $entryName = $buildAndEntryName[0];
                 }
 
-                $position = ($jsFile['section'] ?? '') === self::PART_FOOTER ? TagRenderer::POSITION_FOOTER : '';
+                $position = ($jsFile['section'] ?? '') === self::PART_FOOTER ? TagRendererInterface::POSITION_FOOTER : '';
 
                 unset($params[$includeType][$key], $jsFile['file'], $jsFile['section'], $jsFile['integrity']);
 
@@ -74,7 +74,7 @@ final class PageRendererHooks
         }
 
         // Add CSS-Files by entryNames
-        foreach (TagRenderer::ALLOWED_CSS_POSITIONS as $includeType) {
+        foreach (TagRendererInterface::ALLOWED_CSS_POSITIONS as $includeType) {
             if (empty($params[$includeType])) {
                 continue;
             }
