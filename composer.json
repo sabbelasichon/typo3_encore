@@ -33,7 +33,8 @@
     "typo3/testing-framework": "^6.2",
     "typo3/minimal": "^10.4 || ^11.0",
     "php-parallel-lint/php-parallel-lint": "^1.2",
-    "phpspec/prophecy-phpunit": "^2.0"
+    "phpspec/prophecy-phpunit": "^2.0",
+    "rector/rector": "^0.11.46"
   },
   "replace": {
     "typo3-ter/typo3-encore": "self.version"
