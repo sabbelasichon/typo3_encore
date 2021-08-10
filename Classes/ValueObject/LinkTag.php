@@ -11,27 +11,26 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\ValueObject;
 
+use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
-final class ScriptTag
+final class LinkTag
 {
     private string $entryName;
-    private string $position;
+    private string $media;
     private string $buildName;
     private ?PageRenderer $pageRenderer;
     private array $parameters;
     private bool $registerFile;
-    private bool $isLibrary;
 
-    public function __construct(string $entryName, string $position, string $buildName, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false)
+    public function __construct(string $entryName, string $media = 'all', string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true)
     {
         $this->entryName = $entryName;
-        $this->position = $position;
+        $this->media = $media;
         $this->buildName = $buildName;
         $this->pageRenderer = $pageRenderer;
         $this->parameters = $parameters;
         $this->registerFile = $registerFile;
-        $this->isLibrary = $isLibrary;
     }
 
     public function getEntryName(): string
@@ -39,9 +38,9 @@ final class ScriptTag
         return $this->entryName;
     }
 
-    public function getPosition(): string
+    public function getMedia(): string
     {
-        return $this->position;
+        return $this->media;
     }
 
     public function getBuildName(): string
@@ -62,10 +61,5 @@ final class ScriptTag
     public function isRegisterFile(): bool
     {
         return $this->registerFile;
-    }
-
-    public function isLibrary(): bool
-    {
-        return $this->isLibrary;
     }
 }

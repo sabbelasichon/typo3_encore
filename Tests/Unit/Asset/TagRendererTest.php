@@ -17,6 +17,7 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
 use Ssch\Typo3Encore\Asset\TagRenderer;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -150,7 +151,9 @@ final class TagRendererTest extends UnitTestCase
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldBeCalledOnce();
-        $this->subject->renderWebpackLinkTags('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true]);
+
+        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true]);
+        $this->subject->renderWebpackLinkTags($linkTag);
     }
 
     /**
@@ -174,7 +177,8 @@ final class TagRendererTest extends UnitTestCase
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any(), Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
-        $this->subject->renderWebpackLinkTags('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
+        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
+        $this->subject->renderWebpackLinkTags($linkTag);
     }
 
     /**

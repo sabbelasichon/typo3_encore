@@ -9,8 +9,8 @@
 
 namespace Ssch\Typo3Encore\Asset;
 
+use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\SingletonInterface;
 
 interface TagRendererInterface extends SingletonInterface
@@ -43,5 +43,5 @@ interface TagRendererInterface extends SingletonInterface
 
     public function renderWebpackScriptTags(ScriptTag $scriptTag): void;
 
-    public function renderWebpackLinkTags(string $entryName, string $media = 'all', string $buildName = EntrypointLookupInterface::DEFAULT_BUILD, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true);
+    public function renderWebpackLinkTags(LinkTag $linkTag);
 }

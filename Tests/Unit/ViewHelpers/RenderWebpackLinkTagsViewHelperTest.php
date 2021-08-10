@@ -12,6 +12,7 @@ namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ViewHelpers\RenderWebpackLinkTagsViewHelper;
 use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
@@ -45,7 +46,8 @@ final class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
     public function render(): void
     {
         $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'media' => 'all', 'buildName' => EntrypointLookupInterface::DEFAULT_BUILD, 'parameters' => [], 'registerFile' => true]);
-        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, null, []);
+        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, null, []);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with($linkTag);
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }

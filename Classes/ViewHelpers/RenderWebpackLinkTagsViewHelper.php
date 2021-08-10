@@ -13,6 +13,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
@@ -39,6 +40,14 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
 
     public function render(): void
     {
-        $this->tagRenderer->renderWebpackLinkTags($this->arguments['entryName'], $this->arguments['media'], $this->arguments['buildName'], null, $this->arguments['parameters'], $this->arguments['registerFile']);
+        $linkTag = new LinkTag(
+            $this->arguments['entryName'],
+            $this->arguments['media'],
+            $this->arguments['buildName'],
+            null,
+            $this->arguments['parameters'],
+            $this->arguments['registerFile']
+        );
+        $this->tagRenderer->renderWebpackLinkTags($linkTag);
     }
 }

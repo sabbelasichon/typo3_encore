@@ -13,6 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\Integration\PageRendererHooks;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -114,7 +115,8 @@ final class PageRendererHooksTest extends UnitTestCase
 
         $scriptTag = new ScriptTag('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer, ['forceOnTop' => true]);
         $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with($scriptTag);
-        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer);
+        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with($linkTag);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
@@ -138,7 +140,8 @@ final class PageRendererHooksTest extends UnitTestCase
 
         $scriptTag = new ScriptTag('app', '', 'config', $this->pageRenderer);
         $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with($scriptTag);
-        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with('app', 'all', 'config', $this->pageRenderer);
+        $linkTag = new LinkTag('app', 'all', 'config', $this->pageRenderer);
+        $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with($linkTag);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 }

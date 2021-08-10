@@ -13,6 +13,7 @@ namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
+use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -96,7 +97,8 @@ final class PageRendererHooks
 
                 unset($params[$includeType][$key], $cssFile['file']);
 
-                $this->tagRenderer->renderWebpackLinkTags($entryName, 'all', $buildName, $pageRenderer, $cssFile);
+                $linkTag = new LinkTag($entryName, 'all', $buildName, $pageRenderer, $cssFile);
+                $this->tagRenderer->renderWebpackLinkTags($linkTag);
             }
         }
     }
