@@ -23,20 +23,11 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class TagRenderer implements TagRendererInterface
 {
-    /**
-     * @var EntrypointLookupCollectionInterface
-     */
-    private $entrypointLookupCollection;
+    private EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
-    /**
-     * @var AssetRegistryInterface
-     */
-    private $assetRegistry;
+    private AssetRegistryInterface $assetRegistry;
 
-    /**
-     * @var ApplicationType|null
-     */
-    private $applicationType;
+    private ?ApplicationType $applicationType = null;
 
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection, AssetRegistryInterface $assetRegistry)
     {

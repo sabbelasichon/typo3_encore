@@ -31,10 +31,7 @@ final class PageRendererHooks
      */
     private const PART_FOOTER = 2;
 
-    /**
-     * @var TagRendererInterface
-     */
-    private $tagRenderer;
+    private TagRendererInterface $tagRenderer;
 
     public function __construct(TagRendererInterface $tagRenderer)
     {

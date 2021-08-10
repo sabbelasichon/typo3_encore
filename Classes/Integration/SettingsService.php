@@ -16,16 +16,9 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 final class SettingsService implements SettingsServiceInterface
 {
+    private ?array $settings = null;
 
-    /**
-     * @var array
-     */
-    private $settings;
-
-    /**
-     * @var ConfigurationManagerInterface
-     */
-    private $configurationManager;
+    private ConfigurationManagerInterface $configurationManager;
 
     public function __construct(ConfigurationManagerInterface $configurationManager)
     {
@@ -51,7 +44,6 @@ final class SettingsService implements SettingsServiceInterface
      *
      * If the path is invalid or no entry is found, false is returned.
      *
-     * @param string $path
      *
      * @return mixed
      */

@@ -27,25 +27,16 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class AssetsMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var array
-     */
-    private static $crossOriginAllowed = ['preload', 'preconnect'];
+    private static array $crossOriginAllowed = ['preload', 'preconnect'];
 
     /**
      * @var TypoScriptFrontendController
      */
     protected $controller;
 
-    /**
-     * @var AssetRegistryInterface
-     */
-    private $assetRegistry;
+    private AssetRegistryInterface $assetRegistry;
 
-    /**
-     * @var SettingsServiceInterface
-     */
-    private $settingsService;
+    private SettingsServiceInterface $settingsService;
 
     public function __construct(AssetRegistryInterface $assetRegistry, SettingsServiceInterface $settingsService)
     {

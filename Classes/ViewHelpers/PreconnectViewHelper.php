@@ -16,10 +16,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class PreconnectViewHelper extends AbstractViewHelper
 {
-    /**
-     * @var AssetRegistryInterface
-     */
-    private $assetRegistry;
+    private AssetRegistryInterface $assetRegistry;
 
     public function __construct(AssetRegistryInterface $assetRegistry)
     {

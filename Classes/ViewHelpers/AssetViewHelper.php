@@ -18,15 +18,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class AssetViewHelper extends AbstractViewHelper
 {
-    /**
-     * @var PackageFactoryInterface
-     */
-    private $packageFactory;
+    private PackageFactoryInterface $packageFactory;
 
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     public function __construct(PackageFactoryInterface $packageFactory, FilesystemInterface $filesystem)
     {

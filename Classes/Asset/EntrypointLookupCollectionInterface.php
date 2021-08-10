@@ -11,12 +11,5 @@ namespace Ssch\Typo3Encore\Asset;
 
 interface EntrypointLookupCollectionInterface
 {
-    /**
-     * Retrieve the EntrypointLookupInterface for the given build.
-     *
-     * @param string|null $buildName
-     *
-     * @return EntrypointLookupInterface
-     */
     public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface;
 }

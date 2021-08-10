@@ -20,45 +20,20 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
 final class EntrypointLookup implements EntrypointLookupInterface, IntegrityDataProviderInterface
 {
+    private ?array $entriesData = null;
 
-    /**
-     * @var array
-     */
-    private $entriesData;
+    private string $entrypointJsonPath;
 
-    /**
-     * @var string
-     */
-    private $entrypointJsonPath;
+    private array $returnedFiles = [];
 
-    /**
-     * @var array
-     */
-    private $returnedFiles = [];
+    private JsonDecoderInterface $jsonDecoder;
 
-    /**
-     * @var JsonDecoderInterface
-     */
-    private $jsonDecoder;
+    private FilesystemInterface $filesystem;
 
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private ?FrontendInterface $cache;
 
-    /**
-     * @var FrontendInterface|null
-     */
-    private $cache;
-
-    /**
-     * @var string
-     */
-    private $cacheKey;
-    /**
-     * @var bool
-     */
-    private $strictMode;
+    private string $cacheKey;
+    private bool $strictMode;
 
     public function __construct(string $entrypointJsonPath, string $cacheKeyPrefix, bool $strictMode, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
     {

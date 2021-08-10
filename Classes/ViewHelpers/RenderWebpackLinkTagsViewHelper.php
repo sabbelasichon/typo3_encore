@@ -18,11 +18,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
 {
-
-    /**
-     * @var TagRendererInterface
-     */
-    private $tagRenderer;
+    private TagRendererInterface $tagRenderer;
 
     public function __construct(TagRendererInterface $tagRenderer)
     {

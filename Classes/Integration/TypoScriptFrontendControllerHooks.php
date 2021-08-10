@@ -20,15 +20,9 @@ final class TypoScriptFrontendControllerHooks
      */
     protected $controller;
 
-    /**
-     * @var AssetRegistryInterface
-     */
-    private $assetRegistry;
+    private AssetRegistryInterface $assetRegistry;
 
-    /**
-     * @var SettingsServiceInterface
-     */
-    private $settingsService;
+    private SettingsServiceInterface $settingsService;
 
     public function __construct(AssetRegistryInterface $assetRegistry, SettingsServiceInterface $settingsService)
     {
