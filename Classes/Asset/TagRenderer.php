@@ -259,7 +259,7 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if ($this->getTypoScriptFrontendController()->config['config']['doctype'] !== 'html5') {
+        if (!isset($this->getTypoScriptFrontendController()->config['config']['doctype']) || $this->getTypoScriptFrontendController()->config['config']['doctype'] !== 'html5') {
             return false;
         }
 
