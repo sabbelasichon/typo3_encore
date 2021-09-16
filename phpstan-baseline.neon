@@ -1,0 +1,17 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$links of method Symfony\\\\Component\\\\WebLink\\\\HttpHeaderSerializer\\:\\:serialize\\(\\) expects iterable\\<Psr\\\\Link\\\\LinkInterface\\>&Traversable, array\\<Psr\\\\Link\\\\LinkInterface\\> given\\.$#"
+			count: 1
+			path: Classes/Middleware/AssetsMiddleware.php
+
+		-
+			message: "#^Cannot call method item\\(\\) on DOMNodeList\\|false\\.$#"
+			count: 1
+			path: Classes/ViewHelpers/SvgViewHelper.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of method Ssch\\\\Typo3Encore\\\\Integration\\\\JsonDecoder\\:\\:decode\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: Tests/Unit/Integration/JsonDecoderTest.php
+

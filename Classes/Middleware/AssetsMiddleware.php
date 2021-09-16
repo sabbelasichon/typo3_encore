@@ -15,6 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Link\LinkInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Symfony\Component\WebLink\GenericLinkProvider;
@@ -95,7 +96,15 @@ final class AssetsMiddleware implements MiddlewareInterface
         $linkProvider = $request->getAttribute('_links');
 
         if ($linkProvider->getLinks() !== []) {
-            $response = $response->withHeader('Link', (new HttpHeaderSerializer())->serialize($linkProvider->getLinks()));
+            /** @var LinkInterface[] $links */
+            $links = $linkProvider->getLinks();
+            $serializedLinks = (new HttpHeaderSerializer())->serialize($links);
+
+            if (!is_string($serializedLinks)) {
+                throw new \UnexpectedValueException('Could not serialize the links');
+            }
+
+            $response = $response->withHeader('Link', $serializedLinks);
         }
 
         return $response;

@@ -214,7 +214,7 @@ final class TagRenderer implements TagRendererInterface
         }
     }
 
-    private function removeLeadingSlash($file, array $parameters): bool
+    private function removeLeadingSlash(string $file, array $parameters): bool
     {
         if (array_key_exists('inline', $parameters) && (bool)$parameters['inline']) {
             return true;

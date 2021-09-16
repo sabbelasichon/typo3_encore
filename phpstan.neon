@@ -1,12 +1,12 @@
 parameters:
-  level: 5
+  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+  level: max
   paths:
     - "Classes/"
+    - "Tests/"
 
   inferPrivatePropertyTypeFromConstructor: true
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
-
-  ignoreErrors:
-      - '#withAttribute\(\) expects string, bool given#'
-      - '#serialize\(\) expects iterable<Psr\\Link\\LinkInterface>&Traversable, array given#'
+includes:
+    - phpstan-baseline.neon

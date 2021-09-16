@@ -238,12 +238,4 @@ final class EntrypointLookupTest extends UnitTestCase
         $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
         self::assertContains('file.js', $this->subject->getJavaScriptFiles('app'));
     }
-
-    /**
-     * @test
-     */
-    public function reset(): void
-    {
-        self::assertNull($this->subject->reset());
-    }
 }

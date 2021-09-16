@@ -28,9 +28,9 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
      */
     protected $tagName = 'svg';
 
-    private ?ImageService $imageService = null;
+    private ImageService $imageService;
 
-    private ?IdGeneratorInterface $idGenerator = null;
+    private IdGeneratorInterface $idGenerator;
 
     public function injectImageService(ImageService $imageService): void
     {

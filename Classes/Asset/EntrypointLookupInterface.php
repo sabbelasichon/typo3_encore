@@ -23,5 +23,5 @@ interface EntrypointLookupInterface
     /**
      * Resets the state of this service.
      */
-    public function reset();
+    public function reset(): void;
 }

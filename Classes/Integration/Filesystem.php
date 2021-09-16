@@ -61,6 +61,13 @@ final class Filesystem implements FilesystemInterface
      */
     public function createHash(string $entrypointJsonPath): string
     {
-        return md5_file($entrypointJsonPath);
+        $md5HashOfFile =  md5_file($entrypointJsonPath);
+
+        if ($md5HashOfFile === false) {
+            $message = sprintf('File "%s" could not be md5Hashed', $entrypointJsonPath);
+            throw new UnexpectedValueException($message);
+        }
+
+        return $md5HashOfFile;
     }
 }

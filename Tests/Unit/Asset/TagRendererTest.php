@@ -31,10 +31,19 @@ final class TagRendererTest extends UnitTestCase
 
     protected TagRenderer $subject;
 
+    /**
+     * @var ObjectProphecy|PageRenderer
+     */
     protected ObjectProphecy $pageRenderer;
 
+    /**
+     * @var ObjectProphecy|EntrypointLookupCollectionInterface
+     */
     protected ObjectProphecy $entryLookupCollection;
 
+    /**
+     * @var ObjectProphecy|AssetRegistryInterface
+     */
     protected ObjectProphecy $assetRegistry;
 
     protected function setUp(): void
@@ -78,7 +87,7 @@ final class TagRendererTest extends UnitTestCase
      * @test
      * @dataProvider scriptTagsWithPosition
      */
-    public function renderWebpackScriptTagsWithDefaultBuildInPosition(string $position, $isLibrary, string $expectedPageRendererCall): void
+    public function renderWebpackScriptTagsWithDefaultBuildInPosition(string $position, bool $isLibrary, string $expectedPageRendererCall): void
     {
         $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
 
@@ -242,7 +251,7 @@ final class TagRendererTest extends UnitTestCase
                 return ['file.css'];
             }
 
-            public function reset()
+            public function reset(): void
             {
             }
 
@@ -268,7 +277,7 @@ final class TagRendererTest extends UnitTestCase
                 return ['file1.css', 'file2.css'];
             }
 
-            public function reset()
+            public function reset(): void
             {
             }
 

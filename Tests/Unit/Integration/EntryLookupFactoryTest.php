@@ -32,12 +32,12 @@ final class EntryLookupFactoryTest extends UnitTestCase
     protected EntryLookupFactory $subject;
 
     /**
-     * @var SettingsServiceInterface
+     * @var SettingsServiceInterface|MockObject
      */
     protected $settingsService;
 
     /**
-     * @var ObjectManagerInterface
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 

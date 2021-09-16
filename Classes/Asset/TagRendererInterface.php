@@ -43,5 +43,5 @@ interface TagRendererInterface extends SingletonInterface
 
     public function renderWebpackScriptTags(ScriptTag $scriptTag): void;
 
-    public function renderWebpackLinkTags(LinkTag $linkTag);
+    public function renderWebpackLinkTags(LinkTag $linkTag): void;
 }

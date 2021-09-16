@@ -9,6 +9,7 @@
 
 namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
@@ -25,7 +26,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
     protected PreloadViewHelper $viewHelper;
 
     /**
-     * @var AssetRegistryInterface
+     * @var AssetRegistryInterface|MockObject
      */
     protected $assetRegistry;
 
