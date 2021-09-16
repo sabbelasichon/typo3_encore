@@ -36,7 +36,7 @@ final class SvgViewHelperTest extends ViewHelperBaseTestcase
     protected $viewHelper;
 
     /**
-     * @var MockObject|TagBuilder
+     * @var TagBuilder
      */
     protected $tagBuilder;
 

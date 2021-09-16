@@ -9,6 +9,7 @@
 
 namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\TagRendererInterface;
@@ -26,7 +27,7 @@ final class RenderWebpackLinkTagsViewHelperTest extends ViewHelperBaseTestcase
     protected RenderWebpackLinkTagsViewHelper $viewHelper;
 
     /**
-     * @var TagRendererInterface
+     * @var TagRendererInterface|MockObject
      */
     protected $tagRenderer;
 

@@ -22,6 +22,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ .'/Classes',
         __DIR__ .'/Tests'
     ]);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_70);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_71);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_74);
     // Define what rule sets will be applied
 
