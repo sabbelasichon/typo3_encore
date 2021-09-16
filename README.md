@@ -1,4 +1,4 @@
-[![CI Status](https://github.com/sabbelasichon/typo3_encore/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/sabbelasichon/typo3_encore/actions)
+[![CI Status](https://github.com/sabbelasichon/typo3_encore/workflows/CI/badge.svg)](https://github.com/sabbelasichon/typo3_encore/actions)
 [![Downloads](https://img.shields.io/packagist/dt/ssch/typo3-encore.svg?style=flat-square)](https://packagist.org/packages/ssch/typo3-encore)
 TYPO3 integration with Webpack Encore!
 ======================================
