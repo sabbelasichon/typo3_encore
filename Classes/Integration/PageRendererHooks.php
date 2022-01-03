@@ -17,7 +17,6 @@ use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 final class PageRendererHooks
 {
@@ -102,7 +101,7 @@ final class PageRendererHooks
 
     private function isEncoreEntryName(string $file): bool
     {
-        return StringUtility::beginsWith($file, self::ENCORE_PREFIX);
+        return \str_starts_with($file, self::ENCORE_PREFIX);
     }
 
     private function removePrefix(string $file): string
