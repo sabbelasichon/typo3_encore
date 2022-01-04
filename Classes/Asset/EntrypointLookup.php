@@ -33,15 +33,27 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     private ?FrontendInterface $cache;
 
     private string $cacheKey;
+
     private bool $strictMode;
 
-    public function __construct(string $entrypointJsonPath, string $cacheKeyPrefix, bool $strictMode, JsonDecoderInterface $jsonDecoder, FilesystemInterface $filesystem, CacheFactory $cacheFactory)
-    {
+    public function __construct(
+        string $entrypointJsonPath,
+        string $cacheKeyPrefix,
+        bool $strictMode,
+        JsonDecoderInterface $jsonDecoder,
+        FilesystemInterface $filesystem,
+        CacheFactory $cacheFactory
+    ) {
         $this->entrypointJsonPath = $filesystem->getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
         $this->cache = $cacheFactory->createInstance();
-        $this->cacheKey = sprintf('%s-%s-%s', $cacheKeyPrefix, CacheFactory::CACHE_KEY, $filesystem->createHash($this->entrypointJsonPath));
+        $this->cacheKey = sprintf(
+            '%s-%s-%s',
+            $cacheKeyPrefix,
+            CacheFactory::CACHE_KEY,
+            $filesystem->createHash($this->entrypointJsonPath)
+        );
         $this->strictMode = $strictMode;
     }
 
@@ -97,13 +109,22 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     {
         $entriesData = $this->getEntriesData();
         if (! isset($entriesData['entrypoints'][$entryName]) && $this->strictMode) {
-            $withoutExtension = substr($entryName, 0, (int)strrpos($entryName, '.'));
+            $withoutExtension = substr($entryName, 0, (int) strrpos($entryName, '.'));
 
             if (isset($entriesData['entrypoints'][$withoutExtension])) {
-                throw new EntrypointNotFoundException(sprintf('Could not find the entry "%s". Try "%s" instead (without the extension).', $entryName, $withoutExtension));
+                throw new EntrypointNotFoundException(sprintf(
+                    'Could not find the entry "%s". Try "%s" instead (without the extension).',
+                    $entryName,
+                    $withoutExtension
+                ));
             }
 
-            throw new EntrypointNotFoundException(sprintf('Could not find the entry "%s" in "%s". Found: %s.', $entryName, $this->entrypointJsonPath, implode(', ', array_keys($entriesData))));
+            throw new EntrypointNotFoundException(sprintf(
+                'Could not find the entry "%s" in "%s". Found: %s.',
+                $entryName,
+                $this->entrypointJsonPath,
+                implode(', ', array_keys($entriesData))
+            ));
         }
     }
 
@@ -113,25 +134,34 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             return $this->entriesData;
         }
 
-        if ($this->cache !== null && $this->cache->has($this->cacheKey)) {
+        if (null !== $this->cache && $this->cache->has($this->cacheKey)) {
             return $this->cache->get($this->cacheKey);
         }
 
         if (! $this->filesystem->exists($this->entrypointJsonPath)) {
-            throw new InvalidArgumentException(sprintf('Could not find the entrypoints file from Webpack: the file "%s" does not exist.', $this->entrypointJsonPath));
+            throw new InvalidArgumentException(sprintf(
+                'Could not find the entrypoints file from Webpack: the file "%s" does not exist.',
+                $this->entrypointJsonPath
+            ));
         }
 
         try {
             $this->entriesData = $this->jsonDecoder->decode($this->filesystem->get($this->entrypointJsonPath));
         } catch (JsonDecodeException $e) {
-            throw new InvalidArgumentException(sprintf('There was a problem JSON decoding the "%s" file', $this->entrypointJsonPath));
+            throw new InvalidArgumentException(sprintf(
+                'There was a problem JSON decoding the "%s" file',
+                $this->entrypointJsonPath
+            ));
         }
 
         if (! isset($this->entriesData['entrypoints'])) {
-            throw new InvalidArgumentException(sprintf('Could not find an "entrypoints" key in the "%s" file', $this->entrypointJsonPath));
+            throw new InvalidArgumentException(sprintf(
+                'Could not find an "entrypoints" key in the "%s" file',
+                $this->entrypointJsonPath
+            ));
         }
 
-        if ($this->cache !== null) {
+        if (null !== $this->cache) {
             $this->cache->set($this->cacheKey, $this->entriesData);
         }
 

@@ -30,10 +30,17 @@ final class TagRenderer implements TagRendererInterface
 
     private ?ApplicationType $applicationType = null;
 
-    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection, AssetRegistryInterface $assetRegistry)
-    {
+    public function __construct(
+        EntrypointLookupCollectionInterface $entrypointLookupCollection,
+        AssetRegistryInterface $assetRegistry
+    ) {
         try {
-            $this->applicationType = array_key_exists('TYPO3_REQUEST', $GLOBALS) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface ? ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']) : null;
+            $this->applicationType = array_key_exists(
+                'TYPO3_REQUEST',
+                $GLOBALS
+            ) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface ? ApplicationType::fromRequest(
+                $GLOBALS['TYPO3_REQUEST']
+            ) : null;
         } catch (RuntimeException $e) {
             $this->applicationType = null;
         }
@@ -64,11 +71,11 @@ final class TagRenderer implements TagRendererInterface
         $wrapFirst = '';
         $wrapLast = '';
         $fileCount = count($files);
-        if (!empty($parameters['allWrap']) && $fileCount > 1) {
+        if (! empty($parameters['allWrap']) && $fileCount > 1) {
             // If there are multiple files, allWrap should wrap all.
             // To do this, it's split up into two parts. The first part wraps the first file
             // and the second part wraps the last file.
-            $splitChar = !empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
+            $splitChar = ! empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
             $wrapArr = explode($splitChar, $parameters['allWrap'], 2);
             $wrapFirst = $wrapArr[0] . $splitChar;
             $wrapLast = $splitChar . $wrapArr[1];
@@ -77,14 +84,14 @@ final class TagRenderer implements TagRendererInterface
 
         // We do not want to replace null values in $attributes
         $parameters = array_filter($parameters, static function ($param) {
-            return !is_null($param);
+            return null !== $param;
         });
 
         foreach ($files as $index => $file) {
             $this->addAdditionalAbsRefPrefixDirectories($file);
 
             $allWrap = '';
-            if (!$index) {
+            if (! $index) {
                 // first file
                 $allWrap = $wrapFirst;
             } elseif ($index === $fileCount - 1) {
@@ -108,7 +115,7 @@ final class TagRenderer implements TagRendererInterface
 
             $attributes = array_values($attributes);
 
-            $pageRendererMethodName = 'addJS' . ($position === self::POSITION_FOOTER ? 'Footer' : '');
+            $pageRendererMethodName = 'addJS' . (self::POSITION_FOOTER === $position ? 'Footer' : '');
 
             if ($isLibrary) {
                 $pageRendererMethodName .= 'Library';
@@ -119,7 +126,7 @@ final class TagRenderer implements TagRendererInterface
                 $pageRenderer->{$pageRendererMethodName}(...$attributes);
             }
 
-            if ($registerFile === true) {
+            if (true === $registerFile) {
                 $this->assetRegistry->registerFile(new File($file, 'script'));
             }
         }
@@ -144,11 +151,11 @@ final class TagRenderer implements TagRendererInterface
         $wrapFirst = '';
         $wrapLast = '';
         $fileCount = count($files);
-        if (!empty($parameters['allWrap']) && $fileCount > 1) {
+        if (! empty($parameters['allWrap']) && $fileCount > 1) {
             // If there are multiple files, allWrap should wrap all.
             // To do this, it's split up into two parts. The first part wraps the first file
             // and the second part wraps the last file.
-            $splitChar = !empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
+            $splitChar = ! empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
             $wrapArr = explode($splitChar, $parameters['allWrap'], 2);
             $wrapFirst = $wrapArr[0] . $splitChar;
             $wrapLast = $splitChar . $wrapArr[1];
@@ -159,7 +166,7 @@ final class TagRenderer implements TagRendererInterface
             $this->addAdditionalAbsRefPrefixDirectories($file);
 
             $allWrap = '';
-            if (!$index) {
+            if (! $index) {
                 // first file
                 $allWrap = $wrapFirst;
             } elseif ($index === $fileCount - 1) {
@@ -184,7 +191,7 @@ final class TagRenderer implements TagRendererInterface
 
             $pageRenderer->addCssFile(...$attributes);
 
-            if ($registerFile === true) {
+            if (true === $registerFile) {
                 $this->assetRegistry->registerFile(new File($file, 'style'));
             }
         }
@@ -216,28 +223,28 @@ final class TagRenderer implements TagRendererInterface
 
     private function removeLeadingSlash(string $file, array $parameters): bool
     {
-        if (array_key_exists('inline', $parameters) && (bool)$parameters['inline']) {
+        if (array_key_exists('inline', $parameters) && (bool) $parameters['inline']) {
             return true;
         }
 
-        if ($this->applicationType === null) {
+        if (null === $this->applicationType) {
             return false;
         }
 
-        if (!$this->applicationType->isFrontend()) {
+        if (! $this->applicationType->isFrontend()) {
             return false;
         }
 
-        if ($this->getTypoScriptFrontendController()->absRefPrefix === '') {
+        if ('' === $this->getTypoScriptFrontendController()->absRefPrefix) {
             return false;
         }
 
-        if ($this->getTypoScriptFrontendController()->absRefPrefix === '/') {
+        if ('/' === $this->getTypoScriptFrontendController()->absRefPrefix) {
             //avoid double //
             return true;
         }
 
-        return !GeneralUtility::isValidUrl($file);
+        return ! GeneralUtility::isValidUrl($file);
     }
 
     private function getTypoScriptFrontendController(): TypoScriptFrontendController
@@ -251,15 +258,15 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if ($this->applicationType === null) {
+        if (null === $this->applicationType) {
             return false;
         }
 
-        if (!$this->applicationType->isFrontend()) {
+        if (! $this->applicationType->isFrontend()) {
             return false;
         }
 
-        if (!isset($this->getTypoScriptFrontendController()->config['config']['doctype']) || $this->getTypoScriptFrontendController()->config['config']['doctype'] !== 'html5') {
+        if (! isset($this->getTypoScriptFrontendController()->config['config']['doctype']) || 'html5' !== $this->getTypoScriptFrontendController()->config['config']['doctype']) {
             return false;
         }
 

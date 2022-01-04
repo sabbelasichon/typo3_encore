@@ -27,8 +27,11 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     private static ?array $collection = null;
 
-    public function __construct(SettingsServiceInterface $settingsService, ObjectManagerInterface $objectManager, FilesystemInterface $filesystem)
-    {
+    public function __construct(
+        SettingsServiceInterface $settingsService,
+        ObjectManagerInterface $objectManager,
+        FilesystemInterface $filesystem
+    ) {
         $this->settingsService = $settingsService;
         $this->objectManager = $objectManager;
         $this->filesystem = $filesystem;
@@ -39,7 +42,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     public function getCollection(): array
     {
-        if (self::$collection !== null) {
+        if (null !== self::$collection) {
             return self::$collection;
         }
 
@@ -52,12 +55,16 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
         if (! empty($buildConfigurations)) {
             foreach ($buildConfigurations as $buildConfigurationKey => $buildConfiguration) {
                 $entrypointsPath = sprintf('%s/entrypoints.json', $buildConfiguration);
-                $builds[$buildConfigurationKey] = $this->createEntrypointLookUp($entrypointsPath, $buildConfigurationKey, $strictMode);
+                $builds[$buildConfigurationKey] = $this->createEntrypointLookUp(
+                    $entrypointsPath,
+                    $buildConfigurationKey,
+                    $strictMode
+                );
             }
         }
 
         if ($this->filesystem->exists($this->filesystem->getFileAbsFileName($entrypointsPathDefaultBuild))) {
-            $builds['_default'] =  $this->createEntrypointLookUp($entrypointsPathDefaultBuild, '_default', $strictMode);
+            $builds['_default'] = $this->createEntrypointLookUp($entrypointsPathDefaultBuild, '_default', $strictMode);
         }
 
         self::$collection = $builds;
@@ -65,8 +72,16 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
         return $builds;
     }
 
-    private function createEntrypointLookUp(string $entrypointJsonPath, string $cacheKeyPrefix, bool $strictMode): EntrypointLookupInterface
-    {
-        return $this->objectManager->get(EntrypointLookupInterface::class, $entrypointJsonPath, $cacheKeyPrefix, $strictMode);
+    private function createEntrypointLookUp(
+        string $entrypointJsonPath,
+        string $cacheKeyPrefix,
+        bool $strictMode
+    ): EntrypointLookupInterface {
+        return $this->objectManager->get(
+            EntrypointLookupInterface::class,
+            $entrypointJsonPath,
+            $cacheKeyPrefix,
+            $strictMode
+        );
     }
 }

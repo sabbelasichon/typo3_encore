@@ -27,9 +27,7 @@ final class IncludeFilesTest extends FunctionalTestCase
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/typo3_encore',
-    ];
+    protected $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 
     protected function setUp(): void
     {
@@ -40,62 +38,62 @@ final class IncludeFilesTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function addFiles(): void
+    public function testAddFiles(): void
     {
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_UID,
-            [
-                'EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRenderer.typoscript',
-            ]
+            ['EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRenderer.typoscript']
         );
         $this->setUpSites(self::ROOT_PAGE_UID, []);
         $response = $this->executeFrontendRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_UID));
 
-        $content = $response->getBody()->__toString();
+        $content = $response->getBody()
+            ->__toString();
         self::assertStringContainsString('TYPO3 Webpack Encore - Modern Frontend Development', $content);
         self::assertStringContainsString('main.css', $content);
         self::assertStringContainsString('main.js', $content);
-        self::assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $content);
+        self::assertStringContainsString(
+            'sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0',
+            $content
+        );
     }
 
-    /**
-     * @test
-     */
-    public function addFilesWithAbsRefPrefix(): void
+    public function testAddFilesWithAbsRefPrefix(): void
     {
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_UID,
-            [
-                'EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRendererAbsRefPrefix.typoscript',
-            ]
+            ['EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRendererAbsRefPrefix.typoscript']
         );
         $this->setUpSites(self::ROOT_PAGE_UID, []);
         $response = $this->executeFrontendRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_UID));
 
-        $content = $response->getBody()->__toString();
-        self::assertStringContainsString('https://www.domain.com/foo/typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.css', $content);
-        self::assertStringContainsString('https://www.domain.com/foo/typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.js', $content);
-        self::assertStringContainsString('sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0', $content);
+        $content = $response->getBody()
+            ->__toString();
+        self::assertStringContainsString(
+            'https://www.domain.com/foo/typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.css',
+            $content
+        );
+        self::assertStringContainsString(
+            'https://www.domain.com/foo/typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.js',
+            $content
+        );
+        self::assertStringContainsString(
+            'sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0',
+            $content
+        );
     }
 
-    /**
-     * @test
-     */
-    public function addFilesWithHtml5DocType(): void
+    public function testAddFilesWithHtml5DocType(): void
     {
         $this->setUpFrontendRootPage(
             self::ROOT_PAGE_UID,
-            [
-                'EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRendererHtml5.typoscript',
-            ]
+            ['EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/MainRendererHtml5.typoscript']
         );
         $this->setUpSites(self::ROOT_PAGE_UID, []);
         $response = $this->executeFrontendRequest((new InternalRequest())->withPageId(self::ROOT_PAGE_UID));
 
-        $content = $response->getBody()->__toString();
+        $content = $response->getBody()
+            ->__toString();
         self::assertStringNotContainsString('text/javascript', $content);
     }
 
@@ -108,13 +106,13 @@ final class IncludeFilesTest extends FunctionalTestCase
         foreach ($sites as $identifier => $file) {
             $path = Environment::getConfigPath() . '/sites/' . $identifier . '/';
             $target = $path . 'config.yaml';
-            if (!file_exists($target)) {
+            if (! file_exists($target)) {
                 GeneralUtility::mkdir_deep($path);
-                if (!file_exists($file)) {
+                if (! file_exists($file)) {
                     $file = GeneralUtility::getFileAbsFileName($file);
                 }
                 $fileContent = file_get_contents($file);
-                $fileContent = str_replace('\'{rootPageId}\'', (string)$pageId, (string)$fileContent);
+                $fileContent = str_replace('\'{rootPageId}\'', (string) $pageId, (string) $fileContent);
                 GeneralUtility::writeFile($target, $fileContent);
             }
         }

@@ -30,8 +30,8 @@ jobs:
         run: composer install --no-progress
       - name: "Run PHP lint"
         run: composer run-script test-php-lint
-  php-cs-fixer:
-    name: "PHP-CS-Fixer"
+  ecs:
+    name: "ecs"
     runs-on: ubuntu-20.04
     strategy:
       matrix:
@@ -53,8 +53,8 @@ jobs:
             php-${{ matrix.php-versions }}-composer-
       - name: "Install composer dependencies"
         run: composer install --no-progress
-      - name: "Run PHP-CS-Fixer"
-        run: "composer run-script test-php-cs-fixer"
+      - name: "Run ecs"
+        run: "composer run-script check-style"
   tests:
     runs-on: ubuntu-20.04
     strategy:

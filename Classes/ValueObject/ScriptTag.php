@@ -16,15 +16,28 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 final class ScriptTag
 {
     private string $entryName;
+
     private string $position;
+
     private string $buildName;
+
     private ?PageRenderer $pageRenderer;
+
     private array $parameters;
+
     private bool $registerFile;
+
     private bool $isLibrary;
 
-    public function __construct(string $entryName, string $position, string $buildName, PageRenderer $pageRenderer = null, array $parameters = [], bool $registerFile = true, bool $isLibrary = false)
-    {
+    public function __construct(
+        string $entryName,
+        string $position,
+        string $buildName,
+        PageRenderer $pageRenderer = null,
+        array $parameters = [],
+        bool $registerFile = true,
+        bool $isLibrary = false
+    ) {
         $this->entryName = $entryName;
         $this->position = $position;
         $this->buildName = $buildName;

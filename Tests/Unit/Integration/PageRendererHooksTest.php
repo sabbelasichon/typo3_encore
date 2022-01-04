@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -18,9 +20,6 @@ use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\PageRendererHooks
- */
 final class PageRendererHooksTest extends UnitTestCase
 {
     protected PageRendererHooks $subject;
@@ -47,17 +46,14 @@ final class PageRendererHooksTest extends UnitTestCase
         $this->subject = new PageRendererHooks($this->tagRenderer);
     }
 
-    /**
-     * @test
-     */
-    public function doNothingNoEncoreFiles(): void
+    public function testDoNothingNoEncoreFiles(): void
     {
         $params = [
             'jsFiles' => [
                 [
                     'file' => 'somefile_not_managed_by_encore.js',
                     'forceOnTop' => true,
-                    'section' => 2
+                    'section' => 2,
                 ],
             ],
             'cssFiles' => [
@@ -72,10 +68,7 @@ final class PageRendererHooksTest extends UnitTestCase
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
-    /**
-     * @test
-     */
-    public function doNothingNoMatchingType(): void
+    public function testDoNothingNoMatchingType(): void
     {
         $params = [
             'foo' => [
@@ -90,17 +83,14 @@ final class PageRendererHooksTest extends UnitTestCase
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
-    /**
-     * @test
-     */
-    public function renderPreProcessWithDefaultBuild(): void
+    public function testRenderPreProcessWithDefaultBuild(): void
     {
         $params = [
             'jsFiles' => [
                 [
                     'file' => 'typo3_encore:app',
                     'forceOnTop' => true,
-                    'section' => 2
+                    'section' => 2,
                 ],
             ],
             'cssFiles' => [
@@ -110,17 +100,16 @@ final class PageRendererHooksTest extends UnitTestCase
             ],
         ];
 
-        $scriptTag = new ScriptTag('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer, ['forceOnTop' => true]);
+        $scriptTag = new ScriptTag('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer, [
+            'forceOnTop' => true,
+        ]);
         $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with($scriptTag);
         $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer);
         $this->tagRenderer->expects(self::once())->method('renderWebpackLinkTags')->with($linkTag);
         $this->subject->renderPreProcess($params, $this->pageRenderer);
     }
 
-    /**
-     * @test
-     */
-    public function renderPreProcessWithDefinedBuild(): void
+    public function testRenderPreProcessWithDefinedBuild(): void
     {
         $params = [
             'jsFiles' => [

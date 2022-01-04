@@ -22,20 +22,27 @@ final class ActionViewHelperTest extends ViewHelperBaseTestcase
 
     protected ActionViewHelper $actionViewHelper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->actionViewHelper = new ActionViewHelper();
     }
 
     /**
-     * @test
      * @param mixed $dataOrControllerName
      * @dataProvider provideRenderStimulusAction
      */
-    public function renderData($dataOrControllerName, ?string $actionName, ?string $eventName, string $expected): void
-    {
-        $this->setArgumentsUnderTest($this->actionViewHelper, ['dataOrControllerName' => $dataOrControllerName, 'actionName' => $actionName, 'eventName' => $eventName]);
+    public function testRenderData(
+        $dataOrControllerName,
+        ?string $actionName,
+        ?string $eventName,
+        string $expected
+    ): void {
+        $this->setArgumentsUnderTest($this->actionViewHelper, [
+            'dataOrControllerName' => $dataOrControllerName,
+            'actionName' => $actionName,
+            'eventName' => $eventName,
+        ]);
         self::assertSame($expected, $this->actionViewHelper->initializeArgumentsAndRender());
     }
 
@@ -68,25 +75,51 @@ final class ActionViewHelperTest extends ViewHelperBaseTestcase
 
         yield 'multiple actions, with custom event' => [
             'dataOrControllerName' => [
-                'my-controller' => ['click' => 'onClick'],
-                'my-second-controller' => [['click' => 'onClick'], ['change' => 'onSomethingElse']],
-                'resize-controller' => ['resize@window' => 'onWindowResize'],
-                'foo/bar-controller' => ['click' => 'onClick'],
+                'my-controller' => [
+                    'click' => 'onClick',
+                ],
+                'my-second-controller' => [[
+                    'click' => 'onClick',
+                ], [
+                    'change' => 'onSomethingElse',
+                ]],
+                'resize-controller' => [
+                    'resize@window' => 'onWindowResize',
+                ],
+                'foo/bar-controller' => [
+
+                    'click' => 'onClick',
+                ],
             ],
             'actionName' => null,
-            'eventName' => null,
+            'eventName' =>
+ null,
             'expected' => 'data-action="click->my-controller#onClick click->my-second-controller#onClick change->my-second-controller#onSomethingElse resize@window->resize-controller#onWindowResize click->foo--bar-controller#onClick"',
         ];
 
         yield 'multiple actions, with default and custom event' => [
             'dataOrControllerName' => [
-                'my-controller' => ['click' => 'onClick'],
-                'my-second-controller' => ['onClick', ['click' => 'onAnotherClick'], ['change' => 'onSomethingElse']],
-                'resize-controller' => ['resize@window' => 'onWindowResize'],
-                'foo/bar-controller' => ['click' => 'onClick'],
+                'my-controller' => [
+                    'click' => 'onClick',
+                ],
+                'my-second-controller' => [
+                    'onClick', [
+                        'click' => 'onAnotherClick',
+                    ], [
+                        'change' =>
+                         'onSomethingElse',
+                    ], ],
+                'resize-controller' => [
+                    'resize@window' => 'onWindowResize',
+                ],
+                'foo/bar-controller' =>
+ [
+     'click' => 'onClick',
+ ],
             ],
             'actionName' => null,
-            'eventName' => null,
+            'eventName'
+ => null,
             'expected' => 'data-action="click->my-controller#onClick my-second-controller#onClick click->my-second-controller#onAnotherClick change->my-second-controller#onSomethingElse resize@window->resize-controller#onWindowResize click->foo--bar-controller#onClick"',
         ];
 

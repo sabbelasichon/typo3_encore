@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -17,9 +19,6 @@ use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Symfony\Component\Asset\PackageInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\PackageFactory
- */
 final class PackageFactoryTest extends UnitTestCase
 {
     protected PackageFactory $subject;
@@ -41,23 +40,28 @@ final class PackageFactoryTest extends UnitTestCase
         $this->subject = new PackageFactory($this->settingsService, $this->filesystem);
     }
 
-    /**
-     * @test
-     */
-    public function returnsPackageWithDefaultManifestPath(): void
+    public function testReturnsPackageWithDefaultManifestPath(): void
     {
-        $this->settingsService->method('getStringByPath')->with('manifestJsonPath')->willReturn('manifest.json');
-        $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
-        self::assertInstanceOf(PackageInterface::class, $this->subject->getPackage(EntrypointLookupInterface::DEFAULT_BUILD));
+        $this->settingsService->method('getStringByPath')
+            ->with('manifestJsonPath')
+            ->willReturn('manifest.json');
+        $this->filesystem->method('getFileAbsFileName')
+            ->with('manifest.json')
+            ->willReturn('manifest.json');
+        self::assertInstanceOf(
+            PackageInterface::class,
+            $this->subject->getPackage(EntrypointLookupInterface::DEFAULT_BUILD)
+        );
     }
 
-    /**
-     * @test
-     */
-    public function returnsPackageWithSpecificManifestPath(): void
+    public function testReturnsPackageWithSpecificManifestPath(): void
     {
-        $this->settingsService->method('getStringByPath')->with('packages.custom.manifestJsonPath')->willReturn('manifest.json');
-        $this->filesystem->method('getFileAbsFileName')->with('manifest.json')->willReturn('manifest.json');
+        $this->settingsService->method('getStringByPath')
+            ->with('packages.custom.manifestJsonPath')
+            ->willReturn('manifest.json');
+        $this->filesystem->method('getFileAbsFileName')
+            ->with('manifest.json')
+            ->willReturn('manifest.json');
         self::assertInstanceOf(PackageInterface::class, $this->subject->getPackage('custom'));
     }
 }

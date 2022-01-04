@@ -28,7 +28,13 @@ final class PrerenderViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('uri', 'string', 'The uri to prerender', true);
         $this->registerArgument('as', 'string', 'The type like style or script', true);
-        $this->registerArgument('attributes', 'array', 'The attributes of this link (e.g. "[\'as\' => true]", "[\'pr\' => 0.5]")', false, []);
+        $this->registerArgument(
+            'attributes',
+            'array',
+            'The attributes of this link (e.g. "[\'as\' => true]", "[\'pr\' => 0.5]")',
+            false,
+            []
+        );
     }
 
     public function render(): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -12,15 +14,9 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 use Ssch\Typo3Encore\Integration\IdGenerator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\IdGenerator
- */
 final class IdGeneratorTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
-    public function idGeneratorReturnsString(): void
+    public function testIdGeneratorReturnsString(): void
     {
         $idGenerator = new IdGenerator();
         self::assertTrue(is_string($idGenerator->generate()));

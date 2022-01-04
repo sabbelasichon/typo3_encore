@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -17,9 +19,6 @@ use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
 use Ssch\Typo3Encore\ViewHelpers\AssetViewHelper;
 use Symfony\Component\Asset\PackageInterface;
 
-/**
- * @covers \Ssch\Typo3Encore\ViewHelpers\AssetViewHelper
- */
 final class AssetViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
@@ -42,17 +41,18 @@ final class AssetViewHelperTest extends ViewHelperBaseTestcase
         $this->package = $this->getMockBuilder(PackageInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
         $packageFactory = $this->getMockBuilder(PackageFactoryInterface::class)->getMock();
-        $packageFactory->method('getPackage')->willReturn($this->package);
+        $packageFactory->method('getPackage')
+            ->willReturn($this->package);
         $this->viewHelper = new AssetViewHelper($packageFactory, $this->filesystem);
     }
 
-    /**
-     * @test
-     */
-    public function returnResolvedPathForFile(): void
+    public function testReturnResolvedPathForFile(): void
     {
         $pathToFile = 'EXT:typo3_encore/Tests/Build/UnitTests.xml';
-        $this->setArgumentsUnderTest($this->viewHelper, ['pathToFile' => $pathToFile, 'package' => EntrypointLookupInterface::DEFAULT_BUILD]);
+        $this->setArgumentsUnderTest($this->viewHelper, [
+            'pathToFile' => $pathToFile,
+            'package' => EntrypointLookupInterface::DEFAULT_BUILD,
+        ]);
 
         $this->filesystem->expects(self::once())->method('getRelativeFilePath')->willReturn($pathToFile);
         $this->package->expects(self::once())->method('getUrl')->willReturn($pathToFile);

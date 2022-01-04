@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -16,9 +18,6 @@ use Ssch\Typo3Encore\Asset\TagRendererInterface;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use Ssch\Typo3Encore\ViewHelpers\RenderWebpackScriptTagsViewHelper;
 
-/**
- * @covers \Ssch\Typo3Encore\ViewHelpers\RenderWebpackScriptTagsViewHelper
- */
 final class RenderWebpackScriptTagsViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
@@ -37,12 +36,15 @@ final class RenderWebpackScriptTagsViewHelperTest extends ViewHelperBaseTestcase
         $this->viewHelper = new RenderWebpackScriptTagsViewHelper($this->tagRenderer);
     }
 
-    /**
-     * @test
-     */
-    public function render(): void
+    public function testRender(): void
     {
-        $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'position' => 'footer', 'buildName' => EntrypointLookupInterface::DEFAULT_BUILD, 'parameters' => [], 'registerFile' => true]);
+        $this->setArgumentsUnderTest($this->viewHelper, [
+            'entryName' => 'app',
+            'position' => 'footer',
+            'buildName' => EntrypointLookupInterface::DEFAULT_BUILD,
+            'parameters' => [],
+            'registerFile' => true,
+        ]);
         $scriptTag = new ScriptTag('app', 'footer', EntrypointLookupInterface::DEFAULT_BUILD);
         $this->tagRenderer->expects(self::once())->method('renderWebpackScriptTags')->with($scriptTag);
         $this->viewHelper->initializeArgumentsAndRender();

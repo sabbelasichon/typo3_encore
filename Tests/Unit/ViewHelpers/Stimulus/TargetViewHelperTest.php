@@ -22,20 +22,22 @@ final class TargetViewHelperTest extends ViewHelperBaseTestcase
 
     protected TargetViewHelper $targetViewHelper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->targetViewHelper = new TargetViewHelper();
     }
 
     /**
-     * @test
      * @param mixed $dataOrControllerName
      * @dataProvider provideRenderStimulusTarget
      */
-    public function renderData($dataOrControllerName, ?string $targetName, string $expected): void
+    public function testRenderData($dataOrControllerName, ?string $targetName, string $expected): void
     {
-        $this->setArgumentsUnderTest($this->targetViewHelper, ['dataOrControllerName' => $dataOrControllerName, 'targetNames' => $targetName]);
+        $this->setArgumentsUnderTest($this->targetViewHelper, [
+            'dataOrControllerName' => $dataOrControllerName,
+            'targetNames' => $targetName,
+        ]);
         self::assertSame($expected, $this->targetViewHelper->initializeArgumentsAndRender());
     }
 

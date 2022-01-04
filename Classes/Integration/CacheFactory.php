@@ -20,11 +20,10 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
  */
 class CacheFactory
 {
-
     /**
      * @var string
      */
-    const CACHE_KEY = 'typo3_encore';
+    public const CACHE_KEY = 'typo3_encore';
 
     protected CacheManager $cacheManager;
 

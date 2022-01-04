@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -13,9 +15,6 @@ use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoder;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\JsonDecoder
- */
 final class JsonDecoderTest extends UnitTestCase
 {
     protected JsonDecoder $subject;
@@ -25,20 +24,19 @@ final class JsonDecoderTest extends UnitTestCase
         $this->subject = new JsonDecoder();
     }
 
-    /**
-     * @test
-     */
-    public function decodingThrowsException(): void
+    public function testDecodingThrowsException(): void
     {
         $this->expectException(JsonDecodeException::class);
         $this->subject->decode('can');
     }
 
-    /**
-     * @test
-     */
-    public function decodeSuccessfully(): void
+    public function testDecodeSuccessfully(): void
     {
-        self::assertEquals(['homepage' => ['js' => ['file.js'], 'css' => ['file.css']]], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
+        self::assertEquals([
+            'homepage' => [
+                'js' => ['file.js'],
+                'css' => ['file.css'],
+            ],
+        ], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
     }
 }

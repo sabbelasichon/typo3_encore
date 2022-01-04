@@ -64,12 +64,15 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
         $this->templateVariableContainer = $this->createMock(StandardVariableProvider::class);
         $this->request = $this->prophesize(Request::class);
         $this->controllerContext = $this->prophesize(ControllerContext::class);
-        $this->controllerContext->getRequest()->willReturn($this->request);
+        $this->controllerContext->getRequest()
+            ->willReturn($this->request);
         $this->arguments = [];
         $this->renderingContext = $this->prophesize(RenderingContext::class);
         $this->renderingContext->setVariableProvider($this->templateVariableContainer);
-        $this->renderingContext->getVariableProvider()->willReturn($this->templateVariableContainer);
-        $this->renderingContext->getViewHelperVariableContainer()->willReturn($this->viewHelperVariableContainer);
+        $this->renderingContext->getVariableProvider()
+            ->willReturn($this->templateVariableContainer);
+        $this->renderingContext->getViewHelperVariableContainer()
+            ->willReturn($this->viewHelperVariableContainer);
         if (method_exists(RenderingContext::class, 'setRequest')) {
             $this->renderingContext->setRequest($this->request->reveal());
         }
@@ -84,14 +87,14 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
     }
 
     /**
-     * Helper function to merge arguments with default arguments according to their registration
-     * This usually happens in ViewHelperInvoker before the view helper methods are called
+     * Helper function to merge arguments with default arguments according to their registration This usually happens in
+     * ViewHelperInvoker before the view helper methods are called
      */
     protected function setArgumentsUnderTest(ViewHelperInterface $viewHelper, array $arguments = []): void
     {
         $argumentDefinitions = $viewHelper->prepareArguments();
         foreach ($argumentDefinitions as $argumentName => $argumentDefinition) {
-            if (!isset($arguments[$argumentName])) {
+            if (! isset($arguments[$argumentName])) {
                 $arguments[$argumentName] = $argumentDefinition->getDefaultValue();
             }
         }

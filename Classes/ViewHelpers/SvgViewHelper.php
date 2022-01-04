@@ -59,7 +59,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     public function render(): string
     {
         $image = $this->imageService->getImage($this->arguments['src'], null, false);
-        $imageUri = $this->imageService->getImageUri($image, (bool)$this->arguments['absolute']);
+        $imageUri = $this->imageService->getImageUri($image, (bool) $this->arguments['absolute']);
 
         $content = [];
         $uniqueId = 'unique';
@@ -75,7 +75,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             $content[] = sprintf(
                 '<title id="%s">%s</title>',
                 $titleId,
-                htmlspecialchars((string)$this->arguments['title'], ENT_QUOTES | ENT_HTML5)
+                htmlspecialchars((string) $this->arguments['title'], ENT_QUOTES | ENT_HTML5)
             );
         }
 
@@ -85,20 +85,23 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             $content[] = sprintf(
                 '<desc id="%s">%s</desc>',
                 $descriptionId,
-                htmlspecialchars((string)$this->arguments['description'], ENT_QUOTES | ENT_HTML5)
+                htmlspecialchars((string) $this->arguments['description'], ENT_QUOTES | ENT_HTML5)
             );
         }
 
-        if (!empty($ariaLabelledBy)) {
+        if (! empty($ariaLabelledBy)) {
             $this->tag->addAttribute('aria-labelledby', implode(' ', $ariaLabelledBy));
         }
 
-        $name = (string)$this->arguments['name'];
-        if ((bool)$this->arguments['inline']) {
+        $name = (string) $this->arguments['name'];
+        if ((bool) $this->arguments['inline']) {
             $doc = new DOMDocument();
             $doc->loadXML($image->getContents());
             $xpath = new DOMXPath($doc);
-            if (($icon = $xpath->query("//*[@id='{$name}']")->item(0)) !== null) {
+            $icon = $xpath->query("//*[@id='{$name}']")
+                ->item(0);
+
+            if (null !== $icon) {
                 if ($icon instanceof DOMElement && $icon->hasAttribute('viewBox')) {
                     $this->tag->addAttribute('viewBox', $icon->getAttribute('viewBox'));
                 }

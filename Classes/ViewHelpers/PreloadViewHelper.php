@@ -28,7 +28,13 @@ final class PreloadViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('uri', 'string', 'The uri to preload', true);
         $this->registerArgument('as', 'string', 'The type like style or script', true);
-        $this->registerArgument('attributes', 'array', 'The attributes of this link (e.g. "[\'as\' => true]", "[\'crossorigin\' => \'use-credentials\']")', false, []);
+        $this->registerArgument(
+            'attributes',
+            'array',
+            'The attributes of this link (e.g. "[\'as\' => true]", "[\'crossorigin\' => \'use-credentials\']")',
+            false,
+            []
+        );
     }
 
     public function render(): void

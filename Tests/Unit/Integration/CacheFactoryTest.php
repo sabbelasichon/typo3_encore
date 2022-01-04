@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -16,9 +18,6 @@ use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\CacheFactory
- */
 final class CacheFactoryTest extends UnitTestCase
 {
     protected CacheFactory $subject;
@@ -34,19 +33,13 @@ final class CacheFactoryTest extends UnitTestCase
         $this->subject = new CacheFactory($this->cacheManager);
     }
 
-    /**
-     * @test
-     */
-    public function nullFrontendIsReturnedBecauseNoSuchCacheExceptionIsThrown(): void
+    public function testNullFrontendIsReturnedBecauseNoSuchCacheExceptionIsThrown(): void
     {
         $this->cacheManager->expects(self::once())->method('getCache')->willThrowException(new NoSuchCacheException());
         self::assertNull($this->subject->createInstance());
     }
 
-    /**
-     * @test
-     */
-    public function definedCacheIsReturned(): void
+    public function testDefinedCacheIsReturned(): void
     {
         $cache = $this->getMockBuilder(FrontendInterface::class)->getMock();
         $this->cacheManager->expects(self::once())->method('getCache')->willReturn($cache);
