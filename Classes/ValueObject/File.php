@@ -14,8 +14,11 @@ namespace Ssch\Typo3Encore\ValueObject;
 final class File
 {
     private string $file;
+
     private string $type;
+
     private array $attributes;
+
     private string $rel;
 
     public function __construct(string $file, string $type, array $attributes = [], string $rel = 'preload')

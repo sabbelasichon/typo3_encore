@@ -18,7 +18,7 @@ final class TypoScriptFrontendControllerHooks
     /**
      * @var TypoScriptFrontendController
      */
-    protected $controller;
+    private $controller;
 
     private AssetRegistryInterface $assetRegistry;
 

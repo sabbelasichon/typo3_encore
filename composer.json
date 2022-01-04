@@ -27,9 +27,7 @@
     "typo3/cms-tstemplate": "^10.4.2 || ^11.2"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16",
     "phpstan/phpstan": "^0.12",
-    "typo3/coding-standards": "^0.3",
     "typo3/testing-framework": "^6.2",
     "typo3/minimal": "^10.4 || ^11.0",
     "php-parallel-lint/php-parallel-lint": "^1.2",
@@ -41,7 +39,8 @@
     "symplify/phpstan-extensions": "9.3.26",
     "symplify/phpstan-rules": "9.3.26",
     "phpstan/extension-installer": "^1.1",
-    "saschaegerer/phpstan-typo3": "^0.13.3"
+    "saschaegerer/phpstan-typo3": "^0.13.3",
+    "symplify/easy-coding-standard": "^10.0"
   },
   "replace": {
     "typo3-ter/typo3-encore": "self.version"
@@ -76,11 +75,9 @@
       ".Build/bin/parallel-lint ./Configuration/TCA/",
       ".Build/bin/parallel-lint ./Tests/"
     ],
-    "test-php-cs-fixer": [
-      "php-cs-fixer fix -v --dry-run --using-cache false --diff --diff-format=udiff"
-    ],
+    "check-style": "ecs check --ansi",
     "fix-style": [
-      "php-cs-fixer fix -v --using-cache false --diff --diff-format=udiff"
+      "ecs check --fix --ansi"
     ],
     "test-unit": [
       ".Build/bin/phpunit --configuration Build/UnitTests.xml"

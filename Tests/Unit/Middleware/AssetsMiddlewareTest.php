@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -22,9 +24,6 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Middleware\AssetsMiddleware
- */
 final class AssetsMiddlewareTest extends UnitTestCase
 {
     protected AssetsMiddleware $subject;
@@ -46,17 +45,17 @@ final class AssetsMiddlewareTest extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
+        $this->typoScriptFrontendController = $this->getMockBuilder(
+            TypoScriptFrontendController::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
         $GLOBALS['TSFE'] = $this->typoScriptFrontendController;
         $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService);
     }
 
-    /**
-     * @test
-     */
-    public function preloadingIsDisabled(): void
+    public function testPreloadingIsDisabled(): void
     {
         $registeredFiles = [
             'preload' => [
@@ -78,10 +77,14 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $request = new ServerRequest();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
-        $handler->method('handle')->willReturn($response);
+        $handler->method('handle')
+            ->willReturn($response);
         $this->settingsService->expects(self::once())->method('getSettings')->willReturn([]);
-        $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
-        $defaultAttributes = ['crossorigin' => true];
+        $this->assetRegistry->method('getRegisteredFiles')
+            ->willReturn($registeredFiles);
+        $defaultAttributes = [
+            'crossorigin' => true,
+        ];
         $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
         $returnedResponse = $this->subject->process($request, $handler);
@@ -90,15 +93,13 @@ final class AssetsMiddlewareTest extends UnitTestCase
         self::assertCount(0, $links);
     }
 
-    /**
-     * @test
-     */
-    public function nullResponseAndControllerIsNotOutputting(): void
+    public function testNullResponseAndControllerIsNotOutputting(): void
     {
         $request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(NullResponse::class)->getMock();
-        $handler->method('handle')->willReturn($response);
+        $handler->method('handle')
+            ->willReturn($response);
         $this->assetRegistry->expects(self::never())->method('getRegisteredFiles');
 
         $returnedResponse = $this->subject->process($request, $handler);
@@ -106,15 +107,13 @@ final class AssetsMiddlewareTest extends UnitTestCase
         self::assertEquals($response, $returnedResponse);
     }
 
-    /**
-     * @test
-     */
-    public function noAssetsRegistered(): void
+    public function testNoAssetsRegistered(): void
     {
         $request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $handler->method('handle')->willReturn($response);
+        $handler->method('handle')
+            ->willReturn($response);
         $this->assetRegistry->expects(self::once())->method('getRegisteredFiles')->willReturn([]);
         $this->assetRegistry->expects(self::never())->method('getDefaultAttributes');
 
@@ -123,10 +122,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         self::assertEquals($response, $returnedResponse);
     }
 
-    /**
-     * @test
-     */
-    public function addPreloadingHeader(): void
+    public function testAddPreloadingHeader(): void
     {
         $registeredFiles = [
             'preload' => [
@@ -166,11 +162,19 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $request = new ServerRequest();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
-        $handler->method('handle')->willReturn($response);
-        $this->settingsService->method('getSettings')->willReturn(['array' => 'should-not-be-empty']);
-        $this->settingsService->method('getBooleanByPath')->willReturn(true);
-        $this->assetRegistry->method('getRegisteredFiles')->willReturn($registeredFiles);
-        $defaultAttributes = ['crossorigin' => true];
+        $handler->method('handle')
+            ->willReturn($response);
+        $this->settingsService->method('getSettings')
+            ->willReturn([
+                'array' => 'should-not-be-empty',
+            ]);
+        $this->settingsService->method('getBooleanByPath')
+            ->willReturn(true);
+        $this->assetRegistry->method('getRegisteredFiles')
+            ->willReturn($registeredFiles);
+        $defaultAttributes = [
+            'crossorigin' => true,
+        ];
         $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
         $returnedResponse = $this->subject->process($request, $handler);

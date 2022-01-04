@@ -27,7 +27,7 @@ final class SettingsService implements SettingsServiceInterface
 
     public function getSettings(): array
     {
-        if ($this->settings === null) {
+        if (null === $this->settings) {
             $this->settings = $this->configurationManager->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
                 'Typo3Encore'
@@ -37,33 +37,31 @@ final class SettingsService implements SettingsServiceInterface
         return $this->settings;
     }
 
+    public function getArrayByPath(string $path): array
+    {
+        return (array) $this->getByPath($path);
+    }
+
+    public function getStringByPath(string $path): string
+    {
+        return (string) $this->getByPath($path);
+    }
+
+    public function getBooleanByPath(string $path): bool
+    {
+        return (bool) $this->getByPath($path);
+    }
+
     /**
-     * Returns the settings at path $path, which is separated by ".",
-     * e.g. "pages.uid".
-     * "pages.uid" would return $this->settings['pages']['uid'].
+     * Returns the settings at path $path, which is separated by ".", e.g. "pages.uid". "pages.uid" would return
+     * $this->settings['pages']['uid'].
      *
      * If the path is invalid or no entry is found, false is returned.
-     *
      *
      * @return mixed
      */
     private function getByPath(string $path)
     {
         return ObjectAccess::getPropertyPath($this->getSettings(), $path);
-    }
-
-    public function getArrayByPath(string $path): array
-    {
-        return (array)$this->getByPath($path);
-    }
-
-    public function getStringByPath(string $path): string
-    {
-        return (string)$this->getByPath($path);
-    }
-
-    public function getBooleanByPath(string $path): bool
-    {
-        return (bool)$this->getByPath($path);
     }
 }

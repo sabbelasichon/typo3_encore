@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -18,18 +20,12 @@ interface TagRendererInterface extends SingletonInterface
     /**
      * @var array
      */
-    public const ALLOWED_CSS_POSITIONS = [
-        'cssLibs',
-        'cssFiles'
-    ];
+    public const ALLOWED_CSS_POSITIONS = ['cssLibs', 'cssFiles'];
 
     /**
      * @var array
      */
-    public const ALLOWED_JS_POSITIONS = [
-        'jsLibs',
-        'jsFiles'
-    ];
+    public const ALLOWED_JS_POSITIONS = ['jsLibs', 'jsFiles'];
 
     /**
      * @var string

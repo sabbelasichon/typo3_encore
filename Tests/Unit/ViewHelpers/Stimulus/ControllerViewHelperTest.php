@@ -22,20 +22,22 @@ final class ControllerViewHelperTest extends ViewHelperBaseTestcase
 
     protected ControllerViewHelper $controllerViewHelper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->controllerViewHelper = new ControllerViewHelper();
     }
 
     /**
-     * @test
      * @param mixed $dataOrControllerName
      * @dataProvider provideRenderStimulusController
      */
-    public function renderData($dataOrControllerName, array $controllerValues, string $expected): void
+    public function testRenderData($dataOrControllerName, array $controllerValues, string $expected): void
     {
-        $this->setArgumentsUnderTest($this->controllerViewHelper, ['dataOrControllerName' => $dataOrControllerName, 'controllerValues' => $controllerValues]);
+        $this->setArgumentsUnderTest($this->controllerViewHelper, [
+            'dataOrControllerName' => $dataOrControllerName,
+            'controllerValues' => $controllerValues,
+        ]);
         self::assertSame($expected, $this->controllerViewHelper->initializeArgumentsAndRender());
     }
 
@@ -80,11 +82,14 @@ final class ControllerViewHelperTest extends ViewHelperBaseTestcase
         yield 'single-controller-nested-data' => [
             'dataOrControllerName' => [
                 'my-controller' => [
-                    'myValue' => ['nested' => 'array'],
+                    'myValue' => [
+                        'nested' => 'array',
+                    ],
                 ],
             ],
             'controllerValues' => [],
-            'expected' => 'data-controller="my-controller" data-my-controller-my-value-value="{"nested":"array"}"',
+            'expected' =>
+'data-controller="my-controller" data-my-controller-my-value-value="{"nested":"array"}"',
         ];
 
         yield 'multiple-controllers-scalar-data' => [
@@ -118,25 +123,33 @@ final class ControllerViewHelperTest extends ViewHelperBaseTestcase
 
         yield 'short-single-controller-with-data' => [
             'dataOrControllerName' => 'my-controller',
-            'controllerValues' => ['myValue' => 'scalar-value'],
+            'controllerValues' => [
+                'myValue' => 'scalar-value',
+            ],
             'expected' => 'data-controller="my-controller" data-my-controller-my-value-value="scalar-value"',
         ];
 
         yield 'false-attribute-value-renders-false' => [
             'dataOrControllerName' => 'false-controller',
-            'controllerValues' => ['isEnabled' => false],
+            'controllerValues' => [
+                'isEnabled' => false,
+            ],
             'expected' => 'data-controller="false-controller" data-false-controller-is-enabled-value="false"',
         ];
 
         yield 'true-attribute-value-renders-true' => [
             'dataOrControllerName' => 'true-controller',
-            'controllerValues' => ['isEnabled' => true],
+            'controllerValues' => [
+                'isEnabled' => true,
+            ],
             'expected' => 'data-controller="true-controller" data-true-controller-is-enabled-value="true"',
         ];
 
         yield 'null-attribute-value-does-not-render' => [
             'dataOrControllerName' => 'null-controller',
-            'controllerValues' => ['firstName' => null],
+            'controllerValues' => [
+                'firstName' => null,
+            ],
             'expected' => 'data-controller="null-controller"',
         ];
     }

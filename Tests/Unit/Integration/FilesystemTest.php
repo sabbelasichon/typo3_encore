@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -13,9 +15,6 @@ use Ssch\Typo3Encore\Integration\Filesystem;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use UnexpectedValueException;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\Filesystem
- */
 final class FilesystemTest extends UnitTestCase
 {
     protected Filesystem $subject;
@@ -28,10 +27,7 @@ final class FilesystemTest extends UnitTestCase
         $this->fixtureFile = __DIR__ . '/../Fixtures/testfile.txt';
     }
 
-    /**
-     * @test
-     */
-    public function canNotReadFileContentThrowsException(): void
+    public function testCanNotReadFileContentThrowsException(): void
     {
         $pathToFile = 'thisisnotafile';
 
@@ -39,26 +35,17 @@ final class FilesystemTest extends UnitTestCase
         $this->subject->get($pathToFile);
     }
 
-    /**
-     * @test
-     */
-    public function canReadFileContent(): void
+    public function testCanReadFileContent(): void
     {
         self::assertStringEqualsFile($this->fixtureFile, $this->subject->get($this->fixtureFile));
     }
 
-    /**
-     * @test
-     */
-    public function fileDoesNotExistsReturnsFalse(): void
+    public function testFileDoesNotExistsReturnsFalse(): void
     {
         self::assertFalse($this->subject->exists('doesnotexistsfile.txt'));
     }
 
-    /**
-     * @test
-     */
-    public function fileExistsReturnsTrue(): void
+    public function testFileExistsReturnsTrue(): void
     {
         self::assertTrue($this->subject->exists($this->fixtureFile));
     }

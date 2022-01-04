@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -22,9 +24,6 @@ use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Asset\TagRenderer
- */
 final class TagRendererTest extends UnitTestCase
 {
     use ProphecyTrait;
@@ -54,65 +53,74 @@ final class TagRendererTest extends UnitTestCase
         $this->subject = new TagRenderer($this->entryLookupCollection->reveal(), $this->assetRegistry->reveal());
     }
 
-    /**
-     * @test
-     */
-    public function renderWebpackScriptTagsWithDefaultBuild(): void
+    public function testRenderWebpackScriptTagsWithDefaultBuild(): void
     {
-        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
+        $this->entryLookupCollection->getEntrypointLookup(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->shouldBeCalledOnce()
+            ->willReturn($this->createEntrypointLookUpClass());
 
         $this->addJsFileShouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
 
-        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal());
+        $scriptTag = new ScriptTag(
+            'app',
+            'header',
+            EntrypointLookupInterface::DEFAULT_BUILD,
+            $this->pageRenderer->reveal()
+        );
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
-    /**
-     * @test
-     */
-    public function renderWebpackScriptTagsWithDefaultBuildWithoutAssetRegistration(): void
+    public function testRenderWebpackScriptTagsWithDefaultBuildWithoutAssetRegistration(): void
     {
-        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
+        $this->entryLookupCollection->getEntrypointLookup(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->shouldBeCalledOnce()
+            ->willReturn($this->createEntrypointLookUpClass());
 
         $this->addJsFileShouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any())->shouldNotBeCalled();
-        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [], false);
+        $scriptTag = new ScriptTag(
+            'app',
+            'header',
+            EntrypointLookupInterface::DEFAULT_BUILD,
+            $this->pageRenderer->reveal(),
+            [],
+            false
+        );
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
     /**
-     * @test
      * @dataProvider scriptTagsWithPosition
      */
-    public function renderWebpackScriptTagsWithDefaultBuildInPosition(string $position, bool $isLibrary, string $expectedPageRendererCall): void
-    {
-        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
+    public function testRenderWebpackScriptTagsWithDefaultBuildInPosition(
+        string $position,
+        bool $isLibrary,
+        string $expectedPageRendererCall
+    ): void {
+        $this->entryLookupCollection->getEntrypointLookup(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->shouldBeCalledOnce()
+            ->willReturn($this->createEntrypointLookUpClass());
 
-        $arguments = [
-            'file.js',
-            'text/javascript',
-            true,
-            false,
-            '',
-            false,
-            '|',
-            false,
-            'foobarbaz',
-            false,
-            ''
-        ];
+        $arguments = ['file.js', 'text/javascript', true, false, '', false, '|', false, 'foobarbaz', false, ''];
 
         if ($isLibrary) {
             array_unshift($arguments, 'file.js');
         }
 
-        $this->pageRenderer->{$expectedPageRendererCall}(...$arguments)->shouldBeCalledOnce();
+        $this->pageRenderer->{$expectedPageRendererCall}(...$arguments)
+            ->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
-        $scriptTag = new ScriptTag('app', $position, EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false], true, $isLibrary);
+        $scriptTag = new ScriptTag('app', $position, EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [
+            'compress' => true,
+            'excludeFromConcatenation' => false,
+        ], true, $isLibrary);
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
@@ -127,12 +135,12 @@ final class TagRendererTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function renderWebpackLinkTagsWithDefaultBuild(): void
+    public function testRenderWebpackLinkTagsWithDefaultBuild(): void
     {
-        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
+        $this->entryLookupCollection->getEntrypointLookup(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->shouldBeCalledOnce()
+            ->willReturn($this->createEntrypointLookUpClass());
 
         $this->pageRenderer->addCssFile(
             'file.css',
@@ -149,16 +157,19 @@ final class TagRendererTest extends UnitTestCase
 
         $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
 
-        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true]);
+        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [
+            'forceOnTop' => true,
+            'compress' => true,
+        ]);
         $this->subject->renderWebpackLinkTags($linkTag);
     }
 
-    /**
-     * @test
-     */
-    public function renderWebpackLinkTagsWithDefaultBuildWithoutAssetRegistration(): void
+    public function testRenderWebpackLinkTagsWithDefaultBuildWithoutAssetRegistration(): void
     {
-        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClass());
+        $this->entryLookupCollection->getEntrypointLookup(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->shouldBeCalledOnce()
+            ->willReturn($this->createEntrypointLookUpClass());
 
         $this->pageRenderer->addCssFile(
             'file.css',
@@ -174,17 +185,22 @@ final class TagRendererTest extends UnitTestCase
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any())->shouldNotBeCalled();
-        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['forceOnTop' => true, 'compress' => true], false);
+        $linkTag = new LinkTag('app', 'all', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [
+            'forceOnTop' => true,
+            'compress' => true,
+        ], false);
         $this->subject->renderWebpackLinkTags($linkTag);
     }
 
     /**
      * Test if an entry point with multiple files wraps all files, if allWrap was supplied
-     * @test
      */
-    public function renderWebpackScriptTagsWithMultipleFilesAndAllWrap(): void
+    public function testRenderWebpackScriptTagsWithMultipleFilesAndAllWrap(): void
     {
-        $this->entryLookupCollection->getEntrypointLookup(EntrypointLookupInterface::DEFAULT_BUILD)->shouldBeCalledOnce()->willReturn($this->createEntrypointLookUpClassWithMultipleEntries());
+        $this->entryLookupCollection->getEntrypointLookup(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->shouldBeCalledOnce()
+            ->willReturn($this->createEntrypointLookUpClassWithMultipleEntries());
 
         $this->pageRenderer->addJsFile(
             'file1.js',
@@ -216,7 +232,11 @@ final class TagRendererTest extends UnitTestCase
             Argument::any()
         )->shouldBeCalled();
 
-        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), ['compress' => true, 'excludeFromConcatenation' => false, 'allWrap' => 'BEFORE|AFTER']);
+        $scriptTag = new ScriptTag('app', 'header', EntrypointLookupInterface::DEFAULT_BUILD, $this->pageRenderer->reveal(), [
+            'compress' => true,
+            'excludeFromConcatenation' => false,
+            'allWrap' => 'BEFORE|AFTER',
+        ]);
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
@@ -258,7 +278,7 @@ final class TagRendererTest extends UnitTestCase
             public function getIntegrityData(): array
             {
                 return [
-                    'file.js' => 'foobarbaz'
+                    'file.js' => 'foobarbaz',
                 ];
             }
         };

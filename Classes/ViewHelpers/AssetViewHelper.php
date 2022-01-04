@@ -31,11 +31,19 @@ final class AssetViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument('pathToFile', 'string', 'The path to the file', true);
-        $this->registerArgument('package', 'string', 'The package configuration to use', false, EntrypointLookupInterface::DEFAULT_BUILD);
+        $this->registerArgument(
+            'package',
+            'string',
+            'The package configuration to use',
+            false,
+            EntrypointLookupInterface::DEFAULT_BUILD
+        );
     }
 
     public function render(): string
     {
-        return $this->packageFactory->getPackage($this->arguments['package'])->getUrl($this->filesystem->getRelativeFilePath($this->arguments['pathToFile']));
+        return $this->packageFactory->getPackage($this->arguments['package'])->getUrl(
+            $this->filesystem->getRelativeFilePath($this->arguments['pathToFile'])
+        );
     }
 }

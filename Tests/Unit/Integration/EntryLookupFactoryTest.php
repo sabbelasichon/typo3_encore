@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -12,8 +14,8 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 /**
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
+ * For the full copyright and license information, please read the LICENSE.txt file that was distributed with this
+ * source code.
  */
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,9 +26,6 @@ use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\EntryLookupFactory
- */
 final class EntryLookupFactoryTest extends UnitTestCase
 {
     protected EntryLookupFactory $subject;
@@ -54,23 +53,31 @@ final class EntryLookupFactoryTest extends UnitTestCase
         $this->subject = new EntryLookupFactory($this->settingsService, $this->objectManager, $this->filesystem);
     }
 
-    /**
-     * @test
-     */
-    public function getCollectionWithDefaultCollection(): void
+    public function testGetCollectionWithDefaultCollection(): void
     {
         $builds = [
-            'config1' => 'path/to/config1'
+            'config1' => 'path/to/config1',
         ];
 
-        $this->settingsService->expects(self::atLeastOnce())->method('getArrayByPath')->with(self::equalTo('builds'))->willReturn($builds);
-        $this->settingsService->expects(self::atLeastOnce())->method('getStringByPath')->with(self::equalTo('entrypointJsonPath'))->willReturn('path/to/entrypoints.json');
-        $this->settingsService->expects(self::atLeastOnce())->method('getBooleanByPath')->with(self::equalTo('strictMode'))->willReturn(true);
+        $this->settingsService->expects(self::atLeastOnce())->method('getArrayByPath')->with(
+            self::equalTo('builds')
+        )->willReturn($builds);
+        $this->settingsService->expects(self::atLeastOnce())->method('getStringByPath')->with(
+            self::equalTo('entrypointJsonPath')
+        )->willReturn('path/to/entrypoints.json');
+        $this->settingsService->expects(self::atLeastOnce())->method('getBooleanByPath')->with(
+            self::equalTo('strictMode')
+        )->willReturn(true);
 
-        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
-        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->getMockBuilder(EntrypointLookupInterface::class)->getMock());
+        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn(
+            $this->getMockBuilder(EntrypointLookupInterface::class)->getMock()
+        );
+        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn(
+            $this->getMockBuilder(EntrypointLookupInterface::class)->getMock()
+        );
 
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
 
         $collection = $this->subject->getCollection();
 

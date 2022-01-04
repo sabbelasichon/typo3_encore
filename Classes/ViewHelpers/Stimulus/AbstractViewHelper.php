@@ -22,21 +22,21 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
      */
     protected function normalizeControllerName(string $str): string
     {
-        return (string)preg_replace('/^@/', '', str_replace('_', '-', str_replace('/', '--', $str)));
+        return (string) preg_replace('/^@/', '', str_replace('_', '-', str_replace('/', '--', $str)));
     }
 
     /**
-     * Normalize a Stimulus Value API key into its HTML equivalent ("kebab case").
-     * Backport features from symfony/string.
+     * Normalize a Stimulus Value API key into its HTML equivalent ("kebab case"). Backport features from
+     * symfony/string.
      *
      * @see https://stimulus.hotwired.dev/reference/values
      */
     protected function normalizeKeyName(string $str): string
     {
         // Adapted from ByteString::camel
-        $str = ucfirst(str_replace(' ', '', ucwords((string)preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $str))));
+        $str = ucfirst(str_replace(' ', '', ucwords((string) preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $str))));
 
         // Adapted from ByteString::snake
-        return strtolower((string)preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\1-\2', $str));
+        return strtolower((string) preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\1-\2', $str));
     }
 }

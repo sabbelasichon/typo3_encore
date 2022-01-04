@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -15,9 +17,6 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\ViewHelpers\WebpackJsFilesViewHelper;
 
-/**
- * @covers \Ssch\Typo3Encore\ViewHelpers\WebpackJsFilesViewHelper
- */
 final class WebpackJsFilesViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
@@ -32,18 +31,22 @@ final class WebpackJsFilesViewHelperTest extends ViewHelperBaseTestcase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->entrypointLookupCollection = $this->getMockBuilder(EntrypointLookupCollectionInterface::class)->getMock();
+        $this->entrypointLookupCollection = $this->getMockBuilder(
+            EntrypointLookupCollectionInterface::class
+        )->getMock();
         $this->viewHelper = new WebpackJsFilesViewHelper($this->entrypointLookupCollection);
     }
 
-    /**
-     * @test
-     */
-    public function render(): void
+    public function testRender(): void
     {
-        $this->setArgumentsUnderTest($this->viewHelper, ['entryName' => 'app', 'buildName' => EntrypointLookupInterface::DEFAULT_BUILD]);
+        $this->setArgumentsUnderTest($this->viewHelper, [
+            'entryName' => 'app',
+            'buildName' => EntrypointLookupInterface::DEFAULT_BUILD,
+        ]);
         $entrypointLookup = $this->getMockBuilder(EntrypointLookupInterface::class)->getMock();
-        $this->entrypointLookupCollection->expects(self::once())->method('getEntrypointLookup')->with(EntrypointLookupInterface::DEFAULT_BUILD)->willReturn($entrypointLookup);
+        $this->entrypointLookupCollection->expects(self::once())->method('getEntrypointLookup')->with(
+            EntrypointLookupInterface::DEFAULT_BUILD
+        )->willReturn($entrypointLookup);
         $entrypointLookup->expects(self::once())->method('getJavaScriptFiles')->with('app');
         $this->viewHelper->initializeArgumentsAndRender();
     }

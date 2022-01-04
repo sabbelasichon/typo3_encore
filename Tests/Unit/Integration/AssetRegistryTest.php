@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -14,9 +16,6 @@ use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Ssch\Typo3Encore\ValueObject\File;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\AssetRegistry
- */
 final class AssetRegistryTest extends UnitTestCase
 {
     protected AssetRegistry $subject;
@@ -24,14 +23,13 @@ final class AssetRegistryTest extends UnitTestCase
     protected function setUp(): void
     {
         $settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
-        $settingsService->method('getStringByPath')->with('preload.crossorigin')->willReturn('anonymus');
+        $settingsService->method('getStringByPath')
+            ->with('preload.crossorigin')
+            ->willReturn('anonymus');
         $this->subject = new AssetRegistry($settingsService);
     }
 
-    /**
-     * @test
-     */
-    public function registerFilesSuccessFully(): void
+    public function testRegisterFilesSuccessFully(): void
     {
         $this->subject->registerFile(new File('file1.css', 'style'));
         $this->subject->registerFile(new File('file2.css', 'style'));
@@ -41,6 +39,8 @@ final class AssetRegistryTest extends UnitTestCase
         self::assertCount(2, $registeredFiles['preload']['files']['style']);
         self::assertCount(1, $registeredFiles['preload']['files']['script']);
 
-        self::assertSame(['crossorigin' => 'anonymus'], $this->subject->getDefaultAttributes());
+        self::assertSame([
+            'crossorigin' => 'anonymus',
+        ], $this->subject->getDefaultAttributes());
     }
 }

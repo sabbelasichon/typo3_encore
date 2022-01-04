@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -16,9 +18,6 @@ use Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerHooks;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerHooks
- */
 final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
 {
     protected TypoScriptFrontendControllerHooks $subject;
@@ -40,17 +39,17 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->typoScriptFrontendController = $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock();
+        $this->typoScriptFrontendController = $this->getMockBuilder(
+            TypoScriptFrontendController::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
         $GLOBALS['TSFE'] = $this->typoScriptFrontendController;
         $this->subject = new TypoScriptFrontendControllerHooks($this->assetRegistry, $this->settingsService);
     }
 
-    /**
-     * @test
-     */
-    public function registryDoesNotContainFiles(): void
+    public function testRegistryDoesNotContainFiles(): void
     {
         $this->assetRegistry->expects(self::once())->method('getRegisteredFiles')->willReturn([]);
         $this->assetRegistry->expects(self::never())->method('getDefaultAttributes');
@@ -60,10 +59,7 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
         self::assertArrayNotHasKey('encore_asset_registry', $this->typoScriptFrontendController->config);
     }
 
-    /**
-     * @test
-     */
-    public function registryContainsFiles(): void
+    public function testRegistryContainsFiles(): void
     {
         $registeredFiles = [
             'preload' => [
@@ -81,7 +77,9 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
                 ],
             ],
         ];
-        $defaultAttributes = ['crossorigin' => true];
+        $defaultAttributes = [
+            'crossorigin' => true,
+        ];
         $settings = [
             'preload' => [
                 'enable' => true,
@@ -94,8 +92,14 @@ final class TypoScriptFrontendControllerHooksTest extends UnitTestCase
         $this->subject->contentPostProcAll([], $this->typoScriptFrontendController);
 
         self::assertArrayHasKey('encore_asset_registry', $this->typoScriptFrontendController->config);
-        self::assertSame($registeredFiles, $this->typoScriptFrontendController->config['encore_asset_registry']['registered_files']);
-        self::assertSame($defaultAttributes, $this->typoScriptFrontendController->config['encore_asset_registry']['default_attributes']);
+        self::assertSame(
+            $registeredFiles,
+            $this->typoScriptFrontendController->config['encore_asset_registry']['registered_files']
+        );
+        self::assertSame(
+            $defaultAttributes,
+            $this->typoScriptFrontendController->config['encore_asset_registry']['default_attributes']
+        );
         self::assertSame($settings, $this->typoScriptFrontendController->config['encore_asset_registry']['settings']);
     }
 }

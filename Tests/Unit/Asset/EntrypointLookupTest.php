@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -21,9 +23,6 @@ use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Asset\EntrypointLookup
- */
 final class EntrypointLookupTest extends UnitTestCase
 {
     /**
@@ -59,183 +58,191 @@ final class EntrypointLookupTest extends UnitTestCase
     {
         $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
-        $this->filesystem->method('createHash')->willReturn('foobarbaz');
+        $this->filesystem->method('createHash')
+            ->willReturn('foobarbaz');
         $this->cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)->getMock();
-        $this->cacheFactory->method('createInstance')->willReturn($this->cache);
-        $this->subject = new EntrypointLookup(__DIR__ . '/../Fixtures/entrypoints.json', self::CACHE_KEY_PREFIX, true, $this->jsonDecoder, $this->filesystem, $this->cacheFactory);
+        $this->cacheFactory->method('createInstance')
+            ->willReturn($this->cache);
+        $this->subject = new EntrypointLookup(
+            __DIR__ . '/../Fixtures/entrypoints.json',
+            self::CACHE_KEY_PREFIX,
+            true,
+            $this->jsonDecoder,
+            $this->filesystem,
+            $this->cacheFactory
+        );
         $this->cacheKey = sprintf('%s-%s-%s', self::CACHE_KEY_PREFIX, CacheFactory::CACHE_KEY, 'foobarbaz');
     }
 
-    /**
-     * @test
-     */
-    public function noSuchCacheExceptionIsThrown(): void
+    public function testNoSuchCacheExceptionIsThrown(): void
     {
         $cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
-        $cacheFactory->method('createInstance')->willThrowException(new NoSuchCacheException());
+        $cacheFactory->method('createInstance')
+            ->willThrowException(new NoSuchCacheException());
         $this->expectException(NoSuchCacheException::class);
         $subject = new EntrypointLookup('foo', 'bar', true, $this->jsonDecoder, $this->filesystem, $cacheFactory);
     }
 
-    /**
-     * @test
-     */
-    public function integrityDataReturnsEmptyArray(): void
+    public function testIntegrityDataReturnsEmptyArray(): void
     {
-        $this->filesystem->method('exists')->willReturn(true);
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []]]);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => [
+                    'app' => [],
+                ],
+            ]);
         self::assertEmpty($this->subject->getIntegrityData());
     }
 
-    /**
-     * @test
-     */
-    public function integrityDataReturnsCorrectValues(): void
+    public function testIntegrityDataReturnsCorrectValues(): void
     {
-        $integrity = ['/typo3conf/ext/typo3_encore/Resources/Public/runtime.js' => 'sha384-GRXz+AZB+AWfcuTJbK9EZ+Na2Qa53hmwUKqRNr19Sma1DV1sYa0W7k44N7Y11Whg'];
+        $integrity = [
+            '/typo3conf/ext/typo3_encore/Resources/Public/runtime.js' => 'sha384-GRXz+AZB+AWfcuTJbK9EZ+Na2Qa53hmwUKqRNr19Sma1DV1sYa0W7k44N7Y11Whg',
+        ];
 
-        $this->filesystem->method('exists')->willReturn(true);
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => ['app' => []], 'integrity' => $integrity]);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => [
+                    'app' => [],
+                ],
+                'integrity' =>
+                 $integrity,
+            ]);
         self::assertEquals($integrity, $this->subject->getIntegrityData());
     }
 
-    /**
-     * @test
-     */
-    public function getCssFiles(): void
+    public function testGetCssFiles(): void
     {
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
         $entrypoints = [
             'app' => [
-                'css' => [
-                    'file.css'
-                ]
+                'css' => ['file.css'],
             ],
         ];
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => $entrypoints,
+            ]);
         self::assertContains('file.css', $this->subject->getCssFiles('app'));
     }
 
-    /**
-     * @test
-     */
-    public function getFilesWithNonExistingType(): void
+    public function testGetFilesWithNonExistingType(): void
     {
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
         $entrypoints = [
             'app' => [
-                'foo' => [
-                    'file.css'
-                ]
+                'foo' => ['file.css'],
             ],
         ];
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => $entrypoints,
+            ]);
         self::assertEmpty($this->subject->getCssFiles('app'));
     }
 
-    /**
-     * @test
-     */
-    public function getFromCache(): void
+    public function testGetFromCache(): void
     {
         $this->filesystem->expects(self::never())->method('exists');
 
         $entrypoints = [
             'app' => [
-                'css' => [
-                    'file.css'
-                ]
+                'css' => ['file.css'],
             ],
         ];
 
-        $this->cache->method('has')->with($this->cacheKey)->willReturn(true);
-        $this->cache->method('get')->with($this->cacheKey)->willReturn(['entrypoints' => $entrypoints]);
+        $this->cache->method('has')
+            ->with($this->cacheKey)
+            ->willReturn(true);
+        $this->cache->method('get')
+            ->with($this->cacheKey)
+            ->willReturn([
+                'entrypoints' => $entrypoints,
+            ]);
 
         self::assertContains('file.css', $this->subject->getCssFiles('app'));
     }
 
-    /**
-     * @test
-     */
-    public function throwsExceptionIfJsonCannotBeParsed(): void
+    public function testThrowsExceptionIfJsonCannotBeParsed(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->filesystem->method('exists')->willReturn(true);
-        $this->jsonDecoder->method('decode')->willThrowException(new JsonDecodeException());
+        $this->filesystem->method('exists')
+            ->willReturn(true);
+        $this->jsonDecoder->method('decode')
+            ->willThrowException(new JsonDecodeException());
         $this->subject->getJavaScriptFiles('foo');
     }
 
-    /**
-     * @test
-     */
-    public function throwsExceptionOnEntryWithExtension(): void
+    public function testThrowsExceptionOnEntryWithExtension(): void
     {
         $this->expectException(EntrypointNotFoundException::class);
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
         $entrypoints = [
             'app' => [
-                'js' => [
-                    'file.js'
-                ]
+                'js' => ['file.js'],
             ],
         ];
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => $entrypoints,
+            ]);
         self::assertEmpty($this->subject->getJavaScriptFiles('app.js'));
     }
 
-    /**
-     * @test
-     */
-    public function throwsExceptionIfEntrypointsFileDoesNotExist(): void
+    public function testThrowsExceptionIfEntrypointsFileDoesNotExist(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->filesystem->method('exists')->willReturn(false);
+        $this->filesystem->method('exists')
+            ->willReturn(false);
         self::assertEmpty($this->subject->getJavaScriptFiles('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function throwsExceptionIfJsonCanNotBeRetrieved(): void
+    public function testThrowsExceptionIfJsonCanNotBeRetrieved(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
         self::assertEmpty($this->subject->getJavaScriptFiles('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function throwsExceptionOnMissingEntrypoint(): void
+    public function testThrowsExceptionOnMissingEntrypoint(): void
     {
         $this->expectException(EntrypointNotFoundException::class);
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
         $entrypoints = [
             'app' => [
-                'js' => [
-                    'file.js'
-                ]
+                'js' => ['file.js'],
             ],
         ];
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => $entrypoints,
+            ]);
         self::assertEmpty($this->subject->getJavaScriptFiles('doesnotexist'));
     }
 
-    /**
-     * @test
-     */
-    public function getJsFiles(): void
+    public function testGetJsFiles(): void
     {
-        $this->filesystem->method('exists')->willReturn(true);
+        $this->filesystem->method('exists')
+            ->willReturn(true);
         $entrypoints = [
             'app' => [
-                'js' => [
-                    'file.js'
-                ]
+                'js' => ['file.js'],
             ],
         ];
-        $this->jsonDecoder->method('decode')->willReturn(['entrypoints' => $entrypoints]);
+        $this->jsonDecoder->method('decode')
+            ->willReturn([
+                'entrypoints' => $entrypoints,
+            ]);
         self::assertContains('file.js', $this->subject->getJavaScriptFiles('app'));
     }
 }

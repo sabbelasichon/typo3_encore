@@ -34,7 +34,7 @@ final class AssetsMiddleware implements MiddlewareInterface
     /**
      * @var TypoScriptFrontendController
      */
-    protected $controller;
+    private $controller;
 
     private AssetRegistryInterface $assetRegistry;
 
@@ -56,22 +56,23 @@ final class AssetsMiddleware implements MiddlewareInterface
         }
 
         $registeredFiles = $this->collectRegisteredFiles();
-        if ($registeredFiles === []) {
+        if ([] === $registeredFiles) {
             return $response;
         }
 
-        if (null === $linkProvider = $request->getAttribute('_links')) {
+        $linkProvider = $request->getAttribute('_links');
+        if (null === $linkProvider) {
             $request = $request->withAttribute('_links', new GenericLinkProvider());
         }
 
         /** @var GenericLinkProvider $linkProvider */
         $linkProvider = $request->getAttribute('_links');
         $defaultAttributes = $this->collectDefaultAttributes();
-        $crossOrigin = $defaultAttributes['crossorigin'] ? (bool)$defaultAttributes['crossorigin'] : false;
+        $crossOrigin = $defaultAttributes['crossorigin'] ? (bool) $defaultAttributes['crossorigin'] : false;
 
         foreach ($registeredFiles as $rel => $relFiles) {
             // You can disable or enable one of the resource hints via typoscript simply by adding something like that preload.enable = 1, dns-prefetch.enable = 1
-            if ($this->getBooleanConfigByPath(sprintf('%s.enable', $rel)) === false) {
+            if (false === $this->getBooleanConfigByPath(sprintf('%s.enable', $rel))) {
                 continue;
             }
 
@@ -96,12 +97,12 @@ final class AssetsMiddleware implements MiddlewareInterface
         /** @var GenericLinkProvider $linkProvider */
         $linkProvider = $request->getAttribute('_links');
 
-        if ($linkProvider->getLinks() !== []) {
+        if ([] !== $linkProvider->getLinks()) {
             /** @var LinkInterface[] $links */
             $links = $linkProvider->getLinks();
             $serializedLinks = (new HttpHeaderSerializer())->serialize($links);
 
-            if (!is_string($serializedLinks)) {
+            if (! is_string($serializedLinks)) {
                 throw new UnexpectedValueException('Could not serialize the links');
             }
 
@@ -113,7 +114,11 @@ final class AssetsMiddleware implements MiddlewareInterface
 
     private function canAddCrossOriginAttribute(bool $crossOrigin, string $rel): bool
     {
-        return false !== $crossOrigin && '' !== (string)$crossOrigin && in_array($rel, self::$crossOriginAllowed, true);
+        return false !== $crossOrigin && '' !== (string) $crossOrigin && in_array(
+            $rel,
+            self::$crossOriginAllowed,
+            true
+        );
     }
 
     private function collectRegisteredFiles(): array
@@ -134,12 +139,12 @@ final class AssetsMiddleware implements MiddlewareInterface
 
     private function getBooleanConfigByPath(string $path): bool
     {
-        if ($this->settingsService->getSettings() !== []) {
+        if ([] !== $this->settingsService->getSettings()) {
             return $this->settingsService->getBooleanByPath($path);
         }
 
         $cachedSettings = $this->controller->config['encore_asset_registry']['settings'] ?? [];
 
-        return (bool)ObjectAccess::getPropertyPath($cachedSettings, $path);
+        return (bool) ObjectAccess::getPropertyPath($cachedSettings, $path);
     }
 }

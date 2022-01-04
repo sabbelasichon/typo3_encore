@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -15,9 +17,6 @@ use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
 use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
 
-/**
- * @covers \Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper
- */
 final class PreloadViewHelperTest extends ViewHelperBaseTestcase
 {
     use ProphecyTrait;
@@ -36,24 +35,31 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
         $this->viewHelper = new PreloadViewHelper($this->assetRegistry);
     }
 
-    /**
-     * @test
-     */
-    public function registerFileWithEmptyAttributes(): void
+    public function testRegisterFileWithEmptyAttributes(): void
     {
-        $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style']);
-        $this->assetRegistry->expects(self::once())->method('registerFile')->with(new File('file.css', 'style', [], 'preload'));
+        $this->setArgumentsUnderTest($this->viewHelper, [
+            'uri' => 'file.css',
+            'as' => 'style',
+        ]);
+        $this->assetRegistry->expects(self::once())->method('registerFile')->with(
+            new File('file.css', 'style', [], 'preload')
+        );
         $this->viewHelper->initializeArgumentsAndRender();
     }
 
-    /**
-     * @test
-     */
-    public function registerFileWithAdditionalAttributes(): void
+    public function testRegisterFileWithAdditionalAttributes(): void
     {
-        $attributes = ['type' => 'something'];
-        $this->setArgumentsUnderTest($this->viewHelper, ['uri' => 'file.css', 'as' => 'style', 'attributes' => $attributes]);
-        $this->assetRegistry->expects(self::once())->method('registerFile')->with(new File('file.css', 'style', $attributes, 'preload'));
+        $attributes = [
+            'type' => 'something',
+        ];
+        $this->setArgumentsUnderTest($this->viewHelper, [
+            'uri' => 'file.css',
+            'as' => 'style',
+            'attributes' => $attributes,
+        ]);
+        $this->assetRegistry->expects(self::once())->method('registerFile')->with(
+            new File('file.css', 'style', $attributes, 'preload')
+        );
         $this->viewHelper->initializeArgumentsAndRender();
     }
 }

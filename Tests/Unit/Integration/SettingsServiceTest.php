@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "typo3_encore" Extension for TYPO3 CMS.
  *
@@ -14,9 +16,6 @@ use Ssch\Typo3Encore\Integration\SettingsService;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @covers \Ssch\Typo3Encore\Integration\SettingsService
- */
 final class SettingsServiceTest extends UnitTestCase
 {
     protected SettingsService $subject;
@@ -32,45 +31,33 @@ final class SettingsServiceTest extends UnitTestCase
         $this->subject = new SettingsService($this->configurationManager);
     }
 
-    /**
-     * @test
-     */
-    public function getExistingSettingByPathReturnsCorrectValue(): void
+    public function testGetExistingSettingByPathReturnsCorrectValue(): void
     {
         $settings = [
             'entrypointJsonPath' => 'pathToFile',
             'manifestJsonPath' => 'pathToFile',
         ];
         $this->configurationManager->expects(self::once())
-                                   ->method('getConfiguration')
-                                   ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
-                                   ->willReturn($settings);
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
+            ->willReturn($settings);
 
         self::assertEquals($settings['entrypointJsonPath'], $this->subject->getStringByPath('entrypointJsonPath'));
     }
 
-    /**
-     * @test
-     */
-    public function getNonExistingSettingStringByPathReturnsString(): void
+    public function testGetNonExistingSettingStringByPathReturnsString(): void
     {
         $this->expectEmptySettingsAreReturned();
         self::assertIsString($this->subject->getStringByPath('entrypointJsonPath'));
     }
 
-    /**
-     * @test
-     */
-    public function getNonExistingSettingArrayByPathReturnsArray(): void
+    public function testGetNonExistingSettingArrayByPathReturnsArray(): void
     {
         $this->expectEmptySettingsAreReturned();
         self::assertIsArray($this->subject->getArrayByPath('entrypointJsonPath'));
     }
 
-    /**
-     * @test
-     */
-    public function getNonExistingSettingBooleanByPathReturnsBoolean(): void
+    public function testGetNonExistingSettingBooleanByPathReturnsBoolean(): void
     {
         $this->expectEmptySettingsAreReturned();
         self::assertIsBool($this->subject->getBooleanByPath('entrypointJsonPath'));
@@ -81,8 +68,8 @@ final class SettingsServiceTest extends UnitTestCase
         $settings = [];
 
         $this->configurationManager->expects(self::once())
-                                   ->method('getConfiguration')
-                                   ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
-                                   ->willReturn([]);
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
+            ->willReturn([]);
     }
 }

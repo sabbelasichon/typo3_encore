@@ -17,10 +17,10 @@ final class JsonDecoder implements JsonDecoderInterface
     {
         // In PHP 7.3 you can use JSON_THROW_ON_ERROR constant
         $array = json_decode($json, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new JsonDecodeException(json_last_error_msg());
         }
 
-        return (array)$array;
+        return (array) $array;
     }
 }

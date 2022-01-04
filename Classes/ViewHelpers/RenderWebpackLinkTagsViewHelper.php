@@ -29,7 +29,13 @@ final class RenderWebpackLinkTagsViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('entryName', 'string', 'The entry name', true);
         $this->registerArgument('media', 'string', 'Media type', false, 'all');
-        $this->registerArgument('buildName', 'string', 'The build name', false, EntrypointLookupInterface::DEFAULT_BUILD);
+        $this->registerArgument(
+            'buildName',
+            'string',
+            'The build name',
+            false,
+            EntrypointLookupInterface::DEFAULT_BUILD
+        );
         $this->registerArgument('parameters', 'array', 'Additional parameters for the PageRenderer', false, []);
         $this->registerArgument('registerFile', 'bool', 'Register file for HTTP/2 push functionality', false, true);
     }
