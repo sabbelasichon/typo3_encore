@@ -76,9 +76,6 @@
       ".Build/bin/parallel-lint ./Configuration/TCA/",
       ".Build/bin/parallel-lint ./Tests/"
     ],
-    "extension-create-libs": [
-      "@composer install -d Resources/Private/Php/Libraries"
-    ],
     "test-php-cs-fixer": [
       "php-cs-fixer fix -v --dry-run --using-cache false --diff --diff-format=udiff"
     ],

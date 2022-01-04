@@ -10,17 +10,23 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Set\ValueObject\SetList;
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
+use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+use TYPO3\CMS\Core\Utility\StringUtility;
+use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // get parameters
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
     $parameters->set(Option::PATHS, [
-        __DIR__ .'/Classes',
-        __DIR__ .'/Tests'
+        __DIR__.'/Classes',
+        __DIR__.'/Tests',
     ]);
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_70);
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_71);
@@ -39,4 +45,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveLastReturnRector::class);
     $services->set(TypedPropertyRector::class);
     $services->set(AddVoidReturnTypeWhereNoReturnRector::class);
+
+    $services->set(RenameClassRector::class)->call('configure', [
+            [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
+                    ViewHelperBaseTestcase::class => \Ssch\Typo3Encore\Tests\Unit\ViewHelpers\ViewHelperBaseTestcase::class,
+                ],
+            ],
+        ]
+    );
 };

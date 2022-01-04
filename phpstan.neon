@@ -2,8 +2,8 @@ parameters:
   editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   level: max
   paths:
-    - "Classes/"
-    - "Tests/"
+    - Classes
+    - Tests
 
   inferPrivatePropertyTypeFromConstructor: true
   checkMissingIterableValueType: false

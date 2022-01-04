@@ -14,7 +14,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\ViewHelpers\WebpackCssFilesViewHelper;
-use TYPO3\TestingFramework\Fluid\Unit\ViewHelpers\ViewHelperBaseTestcase;
 
 /**
  * @covers \Ssch\Typo3Encore\ViewHelpers\WebpackCssFilesViewHelper

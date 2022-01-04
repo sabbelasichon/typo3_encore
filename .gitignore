@@ -4,7 +4,6 @@
 /composer.lock
 /Resources/Public/Build
 /Resources/Private/Templates/Page.html
-/Resources/Private/Php/Libraries/vendor
 /phpunit.xml
 /var
 .phpunit.result.cache

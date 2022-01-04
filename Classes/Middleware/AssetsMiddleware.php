@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use UnexpectedValueException;
 
 final class AssetsMiddleware implements MiddlewareInterface
 {
@@ -101,7 +102,7 @@ final class AssetsMiddleware implements MiddlewareInterface
             $serializedLinks = (new HttpHeaderSerializer())->serialize($links);
 
             if (!is_string($serializedLinks)) {
-                throw new \UnexpectedValueException('Could not serialize the links');
+                throw new UnexpectedValueException('Could not serialize the links');
             }
 
             $response = $response->withHeader('Link', $serializedLinks);

@@ -18,7 +18,3 @@ call_user_func(static function ($packageKey) {
     // Add collected assets to page cache
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][$packageKey] =  \Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerHooks::class . '->contentPostProcAll';
 }, 'typo3_encore');
-
-if (!\TYPO3\CMS\Core\Core\Environment::isComposerMode()) {
-    require \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('typo3_encore') . '/Resources/Private/Php/Libraries/vendor/autoload.php';
-}
