@@ -42,7 +42,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
     }
 
     /**
-     * @return array|EntrypointLookupInterface[]
+     * @return EntrypointLookupInterface[]
      */
     public function getCollection(): array
     {
