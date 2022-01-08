@@ -37,21 +37,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // get services (needed for register a single rule)
     $services = $containerConfigurator->services();
-
-    // register a single rule
-    $services->set(RemoveUselessParamTagRector::class);
-    $services->set(RemoveUselessReturnTagRector::class);
-    $services->set(RemoveNonExistingVarAnnotationRector::class);
-    $services->set(RemoveLastReturnRector::class);
-    $services->set(TypedPropertyRector::class);
-    $services->set(AddVoidReturnTypeWhereNoReturnRector::class);
-
-    $services->set(RenameClassRector::class)->call('configure', [
-            [
-                RenameClassRector::OLD_TO_NEW_CLASSES => [
-                    ViewHelperBaseTestcase::class => \Ssch\Typo3Encore\Tests\Unit\ViewHelpers\ViewHelperBaseTestcase::class,
-                ],
-            ],
-        ]
-    );
 };
