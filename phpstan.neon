@@ -8,5 +8,3 @@ parameters:
   inferPrivatePropertyTypeFromConstructor: true
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
-includes:
-    - phpstan-baseline.neon

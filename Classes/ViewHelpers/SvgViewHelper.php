@@ -94,11 +94,17 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
         }
 
         $name = (string) $this->arguments['name'];
-        if ((bool) $this->arguments['inline']) {
+        if ($this->arguments['inline']) {
             $doc = new DOMDocument();
             $doc->loadXML($image->getContents());
             $xpath = new DOMXPath($doc);
-            $icon = $xpath->query("//*[@id='{$name}']")
+            $iconNodeList = $xpath->query("//*[@id='{$name}']");
+
+            if (! $iconNodeList instanceof \DOMNodeList) {
+                throw new \UnexpectedValueException('Could not query for iconNodeList');
+            }
+
+            $icon = $iconNodeList
                 ->item(0);
 
             if (null !== $icon) {

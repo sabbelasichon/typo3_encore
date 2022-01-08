@@ -14,6 +14,7 @@ namespace Ssch\Typo3Encore\Tests\Unit\Integration;
 use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoder;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use UnexpectedValueException;
 
 final class JsonDecoderTest extends UnitTestCase
 {
@@ -32,11 +33,17 @@ final class JsonDecoderTest extends UnitTestCase
 
     public function testDecodeSuccessfully(): void
     {
+        $jsonFile = file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json');
+
+        if (false === $jsonFile) {
+            throw new UnexpectedValueException('Could not open json file');
+        }
+
         self::assertEquals([
             'homepage' => [
                 'js' => ['file.js'],
                 'css' => ['file.css'],
             ],
-        ], $this->subject->decode(file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json')));
+        ], $this->subject->decode($jsonFile));
     }
 }
