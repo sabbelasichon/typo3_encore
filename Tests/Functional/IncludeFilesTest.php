@@ -99,7 +99,7 @@ final class IncludeFilesTest extends FunctionalTestCase
 
     protected function setUpSites(int $pageId, array $sites): void
     {
-        if (empty($sites[$pageId])) {
+        if (!isset($sites[$pageId])) {
             $sites[$pageId] = 'EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/site.yaml';
         }
 

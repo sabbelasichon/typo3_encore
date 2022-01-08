@@ -55,18 +55,4 @@ final class EntrypointLookupCollectionTest extends UnitTestCase
         $this->expectException(UndefinedBuildException::class);
         $this->subject->getEntrypointLookup('nonexisting');
     }
-
-    /**
-     * @testdox Get defined EntryPointLookup instance successfully
-     */
-    public function testGetEntrypointLookup(): void
-    {
-        self::assertInstanceOf(EntrypointLookupInterface::class, $this->subject->getEntrypointLookup('existing'));
-    }
-
-    public function testGetEntrypointLookupWithDefinedDefaultBuild(): void
-    {
-        $subject = new EntrypointLookupCollection($this->entryLookupFactory, 'existing');
-        self::assertInstanceOf(EntrypointLookupInterface::class, $subject->getEntrypointLookup());
-    }
 }

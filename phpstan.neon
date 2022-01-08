@@ -1,3 +1,5 @@
+includes:
+    - phpstan-baseline.neon
 parameters:
   editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   level: max

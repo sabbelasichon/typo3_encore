@@ -58,11 +58,11 @@ final class ControllerViewHelper extends AbstractViewHelper
         $controllers = [];
         $values = [];
 
-        foreach ($data as $controllerName => $controllerValues) {
+        foreach ($data as $controllerName => $controllerValue) {
             $controllerName = $this->normalizeControllerName($controllerName);
             $controllers[] = $controllerName;
 
-            foreach ($controllerValues as $key => $value) {
+            foreach ($controllerValue as $key => $value) {
                 if (null === $value) {
                     continue;
                 }

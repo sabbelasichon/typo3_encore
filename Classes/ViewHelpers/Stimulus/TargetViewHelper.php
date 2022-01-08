@@ -58,10 +58,10 @@ final class TargetViewHelper extends AbstractViewHelper
 
         $targets = [];
 
-        foreach ($data as $controllerName => $targetNames) {
+        foreach ($data as $controllerName => $targetName) {
             $controllerName = $this->normalizeControllerName($controllerName);
 
-            $targets['data-' . $controllerName . '-target'] = $targetNames;
+            $targets['data-' . $controllerName . '-target'] = $targetName;
         }
 
         return implode(' ', array_map(static function (string $attribute, string $value): string {

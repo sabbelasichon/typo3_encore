@@ -1,0 +1,67 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Anonymous function should have native return typehint \"bool\"\\.$#"
+			count: 1
+			path: Classes/Asset/TagRenderer.php
+
+		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 4
+			path: Classes/Asset/TagRenderer.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, \\(int\\|string\\) given\\.$#"
+			count: 2
+			path: Classes/Asset/TagRenderer.php
+
+		-
+			message: "#^Variable method call on TYPO3\\\\CMS\\\\Core\\\\Page\\\\PageRenderer\\.$#"
+			count: 2
+			path: Classes/Asset/TagRenderer.php
+
+		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 2
+			path: Classes/Integration/PageRendererHooks.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, array given\\.$#"
+			count: 1
+			path: Classes/Integration/TypoScriptFrontendControllerHooks.php
+
+		-
+			message: "#^Strict comparison using \\!\\=\\= between '' and '1' will always evaluate to true\\.$#"
+			count: 1
+			path: Classes/Middleware/AssetsMiddleware.php
+
+		-
+			message: "#^Variable method call on Prophecy\\\\Prophecy\\\\ObjectProphecy\\<TYPO3\\\\CMS\\\\Core\\\\Page\\\\PageRenderer\\>\\.$#"
+			count: 1
+			path: Tests/Unit/Asset/TagRendererTest.php
+
+		-
+			message: "#^Call to function is_string\\(\\) with string will always evaluate to true\\.$#"
+			count: 1
+			path: Tests/Unit/Integration/IdGeneratorTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsArray\\(\\) with array will always evaluate to true\\.$#"
+			count: 1
+			path: Tests/Unit/Integration/SettingsServiceTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsBool\\(\\) with bool will always evaluate to true\\.$#"
+			count: 1
+			path: Tests/Unit/Integration/SettingsServiceTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsString\\(\\) with string will always evaluate to true\\.$#"
+			count: 1
+			path: Tests/Unit/Integration/SettingsServiceTest.php
+
+		-
+			message: "#^Call to function method_exists\\(\\) with 'TYPO3\\\\\\\\CMS\\\\\\\\Fluid\\\\\\\\Core\\\\\\\\Rendering\\\\\\\\RenderingContext' and 'setRequest' will always evaluate to true\\.$#"
+			count: 1
+			path: Tests/Unit/ViewHelpers/ViewHelperBaseTestcase.php
+

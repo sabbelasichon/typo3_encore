@@ -84,11 +84,11 @@ final class ActionViewHelper extends AbstractViewHelper
                     $controllerAction = [$controllerAction];
                 }
 
-                foreach ($controllerAction as $eventName => $actionName) {
-                    $action = $controllerName . '#' . $actionName;
+                foreach ($controllerAction as $internalEventName => $internalActionName) {
+                    $action = $controllerName . '#' . $internalActionName;
 
-                    if (\is_string($eventName)) {
-                        $action = $eventName . '->' . $action;
+                    if (\is_string($internalEventName)) {
+                        $action = $internalEventName . '->' . $action;
                     }
 
                     $actions[] = $action;
