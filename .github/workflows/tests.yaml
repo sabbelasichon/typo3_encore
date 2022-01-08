@@ -1,0 +1,54 @@
+name: Tests
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-master"
+
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        strategy:
+            max-parallel: 2
+            matrix:
+                php-versions: [ 7.4, 8.1 ]
+                typo3-versions:
+                    - { typo3: 10, testing: 6 }
+                    - { typo3: 11, testing: 6 }
+
+        name: "Run tests with PHP ${{ matrix.php-versions }}
+                  using TYPO3 ${{ matrix.typo3-versions.typo3 }}
+                  with testing framework version ${{ matrix.typo3-versions.testing }}"
+        steps:
+            -   uses: actions/checkout@v2.4.0
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "${{ matrix.php-versions }}"
+                    extensions: intl, mbstring, pdo_sqlite, pdo_mysql
+                    coverage: none
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Start MySQL
+              run: sudo /etc/init.d/mysql start
+
+            # see https://github.com/ramsey/composer-install
+            -   uses: "ramsey/composer-install@v1"
+
+            - name: "Run Unit tests"
+              run: composer test-unit
+
+            - name: "Functional tests"
+              if: ${{ matrix.typo3-versions.typo3 == '10' }}
+              run: |
+                export typo3DatabaseName="typo3";
+                export typo3DatabaseHost="127.0.0.1";
+                export typo3DatabaseUsername="root";
+                export typo3DatabasePassword="root";
+                composer test-functional
