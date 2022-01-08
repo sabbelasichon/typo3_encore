@@ -11,14 +11,12 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
+use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 final class EntryLookupFactory implements EntryLookupFactoryInterface
 {
     private SettingsServiceInterface $settingsService;
-
-    private ObjectManagerInterface $objectManager;
 
     private FilesystemInterface $filesystem;
 
@@ -27,14 +25,20 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     private static ?array $collection = null;
 
+    private JsonDecoderInterface $jsonDecoder;
+
+    private CacheFactory $cacheFactory;
+
     public function __construct(
         SettingsServiceInterface $settingsService,
-        ObjectManagerInterface $objectManager,
-        FilesystemInterface $filesystem
+        FilesystemInterface $filesystem,
+        JsonDecoderInterface $jsonDecoder,
+        CacheFactory $cacheFactory
     ) {
         $this->settingsService = $settingsService;
-        $this->objectManager = $objectManager;
         $this->filesystem = $filesystem;
+        $this->jsonDecoder = $jsonDecoder;
+        $this->cacheFactory = $cacheFactory;
     }
 
     /**
@@ -52,7 +56,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
 
         $builds = [];
 
-        if (! empty($buildConfigurations)) {
+        if (count($buildConfigurations) > 0) {
             foreach ($buildConfigurations as $buildConfigurationKey => $buildConfiguration) {
                 $entrypointsPath = sprintf('%s/entrypoints.json', $buildConfiguration);
                 $builds[$buildConfigurationKey] = $this->createEntrypointLookUp(
@@ -77,11 +81,13 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
         string $cacheKeyPrefix,
         bool $strictMode
     ): EntrypointLookupInterface {
-        return $this->objectManager->get(
-            EntrypointLookupInterface::class,
+        return new EntrypointLookup(
             $entrypointJsonPath,
             $cacheKeyPrefix,
-            $strictMode
+            $strictMode,
+            $this->jsonDecoder,
+            $this->filesystem,
+            $this->cacheFactory
         );
     }
 }
