@@ -54,7 +54,7 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
     protected $request;
 
     /**
-     * @var RenderingContext
+     * @var RenderingContext|ObjectProphecy
      */
     protected $renderingContext;
 
