@@ -104,6 +104,23 @@ If you want to add additional files to the AssetRegistry you can use the Preload
 Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file.
 So you can also leverage the versioning feature provided by Webpack.
 
+### Static assets
+
+Sometimes you might need to reference static assets (like image files) directly in your fluid templates. You can use the Encore `copyFiles` function to instruct Webpack to copy static assets to your output folder (see https://symfony.com/doc/current/frontend/encore/copy-files.html#referencing-image-files-from-a-template).
+
+To reference a static asset file from a fluid template, you can then use the AssetViewHelper to get the file path (including the hash if versioning is enabled).
+
+Note that the AssetViewHelper does not render anything but just returns the path to the file, so you will probably use inline notation to, e.g., display an image:
+
+```
+{namespace encore = Ssch\Typo3Encore\ViewHelpers}
+
+
+<img class="my-image" src="{encore:asset(pathToFile: 'EXT:my_extension/Resources/Public/Build/images/my_image.jpg')}" alt="My image" />
+```
+
+This way of using the AssetViewHelper is similar to the `asset` function used in Twig templates with Symfony.
+
 ## Additional
 
 1. If you are in production mode and set enableVersioning(true) then you should set the option
