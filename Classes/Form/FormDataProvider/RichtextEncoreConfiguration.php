@@ -60,6 +60,9 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
 
             $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($buildName);
             $contentsCss = $entryPointLookup->getCssFiles($entryName);
+            // call reset() to allow multiple RTEs on the same page.
+            // Otherwise only the first RTE will have the CSS.
+            $entryPointLookup->reset();
             $result['processedTca']['columns'][$fieldName]['config']['richtextConfiguration']['editor']['config']['contentsCss'] = $contentsCss;
         }
 
