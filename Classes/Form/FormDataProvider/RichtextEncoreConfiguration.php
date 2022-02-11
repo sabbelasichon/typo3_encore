@@ -46,24 +46,42 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
                 continue;
             }
             $contentsCss = $rteConfiguration['editor']['config']['contentsCss'];
-            if (! str_starts_with($contentsCss, 'typo3_encore:')) {
-                continue;
-            }
 
-            // strip prefix
-            $contentsCss = substr($contentsCss, strlen('typo3_encore:'));
-            [$buildName, $entryName] = GeneralUtility::trimExplode(':', $contentsCss, true, 2);
-            if ('' !== $entryName) {
-                $entryName = $buildName;
+            // https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-contentsCss
+            // contentCss could be an array or string. We only work with arrays
+            $contentsCss = (array)$contentsCss;
+
+            $updatedContentCss = [];
+            foreach ($contentsCss as $cssFile) {
+                if (! str_starts_with($cssFile, 'typo3_encore:')) {
+                    // keep the css file as-is
+                    $updatedContentCss[] = $cssFile;
+                    continue;
+                }
+
+                // strip prefix
+                $cssFile = substr($cssFile, strlen('typo3_encore:'));
+                $buildAndEntryName = GeneralUtility::trimExplode(':', $cssFile, true, 2);
                 $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
-            }
 
-            $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($buildName);
-            $contentsCss = $entryPointLookup->getCssFiles($entryName);
-            // call reset() to allow multiple RTEs on the same page.
-            // Otherwise only the first RTE will have the CSS.
-            $entryPointLookup->reset();
-            $result['processedTca']['columns'][$fieldName]['config']['richtextConfiguration']['editor']['config']['contentsCss'] = $contentsCss;
+                if (2 === count($buildAndEntryName)) {
+                    [$buildName, $entryName] = $buildAndEntryName;
+                } else {
+                    $entryName = $buildAndEntryName[0];
+                }
+                if ('' !== $entryName) {
+                    $entryName = $buildName;
+                    $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
+                }
+
+                $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($buildName);
+                $cssFiles = $entryPointLookup->getCssFiles($entryName);
+                $updatedContentCss = array_merge($updatedContentCss, $cssFiles);
+                // call reset() to allow multiple RTEs on the same page.
+                // Otherwise only the first RTE will have the CSS.
+                $entryPointLookup->reset();
+            }
+            $result['processedTca']['columns'][$fieldName]['config']['richtextConfiguration']['editor']['config']['contentsCss'] = $updatedContentCss;
         }
 
         return $result;
