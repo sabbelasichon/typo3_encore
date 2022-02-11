@@ -11,10 +11,10 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Tests\Unit\Form\FormDataProvider;
 
-use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
+use Prophecy\Prophecy\ObjectProphecy;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
+use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
 use Ssch\Typo3Encore\Form\FormDataProvider\RichtextEncoreConfiguration;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -82,11 +82,24 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
             [['typo3_encore:entryPoint'], ['file.css'], true],
             [['typo3_encore:_default:entryPoint'], ['file.css'], true],
 
-            ['EXT:rte_ckeditor/Resources/Public/Css/contents.css', ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'], false],
-            [['EXT:rte_ckeditor/Resources/Public/Css/contents.css'], ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'], false],
+            [
+                'EXT:rte_ckeditor/Resources/Public/Css/contents.css',
+                ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+                false,
+            ],
+            [['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+                ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+                false,
+            ],
 
-            [['typo3_encore:entryPoint', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'], ['file.css', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'], true],
-            [['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'typo3_encore:entryPoint'], ['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'file.css'], true],
+            [['typo3_encore:entryPoint', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+                ['file.css', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+                true,
+            ],
+            [['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'typo3_encore:entryPoint'],
+                ['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'file.css'],
+                true,
+            ],
         ];
     }
 

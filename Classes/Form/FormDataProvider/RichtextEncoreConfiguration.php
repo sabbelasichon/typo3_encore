@@ -49,7 +49,7 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
 
             // https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-contentsCss
             // contentCss could be an array or string. We only work with arrays
-            $contentsCss = (array)$contentsCss;
+            $contentsCss = (array) $contentsCss;
 
             $updatedContentCss = [];
             foreach ($contentsCss as $cssFile) {
