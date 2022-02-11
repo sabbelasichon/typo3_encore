@@ -68,7 +68,7 @@ final class ControllerViewHelper extends AbstractViewHelper
                 }
 
                 if (! is_scalar($value)) {
-                    $value = json_encode($value);
+                    $value = json_encode($value, JSON_THROW_ON_ERROR);
                 }
 
                 if (\is_bool($value)) {

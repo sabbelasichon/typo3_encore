@@ -60,7 +60,7 @@ final class TagRenderer implements TagRendererInterface
         $isLibrary = $scriptTag->isLibrary();
 
         /** @var PageRenderer $pageRenderer */
-        $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
+        $pageRenderer ??= GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
 
         $integrityHashes = ($entryPointLookup instanceof IntegrityDataProviderInterface) ? $entryPointLookup->getIntegrityData() : [];
@@ -83,9 +83,7 @@ final class TagRenderer implements TagRendererInterface
         }
 
         // We do not want to replace null values in $attributes
-        $parameters = array_filter($parameters, static function ($param) {
-            return null !== $param;
-        });
+        $parameters = array_filter($parameters, static fn ($param) => null !== $param);
 
         foreach ($files as $index => $file) {
             $this->addAdditionalAbsRefPrefixDirectories($file);
@@ -142,7 +140,7 @@ final class TagRenderer implements TagRendererInterface
         $registerFile = $linkTag->isRegisterFile();
 
         /** @var PageRenderer $pageRenderer */
-        $pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
+        $pageRenderer ??= GeneralUtility::makeInstance(PageRenderer::class);
         $entryPointLookup = $this->getEntrypointLookup($buildName);
         $files = $entryPointLookup->getCssFiles($entryName);
 

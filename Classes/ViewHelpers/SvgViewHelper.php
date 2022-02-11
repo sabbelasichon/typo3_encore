@@ -13,10 +13,12 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use UnexpectedValueException;
 
 /**
  * @final
@@ -100,8 +102,8 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             $xpath = new DOMXPath($doc);
             $iconNodeList = $xpath->query("//*[@id='{$name}']");
 
-            if (! $iconNodeList instanceof \DOMNodeList) {
-                throw new \UnexpectedValueException('Could not query for iconNodeList');
+            if (! $iconNodeList instanceof DOMNodeList) {
+                throw new UnexpectedValueException('Could not query for iconNodeList');
             }
 
             $icon = $iconNodeList

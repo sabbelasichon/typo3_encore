@@ -64,8 +64,13 @@ final class TargetViewHelper extends AbstractViewHelper
             $targets['data-' . $controllerName . '-target'] = $targetName;
         }
 
-        return implode(' ', array_map(static function (string $attribute, string $value): string {
-            return $attribute . '="' . $value . '"';
-        }, array_keys($targets), $targets));
+        return implode(
+            ' ',
+            array_map(
+                static fn (string $attribute, string $value): string => $attribute . '="' . $value . '"',
+                array_keys($targets),
+                $targets
+            )
+        );
     }
 }

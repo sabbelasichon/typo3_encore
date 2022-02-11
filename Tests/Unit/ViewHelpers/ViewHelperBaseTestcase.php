@@ -36,10 +36,7 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
      */
     protected $templateVariableContainer;
 
-    /**
-     * @var ObjectProphecy|ControllerContext
-     */
-    protected $controllerContext;
+    protected ObjectProphecy $controllerContext;
 
     /**
      * @var TagBuilder|ObjectProphecy
@@ -48,15 +45,9 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
 
     protected array $arguments;
 
-    /**
-     * @var Request|ObjectProphecy
-     */
-    protected $request;
+    protected ObjectProphecy $request;
 
-    /**
-     * @var RenderingContext|ObjectProphecy
-     */
-    protected $renderingContext;
+    protected ObjectProphecy $renderingContext;
 
     protected function setUp(): void
     {
