@@ -44,32 +44,4 @@ final class SettingsServiceTest extends UnitTestCase
 
         self::assertEquals($settings['entrypointJsonPath'], $this->subject->getStringByPath('entrypointJsonPath'));
     }
-
-    public function testGetNonExistingSettingStringByPathReturnsString(): void
-    {
-        $this->expectEmptySettingsAreReturned();
-        self::assertIsString($this->subject->getStringByPath('entrypointJsonPath'));
-    }
-
-    public function testGetNonExistingSettingArrayByPathReturnsArray(): void
-    {
-        $this->expectEmptySettingsAreReturned();
-        self::assertIsArray($this->subject->getArrayByPath('entrypointJsonPath'));
-    }
-
-    public function testGetNonExistingSettingBooleanByPathReturnsBoolean(): void
-    {
-        $this->expectEmptySettingsAreReturned();
-        self::assertIsBool($this->subject->getBooleanByPath('entrypointJsonPath'));
-    }
-
-    private function expectEmptySettingsAreReturned(): void
-    {
-        $settings = [];
-
-        $this->configurationManager->expects(self::once())
-            ->method('getConfiguration')
-            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Typo3Encore')
-            ->willReturn([]);
-    }
 }

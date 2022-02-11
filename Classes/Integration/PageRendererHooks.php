@@ -41,7 +41,7 @@ final class PageRendererHooks
     {
         // At this point, TYPO3 provides all javascript includes in only 'Files' or 'Libs'
         foreach (TagRendererInterface::ALLOWED_JS_POSITIONS as $includeType) {
-            if (empty($params[$includeType])) {
+            if (! isset($params[$includeType])) {
                 continue;
             }
 
@@ -74,7 +74,7 @@ final class PageRendererHooks
 
         // Add CSS-Files by entryNames
         foreach (TagRendererInterface::ALLOWED_CSS_POSITIONS as $includeType) {
-            if (empty($params[$includeType])) {
+            if (! isset($params[$includeType])) {
                 continue;
             }
 

@@ -33,7 +33,8 @@ final class TypoScriptFrontendControllerHooks
 
     public function contentPostProcAll(array $params, TypoScriptFrontendController $tsfe): void
     {
-        if (! $this->assetRegistry->getRegisteredFiles()) {
+        $registeredFiles = $this->assetRegistry->getRegisteredFiles();
+        if ([] === $registeredFiles) {
             return;
         }
 

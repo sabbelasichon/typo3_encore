@@ -11,8 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Tests\Unit\Form\FormDataProvider;
 
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use Iterator;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Asset\IntegrityDataProviderInterface;
@@ -21,35 +20,110 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class RichtextEncoreConfigurationTest extends UnitTestCase
 {
-    use ProphecyTrait;
-
     protected RichtextEncoreConfiguration $subject;
-
-    /**
-     * @var ObjectProphecy|EntrypointLookupCollectionInterface
-     */
-    protected ObjectProphecy $entryLookupCollection;
 
     protected function setUp(): void
     {
-        $this->entryLookupCollection = $this->prophesize(EntrypointLookupCollectionInterface::class);
-        $this->subject = new RichtextEncoreConfiguration($this->entryLookupCollection->reveal());
+        $this->subject = new RichtextEncoreConfiguration($this->createEntrypointLookUpCollection());
     }
 
     /**
-     * @dataProvider rteConfiguration
+     * @dataProvider provideRteConfigurationWithEncoreFiles
+     * @dataProvider provideRteConfigurationWithoutEncoreFiles
+     *
      * @param string|string[] $contentsCss
      */
-    public function testRichtextConfiguration($contentsCss, array $expected, bool $containsEntrypoint): void
+    public function testFormConfiguration($contentsCss, array $expected): void
     {
-        if ($containsEntrypoint) {
-            $this->entryLookupCollection->getEntrypointLookup(
-                EntrypointLookupInterface::DEFAULT_BUILD
-            )->shouldBeCalledOnce()
-                ->willReturn($this->createEntrypointLookUpClass());
-        }
+        $data = $this->createFormData($contentsCss);
 
-        $data = [
+        $data = $this->subject->addData($data);
+        $valueAfterProcessing = $data['processedTca']['columns']['testColumn']['config']['richtextConfiguration']['editor']['config']['contentsCss'];
+        self::assertEquals($expected, $valueAfterProcessing);
+    }
+
+    public function provideRteConfigurationWithoutEncoreFiles(): Iterator
+    {
+        yield [
+            'contentCss' => 'EXT:rte_ckeditor/Resources/Public/Css/contents.css',
+            'expected' => ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+        ];
+        yield [
+            'contentCss' => ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+            'expected' => ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+        ];
+    }
+
+    public function provideRteConfigurationWithEncoreFiles(): Iterator
+    {
+        yield [
+            'contentCss' => 'typo3_encore:entryPoint',
+            'expected' => ['file.css'],
+        ];
+
+        yield [
+            'contentCss' => 'typo3_encore:_default:entryPoint',
+            'expected' => ['file.css'],
+        ];
+
+        yield [
+            'contentCss' => ['typo3_encore:entryPoint'],
+            'expected' => ['file.css'],
+        ];
+
+        yield [
+            'contentCss' => ['typo3_encore:_default:entryPoint'],
+            'expected' => ['file.css'],
+        ];
+
+        yield [
+            'contentCss' => ['typo3_encore:entryPoint', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+            'expected' => ['file.css', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
+        ];
+
+        yield [
+            'contentCss' => ['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'typo3_encore:entryPoint'],
+            'expected' => ['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'file.css'],
+        ];
+    }
+
+    private function createEntrypointLookUpCollection(): EntrypointLookupCollectionInterface
+    {
+        return new class() implements EntrypointLookupCollectionInterface {
+            public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface
+            {
+                return new class() implements EntrypointLookupInterface, IntegrityDataProviderInterface {
+                    public function getJavaScriptFiles(string $entryName): array
+                    {
+                        return ['file.js'];
+                    }
+
+                    public function getCssFiles(string $entryName): array
+                    {
+                        return ['file.css'];
+                    }
+
+                    public function reset(): void
+                    {
+                    }
+
+                    public function getIntegrityData(): array
+                    {
+                        return [
+                            'file.js' => 'foobarbaz',
+                        ];
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * @param string|string[] $contentsCss
+     */
+    private function createFormData($contentsCss): array
+    {
+        return [
             'processedTca' => [
                 'columns' => [
                     'testColumn' => [
@@ -68,91 +142,5 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
                 ],
             ],
         ];
-
-        $data = $this->subject->addData($data);
-        $valueAfterProcessing = $data['processedTca']['columns']['testColumn']['config']['richtextConfiguration']['editor']['config']['contentsCss'];
-        self::assertEquals($expected, $valueAfterProcessing);
-    }
-
-    public function rteConfiguration(): array
-    {
-        return [
-            ['typo3_encore:entryPoint', ['file.css'], true],
-            ['typo3_encore:_default:entryPoint', ['file.css'], true],
-            [['typo3_encore:entryPoint'], ['file.css'], true],
-            [['typo3_encore:_default:entryPoint'], ['file.css'], true],
-
-            [
-                'EXT:rte_ckeditor/Resources/Public/Css/contents.css',
-                ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
-                false,
-            ],
-            [['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
-                ['EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
-                false,
-            ],
-
-            [['typo3_encore:entryPoint', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
-                ['file.css', 'EXT:rte_ckeditor/Resources/Public/Css/contents.css'],
-                true,
-            ],
-            [['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'typo3_encore:entryPoint'],
-                ['EXT:rte_ckeditor/Resources/Public/Css/contents.css', 'file.css'],
-                true,
-            ],
-        ];
-    }
-
-    private function createEntrypointLookUpClass(): EntrypointLookupInterface
-    {
-        return new class() implements EntrypointLookupInterface, IntegrityDataProviderInterface {
-            public function getJavaScriptFiles(string $entryName): array
-            {
-                return ['file.js'];
-            }
-
-            public function getCssFiles(string $entryName): array
-            {
-                return ['file.css'];
-            }
-
-            public function reset(): void
-            {
-            }
-
-            public function getIntegrityData(): array
-            {
-                return [
-                    'file.js' => 'foobarbaz',
-                ];
-            }
-        };
-    }
-
-    private function createEntrypointLookUpClassWithMultipleEntries(): EntrypointLookupInterface
-    {
-        return new class() implements EntrypointLookupInterface, IntegrityDataProviderInterface {
-            public function getJavaScriptFiles(string $entryName): array
-            {
-                return ['file1.js', 'file2.js'];
-            }
-
-            public function getCssFiles(string $entryName): array
-            {
-                return ['file1.css', 'file2.css'];
-            }
-
-            public function reset(): void
-            {
-            }
-
-            public function getIntegrityData(): array
-            {
-                return [
-                    'file1.js' => 'foobarbaz1',
-                    'file2.js' => 'foobarbaz2',
-                ];
-            }
-        };
     }
 }
