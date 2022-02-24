@@ -69,10 +69,6 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
                 } else {
                     $entryName = $buildAndEntryName[0];
                 }
-                if ('' !== $entryName) {
-                    $entryName = $buildName;
-                    $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
-                }
 
                 $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($buildName);
                 $cssFiles = $entryPointLookup->getCssFiles($entryName);
