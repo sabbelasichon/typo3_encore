@@ -25,7 +25,7 @@ jobs:
                   using TYPO3 ${{ matrix.typo3-versions.typo3 }}
                   with testing framework version ${{ matrix.typo3-versions.testing }}"
         steps:
-            -   uses: actions/checkout@v2.4.0
+            -   uses: actions/checkout@v3
 
             -   uses: shivammathur/setup-php@v2
                 with:
