@@ -211,7 +211,7 @@ final class TagRenderer implements TagRendererInterface
                 true
             );
 
-            $newDir = basename(dirname($file));
+            $newDir = basename(dirname($file)) . '/';
 
             if (false === in_array($newDir, $directories, true)) {
                 $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'] .= ',' . $newDir;
