@@ -91,7 +91,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             );
         }
 
-        if (count($ariaLabelledBy) > 0) {
+        if ((is_countable($ariaLabelledBy) ? count($ariaLabelledBy) : 0) > 0) {
             $this->tag->addAttribute('aria-labelledby', implode(' ', $ariaLabelledBy));
         }
 

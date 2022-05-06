@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Tests\Unit\Form\FormDataProvider;
 
+use Exception;
 use Iterator;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
@@ -92,7 +93,7 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
             public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface
             {
                 if ('_default' !== $buildName) {
-                    throw new \Exception('Invalid buildName in test case', 1645708934);
+                    throw new Exception('Invalid buildName in test case', 1_645_708_934);
                 }
                 return new class() implements EntrypointLookupInterface, IntegrityDataProviderInterface {
                     public function getJavaScriptFiles(string $entryName): array
