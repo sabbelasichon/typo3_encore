@@ -15,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
+use Ssch\Typo3Encore\ValueObject\FileType;
 use Ssch\Typo3Encore\ViewHelpers\PreloadViewHelper;
 
 final class PreloadViewHelperTest extends ViewHelperBaseTestcase
@@ -42,7 +43,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
             'as' => 'style',
         ]);
         $this->assetRegistry->expects(self::once())->method('registerFile')->with(
-            new File('file.css', 'style', [], 'preload')
+            new File('file.css', FileType::createStyle(), [], 'preload')
         );
         $this->viewHelper->initializeArgumentsAndRender();
     }
@@ -58,7 +59,7 @@ final class PreloadViewHelperTest extends ViewHelperBaseTestcase
             'attributes' => $attributes,
         ]);
         $this->assetRegistry->expects(self::once())->method('registerFile')->with(
-            new File('file.css', 'style', $attributes, 'preload')
+            new File('file.css', FileType::createStyle(), $attributes, 'preload')
         );
         $this->viewHelper->initializeArgumentsAndRender();
     }

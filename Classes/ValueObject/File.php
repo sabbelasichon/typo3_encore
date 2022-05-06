@@ -15,18 +15,18 @@ final class File
 {
     private string $file;
 
-    private string $type;
-
     private array $attributes;
 
     private string $rel;
 
-    public function __construct(string $file, string $type, array $attributes = [], string $rel = 'preload')
+    private FileType $fileType;
+
+    public function __construct(string $file, FileType $fileType, array $attributes = [], string $rel = 'preload')
     {
         $this->file = $file;
-        $this->type = $type;
         $this->attributes = $attributes;
         $this->rel = $rel;
+        $this->fileType = $fileType;
     }
 
     public function getFile(): string
@@ -36,7 +36,7 @@ final class File
 
     public function getType(): string
     {
-        return $this->type;
+        return $this->fileType->getType();
     }
 
     public function getAttributes(): array

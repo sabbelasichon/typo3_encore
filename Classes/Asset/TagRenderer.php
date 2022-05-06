@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
+use Ssch\Typo3Encore\ValueObject\FileType;
 use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Http\ApplicationType;
@@ -51,20 +52,14 @@ final class TagRenderer implements TagRendererInterface
 
     public function renderWebpackScriptTags(ScriptTag $scriptTag): void
     {
-        $entryName = $scriptTag->getEntryName();
-        $position = $scriptTag->getPosition();
-        $buildName = $scriptTag->getBuildName();
-        $pageRenderer = $scriptTag->getPageRenderer();
         $parameters = $scriptTag->getParameters();
-        $registerFile = $scriptTag->isRegisterFile();
-        $isLibrary = $scriptTag->isLibrary();
 
         /** @var PageRenderer $pageRenderer */
-        $pageRenderer ??= GeneralUtility::makeInstance(PageRenderer::class);
-        $entryPointLookup = $this->getEntrypointLookup($buildName);
+        $pageRenderer = $scriptTag->getPageRenderer() ?? GeneralUtility::makeInstance(PageRenderer::class);
+        $entryPointLookup = $this->getEntrypointLookup($scriptTag->getBuildName());
 
         $integrityHashes = ($entryPointLookup instanceof IntegrityDataProviderInterface) ? $entryPointLookup->getIntegrityData() : [];
-        $files = $entryPointLookup->getJavaScriptFiles($entryName);
+        $files = $entryPointLookup->getJavaScriptFiles($scriptTag->getEntryName());
 
         unset($parameters['file']);
 
@@ -113,9 +108,9 @@ final class TagRenderer implements TagRendererInterface
 
             $attributes = array_values($attributes);
 
-            $pageRendererMethodName = 'addJS' . (self::POSITION_FOOTER === $position ? 'Footer' : '');
+            $pageRendererMethodName = 'addJS' . (self::POSITION_FOOTER === $scriptTag->getPosition() ? 'Footer' : '');
 
-            if ($isLibrary) {
+            if ($scriptTag->isLibrary()) {
                 $pageRendererMethodName .= 'Library';
                 $filename = basename($file);
                 $pageRenderer->{$pageRendererMethodName}($filename, ...$attributes);
@@ -124,25 +119,20 @@ final class TagRenderer implements TagRendererInterface
                 $pageRenderer->{$pageRendererMethodName}(...$attributes);
             }
 
-            if (true === $registerFile) {
-                $this->assetRegistry->registerFile(new File($file, 'script'));
+            if (true === $scriptTag->isRegisterFile()) {
+                $this->assetRegistry->registerFile(new File($file, FileType::createScript()));
             }
         }
     }
 
     public function renderWebpackLinkTags(LinkTag $linkTag): void
     {
-        $entryName = $linkTag->getEntryName();
-        $media = $linkTag->getMedia();
-        $buildName = $linkTag->getBuildName();
-        $pageRenderer = $linkTag->getPageRenderer();
         $parameters = $linkTag->getParameters();
-        $registerFile = $linkTag->isRegisterFile();
 
         /** @var PageRenderer $pageRenderer */
-        $pageRenderer ??= GeneralUtility::makeInstance(PageRenderer::class);
-        $entryPointLookup = $this->getEntrypointLookup($buildName);
-        $files = $entryPointLookup->getCssFiles($entryName);
+        $pageRenderer = $linkTag->getPageRenderer() ?? GeneralUtility::makeInstance(PageRenderer::class);
+        $entryPointLookup = $this->getEntrypointLookup($linkTag->getBuildName());
+        $files = $entryPointLookup->getCssFiles($linkTag->getEntryName());
 
         unset($parameters['file']);
 
@@ -175,7 +165,7 @@ final class TagRenderer implements TagRendererInterface
             $attributes = array_replace([
                 'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
                 'rel' => 'stylesheet',
-                'media' => $media,
+                'media' => $linkTag->getMedia(),
                 'title' => '',
                 'compress' => false,
                 'forceOnTop' => false,
@@ -189,8 +179,8 @@ final class TagRenderer implements TagRendererInterface
 
             $pageRenderer->addCssFile(...$attributes);
 
-            if (true === $registerFile) {
-                $this->assetRegistry->registerFile(new File($file, 'style'));
+            if (true === $linkTag->isRegisterFile()) {
+                $this->assetRegistry->registerFile(new File($file, FileType::createStyle()));
             }
         }
     }
@@ -238,7 +228,6 @@ final class TagRenderer implements TagRendererInterface
         }
 
         if ('/' === $this->getTypoScriptFrontendController()->absRefPrefix) {
-            //avoid double //
             return true;
         }
 
