@@ -15,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
+use Ssch\Typo3Encore\ValueObject\FileType;
 use Ssch\Typo3Encore\ViewHelpers\DnsPrefetchViewHelper;
 
 final class DnsPrefetchViewHelperTest extends ViewHelperBaseTestcase
@@ -42,7 +43,7 @@ final class DnsPrefetchViewHelperTest extends ViewHelperBaseTestcase
             'as' => 'style',
         ]);
         $this->assetRegistry->expects(self::once())->method('registerFile')->with(
-            new File('file.css', 'style', [], 'dns-prefetch')
+            new File('file.css', FileType::createStyle(), [], 'dns-prefetch')
         );
         $this->viewHelper->initializeArgumentsAndRender();
     }
@@ -58,7 +59,7 @@ final class DnsPrefetchViewHelperTest extends ViewHelperBaseTestcase
             'attributes' => $attributes,
         ]);
         $this->assetRegistry->expects(self::once())->method('registerFile')->with(
-            new File('file.css', 'style', $attributes, 'dns-prefetch')
+            new File('file.css', FileType::createStyle(), $attributes, 'dns-prefetch')
         );
         $this->viewHelper->initializeArgumentsAndRender();
     }

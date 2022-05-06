@@ -15,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
+use Ssch\Typo3Encore\ValueObject\FileType;
 use Ssch\Typo3Encore\ViewHelpers\PreconnectViewHelper;
 
 final class PreconnectViewHelperTest extends ViewHelperBaseTestcase
@@ -42,7 +43,7 @@ final class PreconnectViewHelperTest extends ViewHelperBaseTestcase
             'as' => 'style',
         ]);
         $this->assetRegistry->expects(self::once())->method('registerFile')->with(
-            new File('file.css', 'style', [], 'preconnect')
+            new File('file.css', FileType::createStyle(), [], 'preconnect')
         );
         $this->viewHelper->initializeArgumentsAndRender();
     }
@@ -58,7 +59,7 @@ final class PreconnectViewHelperTest extends ViewHelperBaseTestcase
             'attributes' => $attributes,
         ]);
         $this->assetRegistry->expects(self::once())->method('registerFile')->with(
-            new File('file.css', 'style', $attributes, 'preconnect')
+            new File('file.css', FileType::createStyle(), $attributes, 'preconnect')
         );
         $this->viewHelper->initializeArgumentsAndRender();
     }

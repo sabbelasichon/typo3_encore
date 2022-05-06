@@ -13,6 +13,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\ValueObject\File;
+use Ssch\Typo3Encore\ValueObject\FileType;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class PreloadViewHelper extends AbstractViewHelper
@@ -40,7 +41,9 @@ final class PreloadViewHelper extends AbstractViewHelper
     public function render(): void
     {
         $attributes = $this->arguments['attributes'] ?? [];
-        $file = new File($this->arguments['uri'], $this->arguments['as'], $attributes, 'preload');
+        $file = new File($this->arguments['uri'], FileType::createFromString(
+            $this->arguments['as']
+        ), $attributes, 'preload');
         $this->assetRegistry->registerFile($file);
     }
 }

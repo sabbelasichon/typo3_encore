@@ -24,7 +24,8 @@
     "symfony/web-link": "^5.4",
     "symfony/asset": "^5.0",
     "ext-dom": "*",
-    "typo3/cms-tstemplate": "^10.4.2 || ^11.2"
+    "typo3/cms-tstemplate": "^10.4.2 || ^11.2",
+    "webmozart/assert": "^1.10"
   },
   "require-dev": {
     "phpstan/phpstan": "^0.12",
