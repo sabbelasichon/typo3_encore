@@ -280,6 +280,39 @@ Encore
 module.exports = Encore.getWebpackConfig();
 ```
 
+### Working with typo3/cms-composer-installers 4+
+
+The `typo3/cms-composer-installers` library takes care of moving TYPO3-specific assets in the right place
+in Composer-based installations, like copying extensions to `typo3conf/ext`. Starting with version 4.0
+(currently at RC1 stage), the extensions will remain in `vendor/vendor_name`. The `Resources/Public`
+directory of each extension is symlinked from the `public/assets` directory using hashes. While it is
+possible to target the symlink, the fact that it is a hash makes it a bit flaky.
+
+The recommendation is to use another build directory, not located inside an extension.
+As an example, asuming that you use `public/build`, the configuration in `webpack.config.js`
+would be modified as follows:
+
+```javascript
+var Encore = require('@symfony/webpack-encore');
+
+Encore
+    .setOutputPath('../../public/build')
+    .setPublicPath('/build')
+    ...
+```
+
+The TypoScript constants have to be modified accordingly:
+
+```typo3_typoscript
+plugin.tx_typo3encore {
+    settings {
+        # These paths are relative to the web root (public) directory
+        entrypointJsonPath = build/entrypoints.json
+        manifestJsonPath = build/manifest.json
+    }
+}
+```
+
 ### The realm of Webpack plugins
 Encore already ships with a lot of useful plugins for the daily work.
 But someday you are gonna get to the point where you need more.
