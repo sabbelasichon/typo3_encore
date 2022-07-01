@@ -41,7 +41,7 @@
     "symplify/phpstan-rules": "9.3.26",
     "phpstan/extension-installer": "^1.1",
     "saschaegerer/phpstan-typo3": "^0.13.3",
-    "symplify/easy-coding-standard": "^10.0",
+    "symplify/easy-coding-standard": "^11.0",
     "phpstan/phpstan-strict-rules": "^0.12",
     "typo3/cms-rte-ckeditor": "^10.4 || ^11.5"
   },
