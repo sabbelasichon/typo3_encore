@@ -90,15 +90,14 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
     {
         $this->validateEntryName($entryName);
         $entriesData = $this->getEntriesData();
-        $entryData = $entriesData['entrypoints'][$entryName];
 
-        if (! isset($entryData[$key])) {
+        if (! isset($entriesData['entrypoints'][$entryName][$key])) {
             // If we don't find the file type then just send back nothing.
             return [];
         }
 
         // make sure to not return the same file multiple times
-        $entryFiles = $entryData[$key];
+        $entryFiles = $entriesData['entrypoints'][$entryName][$key];
         $newFiles = array_values(array_diff($entryFiles, $this->returnedFiles));
         $this->returnedFiles = array_merge($this->returnedFiles, $newFiles);
 
