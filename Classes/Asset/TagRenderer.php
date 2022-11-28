@@ -231,6 +231,10 @@ final class TagRenderer implements TagRendererInterface
             return true;
         }
 
+        if (str_starts_with($file, $this->getTypoScriptFrontendController()->absRefPrefix)) {
+            return false;
+        }
+
         return ! GeneralUtility::isValidUrl($file);
     }
 
