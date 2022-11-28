@@ -18,7 +18,6 @@ use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use TYPO3Fluid\Fluid\Core\Variables\StandardVariableProvider;
-use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
@@ -38,11 +37,6 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
 
     protected ObjectProphecy $controllerContext;
 
-    /**
-     * @var TagBuilder|ObjectProphecy
-     */
-    protected $tagBuilder;
-
     protected array $arguments;
 
     protected ObjectProphecy $request;
@@ -51,6 +45,7 @@ abstract class ViewHelperBaseTestcase extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->viewHelperVariableContainer = $this->prophesize(ViewHelperVariableContainer::class);
         $this->templateVariableContainer = $this->createMock(StandardVariableProvider::class);
         $this->request = $this->prophesize(Request::class);

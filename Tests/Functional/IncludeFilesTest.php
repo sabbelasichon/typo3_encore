@@ -25,7 +25,7 @@ final class IncludeFilesTest extends FunctionalTestCase
     private const ROOT_PAGE_UID = 1;
 
     /**
-     * @var array
+     * @var non-empty-string[]
      */
     protected $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 

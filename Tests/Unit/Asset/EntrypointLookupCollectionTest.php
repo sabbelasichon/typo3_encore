@@ -35,6 +35,7 @@ final class EntrypointLookupCollectionTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->entryLookupFactory = $this->getMockBuilder(EntryLookupFactoryInterface::class)->getMock();
         $buildEntrypoints = [
             'existing' => $this->getMockBuilder(EntrypointLookupInterface::class)->getMock(),

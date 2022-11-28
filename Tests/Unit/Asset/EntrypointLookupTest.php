@@ -56,6 +56,7 @@ final class EntrypointLookupTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
         $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
         $this->filesystem->method('createHash')

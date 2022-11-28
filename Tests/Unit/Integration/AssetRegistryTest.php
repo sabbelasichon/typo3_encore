@@ -23,6 +23,7 @@ final class AssetRegistryTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $settingsService->method('getStringByPath')
             ->with('preload.crossorigin')
