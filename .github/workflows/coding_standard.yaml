@@ -32,7 +32,7 @@ jobs:
 
             -   run: composer fix-style
 
-            -   uses: stefanzweifel/git-auto-commit-action@v4.15.3
+            -   uses: stefanzweifel/git-auto-commit-action@v4.15.4
                 with:
                     commit_message: Apply coding standard changes
                     branch: "master"
