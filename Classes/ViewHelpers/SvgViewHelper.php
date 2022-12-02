@@ -16,6 +16,7 @@ use DOMElement;
 use DOMNodeList;
 use DOMXPath;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use UnexpectedValueException;
@@ -62,6 +63,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     {
         $image = $this->imageService->getImage($this->arguments['src'], null, false);
         $imageUri = $this->imageService->getImageUri($image, (bool) $this->arguments['absolute']);
+        $imageUri = GeneralUtility::createVersionNumberedFilename($imageUri);
 
         $content = [];
         $uniqueId = 'unique';
