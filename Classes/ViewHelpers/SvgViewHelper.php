@@ -48,11 +48,6 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerTagAttribute('class', 'string', 'CSS class(es) for this element');
-        $this->registerTagAttribute(
-            'dir',
-            'string',
-            'Text direction for this HTML element. Allowed strings: "ltr" (left to right), "rtl" (right to left)'
-        );
         $this->registerTagAttribute('id', 'string', 'Unique (in this file) identifier for this HTML element.');
         $this->registerTagAttribute(
             'lang',
