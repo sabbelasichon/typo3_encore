@@ -41,6 +41,7 @@ final class PageRendererHooksTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->tagRenderer = $this->getMockBuilder(TagRendererInterface::class)->getMock();
         $this->pageRenderer = $this->getMockBuilder(PageRenderer::class)->getMock();
         $this->subject = new PageRendererHooks($this->tagRenderer);

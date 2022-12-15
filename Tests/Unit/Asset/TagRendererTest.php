@@ -47,6 +47,7 @@ final class TagRendererTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->pageRenderer = $this->prophesize(PageRenderer::class);
         $this->entryLookupCollection = $this->prophesize(EntrypointLookupCollectionInterface::class);
         $this->assetRegistry = $this->prophesize(AssetRegistryInterface::class);

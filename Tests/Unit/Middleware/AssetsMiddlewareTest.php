@@ -45,6 +45,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->typoScriptFrontendController = $this->getMockBuilder(
             TypoScriptFrontendController::class
         )->disableOriginalConstructor()

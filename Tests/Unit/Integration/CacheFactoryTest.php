@@ -29,6 +29,7 @@ final class CacheFactoryTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->cacheManager = $this->getMockBuilder(CacheManager::class)->disableOriginalConstructor()->getMock();
         $this->subject = new CacheFactory($this->cacheManager);
     }

@@ -27,6 +27,7 @@ final class SettingsServiceTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->configurationManager = $this->createMock(ConfigurationManagerInterface::class);
         $this->subject = new SettingsService($this->configurationManager);
     }

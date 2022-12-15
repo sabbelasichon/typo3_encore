@@ -23,6 +23,7 @@ final class FilesystemTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->subject = new Filesystem();
         $this->fixtureFile = __DIR__ . '/../Fixtures/testfile.txt';
     }
