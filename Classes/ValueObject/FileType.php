@@ -25,11 +25,15 @@ final class FileType
      */
     private const SCRIPT = 'script';
 
+    /**
+     * @var string
+     */
+    private const FONT = 'font';
     private string $type;
 
     private function __construct(string $type)
     {
-        Assert::inArray($type, [self::STYLE, self::SCRIPT]);
+        Assert::inArray($type, [self::STYLE, self::SCRIPT, self::FONT]);
 
         $this->type = $type;
     }
@@ -47,16 +51,6 @@ final class FileType
     public static function createFromString(string $type): self
     {
         return new self($type);
-    }
-
-    public function isStyleSheet(): bool
-    {
-        return self::STYLE === $this->type;
-    }
-
-    public function isScript(): bool
-    {
-        return self::SCRIPT === $this->type;
     }
 
     public function getType(): string
