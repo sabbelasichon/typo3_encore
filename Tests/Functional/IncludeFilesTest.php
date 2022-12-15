@@ -29,6 +29,9 @@ final class IncludeFilesTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAddFiles(): void
     {
         $this->setUpFrontendRootPage(
@@ -48,6 +51,9 @@ final class IncludeFilesTest extends FunctionalTestCase
         );
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAddFilesWithAbsRefPrefix(): void
     {
         $this->setUpFrontendRootPage(
@@ -72,6 +78,9 @@ final class IncludeFilesTest extends FunctionalTestCase
         );
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAddFilesWithHtml5DocType(): void
     {
         $this->setUpFrontendRootPage(
