@@ -9,27 +9,27 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers\Stimulus;
+namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Ssch\Typo3Encore\Tests\Unit\ViewHelpers\ViewHelperBaseTestcase;
-use Ssch\Typo3Encore\ViewHelpers\Stimulus\ActionViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class ActionViewHelperTest extends ViewHelperBaseTestcase
+final class ActionViewHelperTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
-    protected ActionViewHelper $actionViewHelper;
+    protected StandaloneView $view;
 
     protected function setUp(): void
     {
+        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
+        $this->initializeDatabase = false;
         parent::setUp();
-        $this->actionViewHelper = new ActionViewHelper();
+        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
     }
 
     /**
-     * @param mixed $dataOrControllerName
+     * @param array|string $dataOrControllerName
      * @dataProvider provideRenderStimulusAction
      */
     public function testRenderData(
@@ -38,12 +38,18 @@ final class ActionViewHelperTest extends ViewHelperBaseTestcase
         ?string $eventName,
         string $expected
     ): void {
-        $this->setArgumentsUnderTest($this->actionViewHelper, [
+        $this->view->assignMultiple([
             'dataOrControllerName' => $dataOrControllerName,
             'actionName' => $actionName,
             'eventName' => $eventName,
         ]);
-        self::assertSame($expected, $this->actionViewHelper->initializeArgumentsAndRender());
+        $this->view->getRenderingContext()
+            ->getViewHelperResolver()
+            ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
+        $this->view->setTemplateSource(
+            '{encore:stimulus.action(actionName: actionName, eventName: eventName, dataOrControllerName: dataOrControllerName)}'
+        );
+        self::assertSame($expected, $this->view->render());
     }
 
     public function provideRenderStimulusAction(): Generator

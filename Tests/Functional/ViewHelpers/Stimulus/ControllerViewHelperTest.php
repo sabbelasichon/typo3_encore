@@ -9,23 +9,23 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Ssch\Typo3Encore\Tests\Unit\ViewHelpers\Stimulus;
+namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Ssch\Typo3Encore\Tests\Unit\ViewHelpers\ViewHelperBaseTestcase;
-use Ssch\Typo3Encore\ViewHelpers\Stimulus\ControllerViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class ControllerViewHelperTest extends ViewHelperBaseTestcase
+final class ControllerViewHelperTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
-    protected ControllerViewHelper $controllerViewHelper;
+    protected StandaloneView $view;
 
     protected function setUp(): void
     {
+        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
+        $this->initializeDatabase = false;
         parent::setUp();
-        $this->controllerViewHelper = new ControllerViewHelper();
+        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
     }
 
     /**
@@ -34,11 +34,17 @@ final class ControllerViewHelperTest extends ViewHelperBaseTestcase
      */
     public function testRenderData($dataOrControllerName, array $controllerValues, string $expected): void
     {
-        $this->setArgumentsUnderTest($this->controllerViewHelper, [
+        $this->view->assignMultiple([
             'dataOrControllerName' => $dataOrControllerName,
             'controllerValues' => $controllerValues,
         ]);
-        self::assertSame($expected, $this->controllerViewHelper->initializeArgumentsAndRender());
+        $this->view->getRenderingContext()
+            ->getViewHelperResolver()
+            ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
+        $this->view->setTemplateSource(
+            '{encore:stimulus.controller(dataOrControllerName: dataOrControllerName, controllerValues: controllerValues)}'
+        );
+        self::assertSame($expected, $this->view->render());
     }
 
     public function provideRenderStimulusController(): Generator

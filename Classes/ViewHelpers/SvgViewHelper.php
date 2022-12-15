@@ -47,12 +47,29 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerUniversalTagAttributes();
+        $this->registerTagAttribute('class', 'string', 'CSS class(es) for this element');
+        $this->registerTagAttribute(
+            'dir',
+            'string',
+            'Text direction for this HTML element. Allowed strings: "ltr" (left to right), "rtl" (right to left)'
+        );
+        $this->registerTagAttribute('id', 'string', 'Unique (in this file) identifier for this HTML element.');
+        $this->registerTagAttribute(
+            'lang',
+            'string',
+            'Language for this element. Use short names specified in RFC 1766'
+        );
+        $this->registerTagAttribute('style', 'string', 'Individual CSS styles for this element');
+        $this->registerTagAttribute('accesskey', 'string', 'Keyboard shortcut to access this element');
+        $this->registerTagAttribute('tabindex', 'integer', 'Specifies the tab order of this element');
+        $this->registerTagAttribute('onclick', 'string', 'JavaScript evaluated for the onclick event');
+
+        $this->registerArgument('title', 'string', 'Title', false);
+        $this->registerArgument('description', 'string', 'Description', false);
         $this->registerArgument('src', 'string', 'Path to the svg file', true);
         $this->registerArgument('role', 'string', 'Role', false, 'img');
         $this->registerArgument('name', 'string', 'The icon name of the sprite', true);
         $this->registerArgument('inline', 'string', 'Inline icon instead of referencing it', false, false);
-        $this->registerTagAttribute('description', 'string', 'Description text of element');
         $this->registerArgument('width', 'string', 'Width of the image.');
         $this->registerArgument('height', 'string', 'Height of the image.');
         $this->registerArgument('absolute', 'bool', 'Force absolute URL', false, false);
@@ -114,6 +131,9 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
                     $this->tag->addAttribute('viewBox', $icon->getAttribute('viewBox'));
                 }
                 foreach ($icon->childNodes as $node) {
+                    if (null === $node->ownerDocument) {
+                        continue;
+                    }
                     $content[] = $node->ownerDocument->saveXML($node);
                 }
             }

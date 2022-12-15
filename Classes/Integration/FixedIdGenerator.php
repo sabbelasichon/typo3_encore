@@ -11,10 +11,17 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
-final class IdGenerator implements IdGeneratorInterface
+final class FixedIdGenerator implements IdGeneratorInterface
 {
+    private string $id;
+
+    public function __construct(string $id)
+    {
+        $this->id = $id;
+    }
+
     public function generate(): string
     {
-        return uniqid('id');
+        return $this->id;
     }
 }

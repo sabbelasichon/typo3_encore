@@ -38,7 +38,8 @@ final class WebpackCssFilesViewHelper extends AbstractViewHelper
 
     public function render(): array
     {
-        $entryPointLookup = $this->entrypointLookupCollection->getEntrypointLookup($this->arguments['buildName']);
-        return $entryPointLookup->getCssFiles($this->arguments['entryName']);
+        return $this->entrypointLookupCollection->getEntrypointLookup($this->arguments['buildName'])->getCssFiles(
+            $this->arguments['entryName']
+        );
     }
 }

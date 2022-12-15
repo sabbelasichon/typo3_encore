@@ -29,12 +29,13 @@
   },
   "require-dev": {
     "phpstan/phpstan": "^1.0",
-    "typo3/testing-framework": "^6.2",
+    "typo3/testing-framework": "^6.2 || dev-main",
     "typo3/minimal": "^10.4 || ^11.5 || ^12.0",
     "php-parallel-lint/php-parallel-lint": "^1.3",
     "phpspec/prophecy-phpunit": "^2.0",
     "rector/rector": "^0.14.8",
     "phpstan/phpstan-webmozart-assert": "^1.2.2",
+    "sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": "^0.0.1",
     "phpstan/phpstan-phpunit": "^1.0",
     "jangregor/phpstan-prophecy": "^1.0",
     "phpstan/extension-installer": "^1.1",
@@ -68,12 +69,14 @@
     "allow-plugins": {
       "phpstan/extension-installer": true,
       "typo3/class-alias-loader": true,
-      "typo3/cms-composer-installers": true
+      "typo3/cms-composer-installers": true,
+      "sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": true
     }
   },
   "scripts": {
     "post-autoload-dump": [
-      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+      "mkdir -p .Build/public/typo3conf/ext/",
+      "[ -L .Build/public/typo3conf/ext/typo3_encore ] || ln -snvf ../../../../. .Build/public/typo3conf/ext/typo3_encore"
     ],
     "analyze": "phpstan --memory-limit=-1",
     "test-php-lint": [
@@ -99,7 +102,8 @@
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",
-      "web-dir": ".Build"
+      "web-dir": ".Build",
+      "app-dir": ".Build"
     }
   }
 }
