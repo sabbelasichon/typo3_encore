@@ -16,14 +16,13 @@ jobs:
         strategy:
             max-parallel: 2
             matrix:
-                php-versions: [ 7.4, 8.1 ]
+                php-versions: [8.1]
                 typo3-versions:
-                    - { typo3: 10, testing: 6 }
-                    - { typo3: 11, testing: 6 }
+                    - { typo3: 10 }
+                    - { typo3: 11 }
+                    - { typo3: 12 }
 
-        name: "Run tests with PHP ${{ matrix.php-versions }}
-                  using TYPO3 ${{ matrix.typo3-versions.typo3 }}
-                  with testing framework version ${{ matrix.typo3-versions.testing }}"
+        name: "Run tests with PHP ${{ matrix.php-versions }} using TYPO3 ${{ matrix.typo3-versions.typo3 }}"
         steps:
             -   uses: actions/checkout@v3
 
@@ -45,7 +44,6 @@ jobs:
               run: composer test-unit
 
             - name: "Functional tests"
-              if: ${{ matrix.typo3-versions.typo3 == '10' }}
               run: |
                 export typo3DatabaseName="typo3";
                 export typo3DatabaseHost="127.0.0.1";
