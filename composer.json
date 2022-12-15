@@ -20,11 +20,11 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.4",
-    "typo3/cms-core": "^10.4.2 || ^11.5",
-    "symfony/web-link": "^5.4",
-    "symfony/asset": "^5.0",
+    "typo3/cms-core": "^10.4.2 || ^11.5 || ^12",
+    "symfony/web-link": "^5.4 || ^6",
+    "symfony/asset": "^5.0 || ^6",
     "ext-dom": "*",
-    "typo3/cms-tstemplate": "^10.4.2 || ^11.2",
+    "typo3/cms-tstemplate": "^10.4.2 || ^11.2 || ^12",
     "webmozart/assert": "^1.10"
   },
   "require-dev": {
