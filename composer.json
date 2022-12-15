@@ -72,9 +72,6 @@
     }
   },
   "scripts": {
-    "post-autoload-dump": [
-      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-    ],
     "analyze": "phpstan --memory-limit=-1",
     "test-php-lint": [
       ".Build/bin/parallel-lint ./Classes/",
