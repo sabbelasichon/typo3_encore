@@ -14,21 +14,19 @@ jobs:
     tests:
         runs-on: ubuntu-latest
         strategy:
-            max-parallel: 2
             matrix:
-                php-versions: [8.1]
-                typo3-versions:
-                    - { typo3: 10 }
-                    - { typo3: 11 }
-                    - { typo3: 12 }
+                typo3-php-versions:
+                    - { typo3: 10, php: 7.4 }
+                    - { typo3: 11, php: 7.4 }
+                    - { typo3: 12, php: 8.1 }
 
-        name: "Run tests with PHP ${{ matrix.php-versions }} using TYPO3 ${{ matrix.typo3-versions.typo3 }}"
+        name: "Run tests with PHP ${{ matrix.typo3-php-versions.php }} using TYPO3 ${{ matrix.typo3-php-versions.typo3 }}"
         steps:
             -   uses: actions/checkout@v3
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: "${{ matrix.php-versions }}"
+                    php-version: "${{ matrix.typo3-php-versions.php }}"
                     extensions: intl, mbstring, pdo_sqlite, pdo_mysql
                     coverage: none
                 env:
