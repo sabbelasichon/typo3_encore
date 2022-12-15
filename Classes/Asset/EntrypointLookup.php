@@ -12,11 +12,9 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Asset;
 
 use InvalidArgumentException;
-use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
 final class EntrypointLookup implements EntrypointLookupInterface, IntegrityDataProviderInterface
 {
@@ -30,30 +28,17 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
 
     private FilesystemInterface $filesystem;
 
-    private ?FrontendInterface $cache;
-
-    private string $cacheKey;
-
     private bool $strictMode;
 
     public function __construct(
         string $entrypointJsonPath,
-        string $cacheKeyPrefix,
         bool $strictMode,
         JsonDecoderInterface $jsonDecoder,
-        FilesystemInterface $filesystem,
-        CacheFactory $cacheFactory
+        FilesystemInterface $filesystem
     ) {
         $this->entrypointJsonPath = $filesystem->getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
-        $this->cache = $cacheFactory->createInstance();
-        $this->cacheKey = sprintf(
-            '%s-%s-%s',
-            $cacheKeyPrefix,
-            CacheFactory::CACHE_KEY,
-            $filesystem->createHash($this->entrypointJsonPath)
-        );
         $this->strictMode = $strictMode;
     }
 
@@ -133,10 +118,6 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
             return $this->entriesData;
         }
 
-        if (null !== $this->cache && $this->cache->has($this->cacheKey)) {
-            return $this->cache->get($this->cacheKey);
-        }
-
         if (! $this->filesystem->exists($this->entrypointJsonPath)) {
             throw new InvalidArgumentException(sprintf(
                 'Could not find the entrypoints file from Webpack: the file "%s" does not exist.',
@@ -158,10 +139,6 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
                 'Could not find an "entrypoints" key in the "%s" file',
                 $this->entrypointJsonPath
             ));
-        }
-
-        if (null !== $this->cache) {
-            $this->cache->set($this->cacheKey, $this->entriesData);
         }
 
         return $this->entriesData;
