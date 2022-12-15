@@ -13,7 +13,6 @@ namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
 final class EntryLookupFactory implements EntryLookupFactoryInterface
 {
@@ -28,18 +27,14 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
 
     private JsonDecoderInterface $jsonDecoder;
 
-    private ?FrontendInterface $cache;
-
     public function __construct(
         SettingsServiceInterface $settingsService,
         FilesystemInterface $filesystem,
-        JsonDecoderInterface $jsonDecoder,
-        ?FrontendInterface $cache = null
+        JsonDecoderInterface $jsonDecoder
     ) {
         $this->settingsService = $settingsService;
         $this->filesystem = $filesystem;
         $this->jsonDecoder = $jsonDecoder;
-        $this->cache = $cache;
     }
 
     /**
@@ -60,16 +55,12 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
         if (count($buildConfigurations) > 0) {
             foreach ($buildConfigurations as $buildConfigurationKey => $buildConfiguration) {
                 $entrypointsPath = sprintf('%s/entrypoints.json', $buildConfiguration);
-                $builds[$buildConfigurationKey] = $this->createEntrypointLookUp(
-                    $entrypointsPath,
-                    $buildConfigurationKey,
-                    $strictMode
-                );
+                $builds[$buildConfigurationKey] = $this->createEntrypointLookUp($entrypointsPath, $strictMode);
             }
         }
 
         if ($this->filesystem->exists($this->filesystem->getFileAbsFileName($entrypointsPathDefaultBuild))) {
-            $builds['_default'] = $this->createEntrypointLookUp($entrypointsPathDefaultBuild, '_default', $strictMode);
+            $builds['_default'] = $this->createEntrypointLookUp($entrypointsPathDefaultBuild, $strictMode);
         }
 
         self::$collection = $builds;
@@ -79,16 +70,8 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
 
     private function createEntrypointLookUp(
         string $entrypointJsonPath,
-        string $cacheKeyPrefix,
         bool $strictMode
     ): EntrypointLookupInterface {
-        return new EntrypointLookup(
-            $entrypointJsonPath,
-            $cacheKeyPrefix,
-            $strictMode,
-            $this->jsonDecoder,
-            $this->filesystem,
-            $this->cache
-        );
+        return new EntrypointLookup($entrypointJsonPath, $strictMode, $this->jsonDecoder, $this->filesystem);
     }
 }
