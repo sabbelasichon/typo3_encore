@@ -15,6 +15,6 @@ final class IdGenerator implements IdGeneratorInterface
 {
     public function generate(): string
     {
-        return uniqid('id', false);
+        return uniqid('id');
     }
 }
