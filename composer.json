@@ -100,7 +100,8 @@
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",
-      "web-dir": ".Build"
+      "web-dir": ".Build",
+      "app-dir": ".Build"
     }
   }
 }
