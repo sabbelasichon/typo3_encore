@@ -15,21 +15,13 @@ use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointNotFoundException;
-use Ssch\Typo3Encore\Integration\CacheFactory;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\JsonDecodeException;
 use Ssch\Typo3Encore\Integration\JsonDecoderInterface;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class EntrypointLookupTest extends UnitTestCase
 {
-    /**
-     * @var string
-     */
-    private const CACHE_KEY_PREFIX = 'cacheKeyPrefix';
-
     protected EntrypointLookup $subject;
 
     /**
@@ -42,47 +34,19 @@ final class EntrypointLookupTest extends UnitTestCase
      */
     protected $filesystem;
 
-    /**
-     * @var CacheFactory|MockObject
-     */
-    protected $cacheFactory;
-
-    protected string $cacheKey;
-
-    /**
-     * @var FrontendInterface|MockObject
-     */
-    protected $cache;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->jsonDecoder = $this->getMockBuilder(JsonDecoderInterface::class)->getMock();
-        $this->filesystem = $this->getMockBuilder(FilesystemInterface::class)->getMock();
+        $this->jsonDecoder = $this->createMock(JsonDecoderInterface::class);
+        $this->filesystem = $this->createMock(FilesystemInterface::class);
         $this->filesystem->method('createHash')
             ->willReturn('foobarbaz');
-        $this->cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
-        $this->cache = $this->getMockBuilder(FrontendInterface::class)->getMock();
-        $this->cacheFactory->method('createInstance')
-            ->willReturn($this->cache);
         $this->subject = new EntrypointLookup(
             __DIR__ . '/../Fixtures/entrypoints.json',
-            self::CACHE_KEY_PREFIX,
             true,
             $this->jsonDecoder,
             $this->filesystem,
-            $this->cacheFactory
         );
-        $this->cacheKey = sprintf('%s-%s-%s', self::CACHE_KEY_PREFIX, CacheFactory::CACHE_KEY, 'foobarbaz');
-    }
-
-    public function testNoSuchCacheExceptionIsThrown(): void
-    {
-        $cacheFactory = $this->getMockBuilder(CacheFactory::class)->disableOriginalConstructor()->getMock();
-        $cacheFactory->method('createInstance')
-            ->willThrowException(new NoSuchCacheException());
-        $this->expectException(NoSuchCacheException::class);
-        $subject = new EntrypointLookup('foo', 'bar', true, $this->jsonDecoder, $this->filesystem, $cacheFactory);
     }
 
     public function testIntegrityDataReturnsEmptyArray(): void
@@ -147,28 +111,6 @@ final class EntrypointLookupTest extends UnitTestCase
                 'entrypoints' => $entrypoints,
             ]);
         self::assertEmpty($this->subject->getCssFiles('app'));
-    }
-
-    public function testGetFromCache(): void
-    {
-        $this->filesystem->expects(self::never())->method('exists');
-
-        $entrypoints = [
-            'app' => [
-                'css' => ['file.css'],
-            ],
-        ];
-
-        $this->cache->method('has')
-            ->with($this->cacheKey)
-            ->willReturn(true);
-        $this->cache->method('get')
-            ->with($this->cacheKey)
-            ->willReturn([
-                'entrypoints' => $entrypoints,
-            ]);
-
-        self::assertContains('file.css', $this->subject->getCssFiles('app'));
     }
 
     public function testThrowsExceptionIfJsonCannotBeParsed(): void
