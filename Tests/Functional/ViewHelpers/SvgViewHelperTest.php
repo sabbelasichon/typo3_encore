@@ -28,7 +28,6 @@ final class SvgViewHelperTest extends FunctionalTestCase
     {
         $this->pathsToLinkInTestInstance['typo3conf/ext/typo3_encore/Tests/Functional/ViewHelpers/Fixtures/fileadmin/user_upload'] = 'fileadmin/user_upload';
         $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
-        $this->initializeDatabase = false;
         parent::setUp();
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
     }
