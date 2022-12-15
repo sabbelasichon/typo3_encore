@@ -40,8 +40,6 @@ final class WebpackJsFilesViewHelper extends AbstractViewHelper
     {
         return $this->entrypointLookupCollection->getEntrypointLookup(
             $this->arguments['buildName']
-        )->getJavaScriptFiles(
-            $this->arguments['entryName']
-        );
+        )->getJavaScriptFiles($this->arguments['entryName']);
     }
 }

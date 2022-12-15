@@ -24,13 +24,10 @@ final class IncludeFilesTest extends FunctionalTestCase
      */
     private const ROOT_PAGE_UID = 1;
 
-    /**
-     * @var non-empty-string[]
-     */
-    protected $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
-
     protected function setUp(): void
     {
+        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
+
         parent::setUp();
         try {
             $this->importDataSet(__DIR__ . '/Fixtures/pages.xml');

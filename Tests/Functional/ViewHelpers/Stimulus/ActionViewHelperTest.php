@@ -18,13 +18,12 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class ActionViewHelperTest extends FunctionalTestCase
 {
-    protected bool $initializeDatabase = false;
-
-    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
-
     protected StandaloneView $view;
+
     protected function setUp(): void
     {
+        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
+        $this->initializeDatabase = false;
         parent::setUp();
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
     }

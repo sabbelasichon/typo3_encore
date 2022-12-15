@@ -25,13 +25,3 @@ parameters:
 			count: 1
 			path: Tests/Unit/Asset/TagRendererTest.php
 
-		-
-			message: "#^Call to function method_exists\\(\\) with 'TYPO3\\\\\\\\CMS\\\\\\\\Fluid\\\\\\\\Core\\\\\\\\Rendering\\\\\\\\RenderingContext' and 'setRequest' will always evaluate to true\\.$#"
-			count: 1
-			path: Tests/Unit/ViewHelpers/ViewHelperBaseTestcase.php
-
-		-
-			message: "#^Parameter \\#1 \\$renderingContext of method TYPO3Fluid\\\\Fluid\\\\Core\\\\ViewHelper\\\\ViewHelperInterface\\:\\:setRenderingContext\\(\\) expects TYPO3Fluid\\\\Fluid\\\\Core\\\\Rendering\\\\RenderingContextInterface, object given\\.$#"
-			count: 1
-			path: Tests/Unit/ViewHelpers/ViewHelperBaseTestcase.php
-
