@@ -9,8 +9,6 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-defined('TYPO3_MODE') or die();
-
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'typo3_encore',
     'Configuration/TypoScript',
