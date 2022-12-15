@@ -72,6 +72,10 @@
     }
   },
   "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/public/typo3conf/ext/",
+      "[ -L .Build/public/typo3conf/ext/typo3_encore ] || ln -snvf ../../../../. .Build/public/typo3conf/ext/typo3_encore"
+    ],
     "analyze": "phpstan --memory-limit=-1",
     "test-php-lint": [
       ".Build/bin/parallel-lint ./Classes/",
