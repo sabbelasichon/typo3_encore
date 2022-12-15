@@ -25,12 +25,12 @@ final class PageRendererHooksTest extends UnitTestCase
     protected PageRendererHooks $subject;
 
     /**
-     * @var MockObject|TagRendererInterface
+     * @var TagRendererInterface|MockObject
      */
     protected $tagRenderer;
 
     /**
-     * @var MockObject|PageRenderer
+     * @var PageRenderer|MockObject
      */
     protected $pageRenderer;
 
@@ -38,8 +38,8 @@ final class PageRendererHooksTest extends UnitTestCase
     {
         parent::setUp();
         $this->resetSingletonInstances = true;
-        $this->tagRenderer = $this->createStub(TagRendererInterface::class);
-        $this->pageRenderer = $this->createStub(PageRenderer::class);
+        $this->tagRenderer = $this->createMock(TagRendererInterface::class);
+        $this->pageRenderer = $this->createMock(PageRenderer::class);
         $this->subject = new PageRendererHooks($this->tagRenderer);
     }
 
