@@ -16,7 +16,9 @@ use DOMElement;
 use DOMNodeList;
 use DOMXPath;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Extbase\Service\ImageService;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use UnexpectedValueException;
 
@@ -56,6 +58,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
         $this->registerArgument('width', 'string', 'Width of the image.');
         $this->registerArgument('height', 'string', 'Height of the image.');
         $this->registerArgument('absolute', 'bool', 'Force absolute URL', false, false);
+        $this->registerArgument('cacheBusterParameter', 'string', 'Add a cache buster parameter', false, '');
     }
 
     public function render(): string
@@ -118,6 +121,12 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
                 }
             }
         } else {
+            if ($this->arguments['cacheBusterParameter']) {
+                $time = @filemtime(Environment::getPublicPath(). '/'. ltrim($imageUri, '/'));
+                if ($time) {
+                    $imageUri .= sprintf('?%s=%s', $this->arguments['cacheBusterParameter'], $time);
+                }
+            }
             $content[] = sprintf(
                 '<use xlink:href="%s#%s" />',
                 $imageUri,
