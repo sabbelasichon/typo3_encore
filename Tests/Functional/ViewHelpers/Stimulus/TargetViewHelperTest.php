@@ -12,16 +12,17 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use Ssch\Typo3Encore\Tests\Functional\ViewHelpers\ViewHelperBaseTestcase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-final class TargetViewHelperTest extends ViewHelperBaseTestcase
+final class TargetViewHelperTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
     protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 
+    protected StandaloneView $view;
     protected function setUp(): void
     {
         parent::setUp();

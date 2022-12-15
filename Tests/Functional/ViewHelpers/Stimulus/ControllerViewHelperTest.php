@@ -22,6 +22,8 @@ final class ControllerViewHelperTest extends FunctionalTestCase
 
     protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 
+    protected StandaloneView $view;
+
     protected function setUp(): void
     {
         parent::setUp();

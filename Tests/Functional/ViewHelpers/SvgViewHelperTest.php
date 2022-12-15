@@ -23,6 +23,8 @@ final class SvgViewHelperTest extends FunctionalTestCase
       'typo3conf/ext/typo3_encore/Tests/Functional/ViewHelpers/Fixtures/fileadmin/user_upload' => 'fileadmin/user_upload'
     ];
 
+    protected StandaloneView $view;
+
     /**
      * @var string
      */
