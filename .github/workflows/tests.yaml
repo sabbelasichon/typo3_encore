@@ -18,7 +18,7 @@ jobs:
                 typo3-php-versions:
                     - { typo3: 10, php: 7.4 }
                     - { typo3: 11, php: 7.4 }
-                    # - { typo3: 12, php: 8.1 }
+                    - { typo3: 12, php: 8.1 }
 
         name: "Run tests with PHP ${{ matrix.typo3-php-versions.php }} using TYPO3 ${{ matrix.typo3-php-versions.typo3 }}"
         steps:
