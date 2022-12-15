@@ -9,11 +9,15 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Ssch\Typo3Encore\Integration\CacheFactory;
+use Ssch\Typo3Encore\Integration\EntryLookupFactory;
 use Ssch\Typo3Encore\Integration\FixedIdGenerator;
 use Ssch\Typo3Encore\Integration\IdGenerator;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 
 return static function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void {
@@ -31,6 +35,12 @@ return static function (ContainerConfigurator $containerConfigurator, ContainerB
     $services->alias(IdGeneratorInterface::class, IdGenerator::class);
 
     $services->set(FixedIdGenerator::class)->args(['fixed']);
+
+    $services->set('cache.encore')
+        ->class(FrontendInterface::class)
+        ->factory([service(CacheFactory::class), 'createInstance']);
+
+    $services->set(EntryLookupFactory::class)->arg('$cache', service('cache.encore'));
 
     if (Environment::getContext()->isTesting()) {
         $services->alias(IdGeneratorInterface::class, FixedIdGenerator::class);

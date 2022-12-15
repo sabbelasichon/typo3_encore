@@ -13,6 +13,7 @@ namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookup;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
 final class EntryLookupFactory implements EntryLookupFactoryInterface
 {
@@ -27,18 +28,18 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
 
     private JsonDecoderInterface $jsonDecoder;
 
-    private CacheFactory $cacheFactory;
+    private ?FrontendInterface $cache;
 
     public function __construct(
         SettingsServiceInterface $settingsService,
         FilesystemInterface $filesystem,
         JsonDecoderInterface $jsonDecoder,
-        CacheFactory $cacheFactory
+        ?FrontendInterface $cache = null
     ) {
         $this->settingsService = $settingsService;
         $this->filesystem = $filesystem;
         $this->jsonDecoder = $jsonDecoder;
-        $this->cacheFactory = $cacheFactory;
+        $this->cache = $cache;
     }
 
     /**
@@ -87,7 +88,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
             $strictMode,
             $this->jsonDecoder,
             $this->filesystem,
-            $this->cacheFactory
+            $this->cache
         );
     }
 }

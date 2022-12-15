@@ -42,12 +42,12 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
         bool $strictMode,
         JsonDecoderInterface $jsonDecoder,
         FilesystemInterface $filesystem,
-        CacheFactory $cacheFactory
+        ?FrontendInterface $cache = null
     ) {
         $this->entrypointJsonPath = $filesystem->getFileAbsFileName($entrypointJsonPath);
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
-        $this->cache = $cacheFactory->createInstance();
+        $this->cache = $cache;
         $this->cacheKey = sprintf(
             '%s-%s-%s',
             $cacheKeyPrefix,
