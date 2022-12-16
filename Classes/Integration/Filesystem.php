@@ -20,7 +20,7 @@ final class Filesystem implements FilesystemInterface
 {
     public function get(string $pathToFile): string
     {
-        $data = @file_get_contents($pathToFile);
+        $data = GeneralUtility::getUrl($pathToFile);
 
         if (false === $data) {
             throw new UnexpectedValueException(sprintf('Data could not be read from file %s', $pathToFile));
