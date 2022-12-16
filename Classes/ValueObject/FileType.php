@@ -29,6 +29,7 @@ final class FileType
      * @var string
      */
     private const FONT = 'font';
+
     private string $type;
 
     private function __construct(string $type)

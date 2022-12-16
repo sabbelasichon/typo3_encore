@@ -17,6 +17,7 @@ use DOMNodeList;
 use DOMXPath;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
+use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use UnexpectedValueException;
@@ -32,16 +33,20 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     protected $tagName = 'svg';
 
     private IdGeneratorInterface $idGenerator;
+
     private FilesystemInterface $filesystem;
 
-    public function injectIdGenerator(IdGeneratorInterface $idGenerator): void
-    {
-        $this->idGenerator = $idGenerator;
-    }
+    private ImageService $imageService;
 
-    public function injectFilesystem(FilesystemInterface $filesystem)
-    {
+    public function __construct(
+        FilesystemInterface $filesystem,
+        IdGeneratorInterface $idGenerator,
+        ImageService $imageService
+    ) {
+        parent::__construct();
         $this->filesystem = $filesystem;
+        $this->idGenerator = $idGenerator;
+        $this->imageService = $imageService;
     }
 
     public function initializeArguments(): void
@@ -67,11 +72,19 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
         $this->registerArgument('inline', 'string', 'Inline icon instead of referencing it', false, false);
         $this->registerArgument('width', 'string', 'Width of the image.');
         $this->registerArgument('height', 'string', 'Height of the image.');
+        $this->registerArgument('absolute', 'bool', 'Force absolute URL', false, false);
     }
 
     public function render(): string
     {
-        $imageUri = $this->arguments['src'];
+        try {
+            $image = $this->imageService->getImage($this->arguments['src'], null, false);
+            $imageUri = $this->imageService->getImageUri($image, (bool) $this->arguments['absolute']);
+            $imageContents = $image->getContents();
+        } catch (FolderDoesNotExistException $folderDoesNotExistException) {
+            $imageUri = $this->arguments['src'];
+            $imageContents = $this->filesystem->get($imageUri);
+        }
 
         $content = [];
         $uniqueId = 'unique';
@@ -108,7 +121,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
         $name = (string) $this->arguments['name'];
         if ($this->arguments['inline']) {
             $doc = new DOMDocument();
-            $doc->loadXML($this->filesystem->get($imageUri));
+            $doc->loadXML($imageContents);
             $xpath = new DOMXPath($doc);
             $iconNodeList = $xpath->query("//*[@id='{$name}']");
 
