@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
-use Symfony\Component\Asset\PackageInterface;
+use Ssch\Typo3Encore\ValueObject\JsonPackage;
 
 interface PackageFactoryInterface
 {
-    public function getPackage(string $package): PackageInterface;
+    public function getPackage(string $package): JsonPackage;
 }

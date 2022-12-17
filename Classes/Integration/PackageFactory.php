@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
+use Ssch\Typo3Encore\ValueObject\JsonPackage;
 use Symfony\Component\Asset\Package;
-use Symfony\Component\Asset\PackageInterface;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 
 final class PackageFactory implements PackageFactoryInterface
@@ -28,14 +28,18 @@ final class PackageFactory implements PackageFactoryInterface
         $this->filesystem = $filesystem;
     }
 
-    public function getPackage(string $package): PackageInterface
+    public function getPackage(string $package): JsonPackage
     {
         $manifestJsonPath = EntrypointLookupInterface::DEFAULT_BUILD === $package ? 'manifestJsonPath' : sprintf(
             'packages.%s.manifestJsonPath',
             $package
         );
-        return new Package(new JsonManifestVersionStrategy($this->filesystem->getFileAbsFileName(
+        $absoluteManifestJsonPath = $this->filesystem->getFileAbsFileName(
             $this->settingsService->getStringByPath($manifestJsonPath)
+        );
+
+        return new JsonPackage($absoluteManifestJsonPath, new Package(new JsonManifestVersionStrategy(
+            $absoluteManifestJsonPath
         )));
     }
 }
