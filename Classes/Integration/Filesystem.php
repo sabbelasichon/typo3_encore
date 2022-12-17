@@ -11,9 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use UnexpectedValueException;
 
 final class Filesystem implements FilesystemInterface
@@ -40,19 +38,6 @@ final class Filesystem implements FilesystemInterface
     public function getFileAbsFileName(string $pathToFile): string
     {
         return GeneralUtility::getFileAbsFileName($pathToFile);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getRelativeFilePath(string $pathToFile): string
-    {
-        $pathToFile = $this->getFileAbsFileName(($pathToFile));
-        if (\str_starts_with($pathToFile, Environment::getPublicPath())) {
-            return PathUtility::stripPathSitePrefix($pathToFile);
-        }
-
-        return $pathToFile;
     }
 
     /**

@@ -57,6 +57,7 @@ final class AssetsMiddleware implements MiddlewareInterface
         }
 
         $registeredFiles = $this->collectRegisteredFiles();
+
         if ([] === $registeredFiles) {
             return $response;
         }

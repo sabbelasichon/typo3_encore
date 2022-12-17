@@ -14,6 +14,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class AssetViewHelper extends AbstractViewHelper
@@ -42,8 +43,21 @@ final class AssetViewHelper extends AbstractViewHelper
 
     public function render(): string
     {
-        return $this->packageFactory->getPackage($this->arguments['package'])->getUrl(
-            $this->filesystem->getRelativeFilePath($this->arguments['pathToFile'])
+        $jsonPackage = $this->packageFactory->getPackage($this->arguments['package']);
+
+        return $jsonPackage->getUrl(
+            $this->getRelativeFilePath($this->arguments['pathToFile'], $jsonPackage->getManifestJsonPath())
         );
+    }
+
+    private function getRelativeFilePath(string $pathToFile, string $absolutePathToManifestJson): string
+    {
+        if (! PathUtility::isExtensionPath($pathToFile)) {
+            return $pathToFile;
+        }
+
+        $absolutePathToFile = $this->filesystem->getFileAbsFileName($pathToFile);
+
+        return substr($absolutePathToFile, strlen(dirname($absolutePathToManifestJson) . '/'));
     }
 }
