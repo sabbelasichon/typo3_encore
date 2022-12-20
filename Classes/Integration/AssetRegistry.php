@@ -20,9 +20,11 @@ final class AssetRegistry implements AssetRegistryInterface
 
     private array $defaultAttributes = [];
 
+    private SettingsServiceInterface $settingsService;
+
     public function __construct(SettingsServiceInterface $settingsService)
     {
-        $this->defaultAttributes['crossorigin'] = $settingsService->getStringByPath('preload.crossorigin');
+        $this->settingsService = $settingsService;
         $this->reset();
     }
 
@@ -52,6 +54,9 @@ final class AssetRegistry implements AssetRegistryInterface
 
     public function getDefaultAttributes(): array
     {
+        if (count($this->defaultAttributes) === 0) {
+            $this->defaultAttributes['crossorigin'] = $this->settingsService->getStringByPath('preload.crossorigin');
+        }
         return $this->defaultAttributes;
     }
 
