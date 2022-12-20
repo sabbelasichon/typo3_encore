@@ -32,7 +32,7 @@ class EntrypointLookupCollection implements EntrypointLookupCollectionInterface
 
     public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface
     {
-        if ($this->buildEntrypoints === null) {
+        if (null === $this->buildEntrypoints) {
             $this->buildEntrypoints = $this->entryLookupFactory->getCollection();
         }
         if (null === $buildName) {

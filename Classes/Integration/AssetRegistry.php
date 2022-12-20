@@ -54,7 +54,7 @@ final class AssetRegistry implements AssetRegistryInterface
 
     public function getDefaultAttributes(): array
     {
-        if (count($this->defaultAttributes) === 0) {
+        if (0 === count($this->defaultAttributes)) {
             $this->defaultAttributes['crossorigin'] = $this->settingsService->getStringByPath('preload.crossorigin');
         }
         return $this->defaultAttributes;
