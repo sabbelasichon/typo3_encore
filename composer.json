@@ -35,7 +35,7 @@
     "phpspec/prophecy-phpunit": "^2.0",
     "rector/rector": "^0.14.8",
     "phpstan/phpstan-webmozart-assert": "^1.2.2",
-    "sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": "^0.0.1",
+    "sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": "^0.1.1",
     "phpstan/phpstan-phpunit": "^1.0",
     "jangregor/phpstan-prophecy": "^1.0",
     "phpstan/extension-installer": "^1.1",
