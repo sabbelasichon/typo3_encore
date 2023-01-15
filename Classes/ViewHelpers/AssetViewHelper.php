@@ -14,6 +14,7 @@ namespace Ssch\Typo3Encore\ViewHelpers;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\PackageFactoryInterface;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -57,6 +58,10 @@ final class AssetViewHelper extends AbstractViewHelper
         }
 
         $absolutePathToFile = $this->filesystem->getFileAbsFileName($pathToFile);
+
+        if (\str_starts_with($absolutePathToFile, Environment::getPublicPath())) {
+            return PathUtility::stripPathSitePrefix($absolutePathToFile);
+        }
 
         return substr($absolutePathToFile, strlen(dirname($absolutePathToManifestJson) . '/'));
     }
