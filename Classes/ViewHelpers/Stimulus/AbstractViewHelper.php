@@ -38,7 +38,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                 'Passing an array as first argument of stimulus_controller() is deprecated.'
             );
 
-            if ($controllerValues || $controllerClasses) {
+            if ($controllerValues !== [] || $controllerClasses !== []) {
                 throw new \InvalidArgumentException(
                     'You cannot pass an array to the first and second/third argument of stimulus_controller(): check the documentation.'
                 );
@@ -46,8 +46,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
 
             $data = $controllerName;
 
-            foreach ($data as $controllerName => $controllerValues) {
-                $dto->addController($controllerName, $controllerValues);
+            foreach ($data as $controllerName => $values) {
+                $dto->addController($controllerName, $values);
             }
 
             return $dto;
@@ -77,7 +77,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                 'Passing an array as first argument of stimulus_action() is deprecated.'
             );
 
-            if ($actionName || $eventName || $parameters) {
+            if ($actionName !== null || $eventName !== null || $parameters !== []) {
                 throw new \InvalidArgumentException(
                     'You cannot pass a string to the second or third argument nor an array to the fourth argument while passing an array to the first argument of stimulus_action(): check the documentation.'
                 );
@@ -85,7 +85,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
 
             $data = $controllerName;
 
-            foreach ($data as $controllerName => $controllerActions) {
+            foreach ($data as $controller => $controllerActions) {
                 if (\is_string($controllerActions)) {
                     $controllerActions = [[$controllerActions]];
                 }
@@ -99,8 +99,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                         $controllerAction = [$controllerAction];
                     }
 
-                    foreach ($controllerAction as $eventName => $actionName) {
-                        $dto->addAction($controllerName, $actionName, \is_string($eventName) ? $eventName : null);
+                    foreach ($controllerAction as $eventName => $action) {
+                        $dto->addAction($controller, $action, \is_string($eventName) ? $eventName : null);
                     }
                 }
             }
