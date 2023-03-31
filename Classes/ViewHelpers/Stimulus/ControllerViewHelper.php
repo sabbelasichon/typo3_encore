@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\ViewHelpers\Stimulus;
 
-use InvalidArgumentException;
-
 final class ControllerViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
@@ -30,57 +28,21 @@ final class ControllerViewHelper extends AbstractViewHelper
             false,
             []
         );
+        $this->registerArgument(
+            'controllerClasses',
+            'array',
+            'Array of classes to add to the controller',
+            false,
+            []
+        );
     }
 
     public function render(): string
     {
-        $dataOrControllerName = $this->arguments['dataOrControllerName'];
-        $controllerValues = $this->arguments['controllerValues'];
-
-        if (\is_string($dataOrControllerName)) {
-            $data = [
-                $dataOrControllerName => $controllerValues,
-            ];
-        } else {
-            if ($controllerValues) {
-                throw new InvalidArgumentException(
-                    'You cannot pass an array to the first and second argument of stimulus_controller(): check the documentation.'
-                );
-            }
-
-            $data = $dataOrControllerName;
-
-            if (! $data) {
-                return '';
-            }
-        }
-
-        $controllers = [];
-        $values = [];
-
-        foreach ($data as $controllerName => $controllerValue) {
-            $controllerName = $this->normalizeControllerName($controllerName);
-            $controllers[] = $controllerName;
-
-            foreach ($controllerValue as $key => $value) {
-                if (null === $value) {
-                    continue;
-                }
-
-                if (! is_scalar($value)) {
-                    $value = json_encode($value, JSON_THROW_ON_ERROR);
-                }
-
-                if (\is_bool($value)) {
-                    $value = $value ? 'true' : 'false';
-                }
-
-                $key = $this->normalizeKeyName($key);
-
-                $values[] = 'data-' . $controllerName . '-' . $key . '-value="' . $value . '"';
-            }
-        }
-
-        return rtrim('data-controller="' . implode(' ', $controllers) . '" ' . implode(' ', $values));
+        return $this->renderStimulusController(
+            $this->arguments['dataOrControllerName'],
+            $this->arguments['controllerValues'],
+            $this->arguments['controllerClasses']
+        )->__toString();
     }
 }

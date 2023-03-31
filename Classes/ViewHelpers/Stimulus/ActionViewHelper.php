@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\ViewHelpers\Stimulus;
 
-use InvalidArgumentException;
-
 /**
  * Copyright (c) 2004-2018 Fabien Potencier
  */
@@ -29,73 +27,29 @@ final class ActionViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'eventName',
             'string',
-            'The action to trigger if a string is passed to the 1st argument. Optional.',
-            false
+            'The event to listen to trigger if a string is passed to the 1st argument. Optional.',
         );
         $this->registerArgument(
             'actionName',
             'string',
-            'The event to listen to trigger if a string is passed to the 1st argument. Optional.',
-            false
+            'The action to trigger if a string is passed to the 1st argument. Optional.'
+        );
+        $this->registerArgument(
+            'parameters',
+            'array',
+            'Parameters to pass to the action. Optional.',
+            false,
+            []
         );
     }
 
     public function render(): string
     {
-        $dataOrControllerName = $this->arguments['dataOrControllerName'];
-        $eventName = $this->arguments['eventName'];
-        $actionName = $this->arguments['actionName'];
-
-        if (\is_string($dataOrControllerName)) {
-            $data = [
-                $dataOrControllerName => null === $eventName ? [[$actionName]] : [[
-                    $eventName => $actionName,
-                ]],
-            ];
-        } else {
-            if ($actionName || $eventName) {
-                throw new InvalidArgumentException(
-                    'You cannot pass a string to the second or third argument while passing an array to the first argument of stimulus_action(): check the documentation.'
-                );
-            }
-
-            $data = $dataOrControllerName;
-
-            if (! $data) {
-                return '';
-            }
-        }
-
-        $actions = [];
-
-        foreach ($data as $controllerName => $controllerActions) {
-            $controllerName = $this->normalizeControllerName($controllerName);
-
-            if (\is_string($controllerActions)) {
-                $controllerActions = [[$controllerActions]];
-            }
-
-            foreach ($controllerActions as $possibleEventName => $controllerAction) {
-                if (\is_string($possibleEventName) && \is_string($controllerAction)) {
-                    $controllerAction = [
-                        $possibleEventName => $controllerAction,
-                    ];
-                } elseif (\is_string($controllerAction)) {
-                    $controllerAction = [$controllerAction];
-                }
-
-                foreach ($controllerAction as $internalEventName => $internalActionName) {
-                    $action = $controllerName . '#' . $internalActionName;
-
-                    if (\is_string($internalEventName)) {
-                        $action = $internalEventName . '->' . $action;
-                    }
-
-                    $actions[] = $action;
-                }
-            }
-        }
-
-        return 'data-action="' . implode(' ', $actions) . '"';
+        return $this->renderStimulusAction(
+            $this->arguments['dataOrControllerName'],
+            $this->arguments['actionName'],
+            $this->arguments['eventName'],
+            $this->arguments['parameters']
+        )->__toString();
     }
 }
