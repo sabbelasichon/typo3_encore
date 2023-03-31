@@ -19,9 +19,9 @@ final class ActionViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument(
-            'dataOrControllerName',
+            'controllerName',
             'string|array',
-            'This can either be a map of controller names as keys set to their "values". Or this can be a string controller name and data is passed as the 2nd argument.',
+            'The Stimulus controller name to render.',
             true
         );
         $this->registerArgument(
@@ -46,7 +46,7 @@ final class ActionViewHelper extends AbstractViewHelper
     public function render(): string
     {
         return $this->renderStimulusAction(
-            $this->arguments['dataOrControllerName'],
+            $this->arguments['controllerName'],
             $this->arguments['actionName'],
             $this->arguments['eventName'],
             $this->arguments['parameters']
