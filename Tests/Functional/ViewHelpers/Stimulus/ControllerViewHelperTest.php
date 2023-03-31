@@ -29,20 +29,20 @@ final class ControllerViewHelperTest extends FunctionalTestCase
     }
 
     /**
-     * @param mixed $dataOrControllerName
+     * @param mixed $controllerName
      * @dataProvider provideRenderStimulusController
      */
-    public function testRenderData($dataOrControllerName, array $controllerValues, string $expected): void
+    public function testRenderData($controllerName, array $controllerValues, string $expected): void
     {
         $this->view->assignMultiple([
-            'dataOrControllerName' => $dataOrControllerName,
+            'controllerName' => $controllerName,
             'controllerValues' => $controllerValues,
         ]);
         $this->view->getRenderingContext()
             ->getViewHelperResolver()
             ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
         $this->view->setTemplateSource(
-            '{encore:stimulus.controller(dataOrControllerName: dataOrControllerName, controllerValues: controllerValues)}'
+            '{encore:stimulus.controller(controllerName: controllerName, controllerValues: controllerValues)}'
         );
         self::assertSame($expected, $this->view->render());
     }
@@ -50,13 +50,13 @@ final class ControllerViewHelperTest extends FunctionalTestCase
     public function provideRenderStimulusController(): Generator
     {
         yield 'empty' => [
-            'dataOrControllerName' => [],
+            'controllerName' => [],
             'controllerValues' => [],
             'expected' => '',
         ];
 
         yield 'single-controller-no-data' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [],
             ],
             'controllerValues' => [],
@@ -64,7 +64,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'single-controller-scalar-data' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [
                     'myValue' => 'scalar-value',
                 ],
@@ -74,7 +74,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'single-controller-typed-data' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [
                     'boolean' => true,
                     'number' => 4,
@@ -86,7 +86,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'single-controller-nested-data' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [
                     'myValue' => [
                         'nested' => 'array',
@@ -99,7 +99,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'multiple-controllers-scalar-data' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [
                     'myValue' => 'scalar-value',
                 ],
@@ -112,7 +112,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'normalize-names' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 '@symfony/ux-dropzone/dropzone' => [
                     'my"Key"' => true,
                 ],
@@ -122,13 +122,13 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'short-single-controller-no-data' => [
-            'dataOrControllerName' => 'my-controller',
+            'controllerName' => 'my-controller',
             'controllerValues' => [],
             'expected' => 'data-controller="my-controller"',
         ];
 
         yield 'short-single-controller-with-data' => [
-            'dataOrControllerName' => 'my-controller',
+            'controllerName' => 'my-controller',
             'controllerValues' => [
                 'myValue' => 'scalar-value',
             ],
@@ -136,7 +136,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'false-attribute-value-renders-false' => [
-            'dataOrControllerName' => 'false-controller',
+            'controllerName' => 'false-controller',
             'controllerValues' => [
                 'isEnabled' => false,
             ],
@@ -144,7 +144,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'true-attribute-value-renders-true' => [
-            'dataOrControllerName' => 'true-controller',
+            'controllerName' => 'true-controller',
             'controllerValues' => [
                 'isEnabled' => true,
             ],
@@ -152,7 +152,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'null-attribute-value-does-not-render' => [
-            'dataOrControllerName' => 'null-controller',
+            'controllerName' => 'null-controller',
             'controllerValues' => [
                 'firstName' => null,
             ],

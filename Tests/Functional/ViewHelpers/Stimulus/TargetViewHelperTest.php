@@ -29,20 +29,20 @@ final class TargetViewHelperTest extends FunctionalTestCase
     }
 
     /**
-     * @param mixed $dataOrControllerName
+     * @param mixed $controllerName
      * @dataProvider provideRenderStimulusTarget
      */
-    public function testRenderData($dataOrControllerName, ?string $targetName, string $expected): void
+    public function testRenderData($controllerName, ?string $targetName, string $expected): void
     {
         $this->view->assignMultiple([
-            'dataOrControllerName' => $dataOrControllerName,
+            'controllerName' => $controllerName,
             'targetNames' => $targetName,
         ]);
         $this->view->getRenderingContext()
             ->getViewHelperResolver()
             ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
         $this->view->setTemplateSource(
-            '{encore:stimulus.target(dataOrControllerName: dataOrControllerName, targetNames: targetNames)}'
+            '{encore:stimulus.target(controllerName: controllerName, targetNames: targetNames)}'
         );
         self::assertSame($expected, $this->view->render());
     }
@@ -50,19 +50,19 @@ final class TargetViewHelperTest extends FunctionalTestCase
     public function provideRenderStimulusTarget(): Generator
     {
         yield 'simple' => [
-            'dataOrControllerName' => 'my-controller',
+            'controllerName' => 'my-controller',
             'targetName' => 'myTarget',
             'expected' => 'data-my-controller-target="myTarget"',
         ];
 
         yield 'normalize-name' => [
-            'dataOrControllerName' => '@symfony/ux-dropzone/dropzone',
+            'controllerName' => '@symfony/ux-dropzone/dropzone',
             'targetName' => 'myTarget',
             'expected' => 'data-symfony--ux-dropzone--dropzone-target="myTarget"',
         ];
 
         yield 'multiple' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => 'myTarget',
                 '@symfony/ux-dropzone/dropzone' => 'anotherTarget fooTarget',
             ],
