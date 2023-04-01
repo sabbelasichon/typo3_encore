@@ -74,7 +74,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
             trigger_deprecation(
                 'symfony/webpack-encore-bundle',
                 'v1.15.0',
-                'Passing an array as first argument of stimulus_action() is deprecated.'
+                'Passing an array as first argument of stimulus_action() is deprecated.',
+                E_USER_DEPRECATED
             );
 
             if (null !== $actionName || null !== $eventName || [] !== $parameters) {
