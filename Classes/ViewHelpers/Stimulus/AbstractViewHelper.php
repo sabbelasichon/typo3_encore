@@ -46,8 +46,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
 
             $data = $controllerName;
 
-            foreach ($data as $controllerName => $values) {
-                $dto->addController($controllerName, $values);
+            foreach ($data as $controller => $values) {
+                $dto->addController($controller, $values);
             }
 
             return $dto;
@@ -99,8 +99,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                         $controllerAction = [$controllerAction];
                     }
 
-                    foreach ($controllerAction as $eventName => $action) {
-                        $dto->addAction($controller, $action, \is_string($eventName) ? $eventName : null);
+                    foreach ($controllerAction as $event => $action) {
+                        $dto->addAction($controller, $action, \is_string($event) ? $eventName : null);
                     }
                 }
             }
@@ -108,7 +108,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
             return $dto;
         }
 
-        $dto->addAction($controllerName, $actionName, $eventName, $parameters);
+        $dto->addAction($controllerName, (string) $actionName, $eventName, $parameters);
 
         return $dto;
     }
@@ -153,7 +153,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                 'Passing an array as first argument of stimulus_target() is deprecated.'
             );
 
-            if ($targetNames) {
+            if ($targetNames !== null) {
                 throw new \InvalidArgumentException(
                     'You cannot pass a string to the second argument while passing an array to the first argument of stimulus_target(): check the documentation.'
                 );
@@ -161,8 +161,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
 
             $data = $controllerName;
 
-            foreach ($data as $controllerName => $targetNames) {
-                $dto->addTarget($controllerName, $targetNames);
+            foreach ($data as $controller => $targets) {
+                $dto->addTarget($controller, $targets);
             }
 
             return $dto;

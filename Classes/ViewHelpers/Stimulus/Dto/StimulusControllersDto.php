@@ -77,9 +77,9 @@ class StimulusControllersDto extends AbstractStimulusDto
     private function normalizeKeyName(string $str): string
     {
         // Adapted from ByteString::camel
-        $str = ucfirst(str_replace(' ', '', ucwords(preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $str))));
+        $str = ucfirst(str_replace(' ', '', ucwords((string) preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $str))));
 
         // Adapted from ByteString::snake
-        return strtolower(preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\1-\2', $str));
+        return strtolower((string) preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\1-\2', $str));
     }
 }

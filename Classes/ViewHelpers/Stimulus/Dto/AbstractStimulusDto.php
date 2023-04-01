@@ -20,7 +20,10 @@ abstract class AbstractStimulusDto
         return $this->escapeAsHtmlAttr($this->normalizeControllerName($controllerName));
     }
 
-    protected function getFormattedValue($value)
+    /**
+     * @param mixed $value
+     */
+    protected function getFormattedValue($value): string
     {
         if ((\is_object($value) && \is_callable([$value, '__toString']))) {
             $value = (string) $value;
@@ -33,7 +36,7 @@ abstract class AbstractStimulusDto
         return (string) $value;
     }
 
-    protected function escapeAsHtmlAttr($value): string
+    protected function escapeAsHtmlAttr(string $value): string
     {
         return htmlspecialchars($value, ENT_QUOTES);
     }
@@ -45,6 +48,6 @@ abstract class AbstractStimulusDto
      */
     private function normalizeControllerName(string $controllerName): string
     {
-        return preg_replace('/^@/', '', str_replace('_', '-', str_replace('/', '--', $controllerName)));
+        return (string) preg_replace('/^@/', '', str_replace('_', '-', str_replace('/', '--', $controllerName)));
     }
 }
