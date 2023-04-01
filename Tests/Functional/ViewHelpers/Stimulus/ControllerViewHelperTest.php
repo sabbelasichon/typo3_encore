@@ -95,7 +95,7 @@ final class ControllerViewHelperTest extends FunctionalTestCase
             ],
             'controllerValues' => [],
             'expected' =>
-'data-controller="my-controller" data-my-controller-my-value-value="{"nested":"array"}"',
+'data-controller="my-controller" data-my-controller-my-value-value="{&quot;nested&quot;:&quot;array&quot;}"',
         ];
 
         yield 'multiple-controllers-scalar-data' => [
