@@ -29,17 +29,17 @@ final class ActionViewHelperTest extends FunctionalTestCase
     }
 
     /**
-     * @param array|string $dataOrControllerName
+     * @param array|string $controllerName
      * @dataProvider provideRenderStimulusAction
      */
     public function testRenderData(
-        $dataOrControllerName,
+        $controllerName,
         ?string $actionName,
         ?string $eventName,
         string $expected
     ): void {
         $this->view->assignMultiple([
-            'dataOrControllerName' => $dataOrControllerName,
+            'controllerName' => $controllerName,
             'actionName' => $actionName,
             'eventName' => $eventName,
         ]);
@@ -47,7 +47,7 @@ final class ActionViewHelperTest extends FunctionalTestCase
             ->getViewHelperResolver()
             ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
         $this->view->setTemplateSource(
-            '{encore:stimulus.action(actionName: actionName, eventName: eventName, dataOrControllerName: dataOrControllerName)}'
+            '{encore:stimulus.action(actionName: actionName, eventName: eventName, controllerName: controllerName)}'
         );
         self::assertSame($expected, $this->view->render());
     }
@@ -55,21 +55,21 @@ final class ActionViewHelperTest extends FunctionalTestCase
     public function provideRenderStimulusAction(): Generator
     {
         yield 'with default event' => [
-            'dataOrControllerName' => 'my-controller',
+            'controllerName' => 'my-controller',
             'actionName' => 'onClick',
             'eventName' => null,
             'expected' => 'data-action="my-controller#onClick"',
         ];
 
         yield 'with custom event' => [
-            'dataOrControllerName' => 'my-controller',
+            'controllerName' => 'my-controller',
             'actionName' => 'onClick',
             'eventName' => 'click',
             'expected' => 'data-action="click->my-controller#onClick"',
         ];
 
         yield 'multiple actions, with default event' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => 'onClick',
                 'my-second-controller' => ['onClick', 'onSomethingElse'],
                 'foo/bar-controller' => 'onClick',
@@ -80,7 +80,7 @@ final class ActionViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'multiple actions, with custom event' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [
                     'click' => 'onClick',
                 ],
@@ -104,7 +104,7 @@ final class ActionViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'multiple actions, with default and custom event' => [
-            'dataOrControllerName' => [
+            'controllerName' => [
                 'my-controller' => [
                     'click' => 'onClick',
                 ],
@@ -130,14 +130,14 @@ final class ActionViewHelperTest extends FunctionalTestCase
         ];
 
         yield 'normalize-name, with default event' => [
-            'dataOrControllerName' => '@symfony/ux-dropzone/dropzone',
+            'controllerName' => '@symfony/ux-dropzone/dropzone',
             'actionName' => 'onClick',
             'eventName' => null,
             'expected' => 'data-action="symfony--ux-dropzone--dropzone#onClick"',
         ];
 
         yield 'normalize-name, with custom event' => [
-            'dataOrControllerName' => '@symfony/ux-dropzone/dropzone',
+            'controllerName' => '@symfony/ux-dropzone/dropzone',
             'actionName' => 'onClick',
             'eventName' => 'click',
             'expected' => 'data-action="click->symfony--ux-dropzone--dropzone#onClick"',
