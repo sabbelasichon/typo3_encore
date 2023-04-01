@@ -100,7 +100,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                     }
 
                     foreach ($controllerAction as $event => $action) {
-                        $dto->addAction($controller, $action, \is_string($event) ? $eventName : null);
+                        $dto->addAction($controller, $action, \is_string($event) ? $event : null);
                     }
                 }
             }
