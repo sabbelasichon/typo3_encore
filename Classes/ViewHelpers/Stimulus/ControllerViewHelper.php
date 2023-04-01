@@ -15,12 +15,7 @@ final class ControllerViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
     {
-        $this->registerArgument(
-            'controllerName',
-            'string|array',
-            'The Stimulus controller name to render.',
-            true
-        );
+        $this->registerArgument('controllerName', 'string|array', 'The Stimulus controller name to render.', true);
         $this->registerArgument(
             'controllerValues',
             'array',

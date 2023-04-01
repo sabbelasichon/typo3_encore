@@ -18,12 +18,7 @@ final class ActionViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
     {
-        $this->registerArgument(
-            'controllerName',
-            'string|array',
-            'The Stimulus controller name to render.',
-            true
-        );
+        $this->registerArgument('controllerName', 'string|array', 'The Stimulus controller name to render.', true);
         $this->registerArgument(
             'eventName',
             'string',
@@ -34,13 +29,7 @@ final class ActionViewHelper extends AbstractViewHelper
             'string',
             'The action to trigger if a string is passed to the 1st argument. Optional.'
         );
-        $this->registerArgument(
-            'parameters',
-            'array',
-            'Parameters to pass to the action. Optional.',
-            false,
-            []
-        );
+        $this->registerArgument('parameters', 'array', 'Parameters to pass to the action. Optional.', false, []);
     }
 
     public function render(): string

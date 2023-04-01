@@ -18,12 +18,7 @@ final class TargetViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
     {
-        $this->registerArgument(
-            'controllerName',
-            'string|array',
-            'The Stimulus controller name to render.',
-            true
-        );
+        $this->registerArgument('controllerName', 'string|array', 'The Stimulus controller name to render.', true);
         $this->registerArgument(
             'targetNames',
             'string',
