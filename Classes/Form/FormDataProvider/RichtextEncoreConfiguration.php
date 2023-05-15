@@ -15,24 +15,17 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupCollection;
 use Ssch\Typo3Encore\Asset\EntrypointLookupCollectionInterface;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class RichtextEncoreConfiguration implements FormDataProviderInterface
 {
     private EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
-    private int $majorVersion = 12;
-
-    public function __construct(
-        EntrypointLookupCollectionInterface $entrypointLookupCollection = null,
-        Typo3Version $typo3Version = null
-    ) {
+    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
+    {
         $this->entrypointLookupCollection = $entrypointLookupCollection ?? GeneralUtility::makeInstance(
             EntrypointLookupCollection::class
         );
-        $typo3Version = $typo3Version ?? GeneralUtility::makeInstance(Typo3Version::class);
-        $this->majorVersion = $typo3Version->getMajorVersion();
     }
 
     public function addData(array $result): array
@@ -52,32 +45,26 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
             if (! isset($rteConfiguration['editor']['config']['contentsCss'])) {
                 continue;
             }
-            $contentsCss = $rteConfiguration['editor']['config']['contentsCss'];
+            $contentsCss = (array) $rteConfiguration['editor']['config']['contentsCss'];
 
-            if (is_array($contentsCss) && $this->majorVersion < 12) {
-                $updatedContentCss = [];
-                foreach ($contentsCss as $cssFile) {
-                    $updatedContent = $this->getContentCss($cssFile);
-                    $updatedContentCss[] = is_array($updatedContent) ? $updatedContent : [$updatedContent];
-                }
-                $contentsCss = array_merge(...$updatedContentCss);
-            } elseif (is_string($contentsCss)) {
-                $contentsCss = $this->getContentCss($contentsCss);
+            $updatedContentCss = [];
+            foreach ($contentsCss as $cssFile) {
+                $updatedContent = $this->getContentCss($cssFile);
+                $updatedContentCss[] = is_array($updatedContent) ? $updatedContent : [$updatedContent];
             }
+            $contentsCss = array_merge(...$updatedContentCss);
+
             $result['processedTca']['columns'][$fieldName]['config']['richtextConfiguration']['editor']['config']['contentsCss'] = $contentsCss;
         }
 
         return $result;
     }
 
-    /**
-     * @return array|string
-     */
-    private function getContentCss(string $contentsCss)
+    private function getContentCss(string $contentsCss): array
     {
         if (! str_starts_with($contentsCss, 'typo3_encore:')) {
             // keep the css file as-is
-            return ($this->majorVersion < 12) ? [$contentsCss] : $contentsCss;
+            return [$contentsCss];
         }
 
         // strip prefix
@@ -96,10 +83,7 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
         // call reset() to allow multiple RTEs on the same page.
         // Otherwise only the first RTE will have the CSS.
         $entryPointLookup->reset();
-        if ($this->majorVersion < 12) {
-            return $cssFiles;
-        }
-        // TYPO3 12 support only one css file. See https://forge.typo3.org/issues/99327
-        return reset($cssFiles);
+
+        return $cssFiles;
     }
 }
