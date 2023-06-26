@@ -319,8 +319,8 @@ plugin.tx_typo3encore {
 }
 ```
 
-If site base configuration (`config/sites/yoursite/config.yaml`) is subdirectory/subpath of your domain, it is required to add your new "build" directory as additional absolute directory.
-Can be done in your "Configure Installation-Wide Options" (TYPO3 <= 11: `typo3conf/LocalConfiguration.php`; TYPO3 >= 12: `config/system/settings.php`)
+If the site `base` configuration (`config/sites/yoursite/config.yaml`) is a subdirectory/subpath of your domain, it is required to add your new "build" directory as an additional absolute directory.
+This can be done in your "Configure Installation-Wide Options" (TYPO3 <= 11: `typo3conf/LocalConfiguration.php`; TYPO3 >= 12: `config/system/settings.php`)
 ```
     [FE][additionalAbsRefPrefixDirectories]: build
 ```
