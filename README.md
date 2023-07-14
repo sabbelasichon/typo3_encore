@@ -319,6 +319,12 @@ plugin.tx_typo3encore {
 }
 ```
 
+If the site `base` configuration (`config/sites/yoursite/config.yaml`) is a subdirectory/subpath of your domain, it is required to add your new "build" directory as an additional absolute directory.
+This can be done in your "Configure Installation-Wide Options" (TYPO3 <= 11: `typo3conf/LocalConfiguration.php`; TYPO3 >= 12: `config/system/settings.php`)
+```
+    [FE][additionalAbsRefPrefixDirectories]: build
+```
+
 ### The realm of Webpack plugins
 Encore already ships with a lot of useful plugins for the daily work.
 But someday you are gonna get to the point where you need more.
