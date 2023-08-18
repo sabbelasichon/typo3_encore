@@ -120,7 +120,9 @@ final class TagRenderer implements TagRendererInterface
             }
 
             if (true === $scriptTag->isRegisterFile()) {
-                $this->assetRegistry->registerFile(new File($file, FileType::createScript(), ['integrity' => $integrityHashes[$file] ?? false]));
+                $this->assetRegistry->registerFile(new File($file, FileType::createScript(), [
+                    'integrity' => $integrityHashes[$file] ?? false,
+                ]));
             }
         }
     }
