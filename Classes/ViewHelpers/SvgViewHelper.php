@@ -18,6 +18,7 @@ use DOMXPath;
 use Ssch\Typo3Encore\Integration\FilesystemInterface;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use UnexpectedValueException;
@@ -80,6 +81,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
         try {
             $image = $this->imageService->getImage($this->arguments['src'], null, false);
             $imageUri = $this->imageService->getImageUri($image, (bool) $this->arguments['absolute']);
+            $imageUri = GeneralUtility::createVersionNumberedFilename($imageUri);
             $imageContents = $image->getContents();
         } catch (FolderDoesNotExistException $folderDoesNotExistException) {
             $imageUri = $this->arguments['src'];
