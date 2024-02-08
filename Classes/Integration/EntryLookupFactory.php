@@ -42,7 +42,7 @@ final class EntryLookupFactory implements EntryLookupFactoryInterface
      */
     public function getCollection(): array
     {
-        if (null !== self::$collection) {
+        if (self::$collection !== null) {
             return self::$collection;
         }
 

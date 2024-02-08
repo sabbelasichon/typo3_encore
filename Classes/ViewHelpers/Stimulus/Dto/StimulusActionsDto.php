@@ -19,7 +19,7 @@ final class StimulusActionsDto extends AbstractStimulusDto
 
     public function __toString(): string
     {
-        if (0 === \count($this->actions)) {
+        if (\count($this->actions) === 0) {
             return '';
         }
 
@@ -46,7 +46,7 @@ final class StimulusActionsDto extends AbstractStimulusDto
         $controllerName = $this->getFormattedControllerName($controllerName);
         $action = $controllerName . '#' . $this->escapeAsHtmlAttr($actionName);
 
-        if (null !== $eventName) {
+        if ($eventName !== null) {
             $action = $eventName . '->' . $action;
         }
 

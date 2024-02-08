@@ -93,18 +93,18 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
         return new class() implements EntrypointLookupCollectionInterface {
             public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface
             {
-                if ('_default' !== $buildName) {
+                if ($buildName !== '_default') {
                     throw new Exception('Invalid buildName in test case', 1_645_708_934);
                 }
                 return new class() implements EntrypointLookupInterface, IntegrityDataProviderInterface {
                     public function getJavaScriptFiles(string $entryName): array
                     {
-                        return 'entryPoint' === $entryName ? ['file.js'] : [];
+                        return $entryName === 'entryPoint' ? ['file.js'] : [];
                     }
 
                     public function getCssFiles(string $entryName): array
                     {
-                        return 'entryPoint' === $entryName ? ['file.css'] : [];
+                        return $entryName === 'entryPoint' ? ['file.css'] : [];
                     }
 
                     public function reset(): void

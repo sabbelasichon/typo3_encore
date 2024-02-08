@@ -36,7 +36,7 @@ final class JsonDecoderTest extends UnitTestCase
     {
         $jsonFile = file_get_contents(__DIR__ . '/../Fixtures/entrypoints.json');
 
-        if (false === $jsonFile) {
+        if ($jsonFile === false) {
             throw new UnexpectedValueException('Could not open json file');
         }
 

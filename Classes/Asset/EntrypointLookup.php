@@ -114,7 +114,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
 
     private function getEntriesData(): array
     {
-        if (null !== $this->entriesData) {
+        if ($this->entriesData !== null) {
             return $this->entriesData;
         }
 

@@ -32,11 +32,11 @@ class EntrypointLookupCollection implements EntrypointLookupCollectionInterface
 
     public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface
     {
-        if (null === $this->buildEntrypoints) {
+        if ($this->buildEntrypoints === null) {
             $this->buildEntrypoints = $this->entryLookupFactory->getCollection();
         }
-        if (null === $buildName) {
-            if (null === $this->defaultBuildName) {
+        if ($buildName === null) {
+            if ($this->defaultBuildName === null) {
                 throw new UndefinedBuildException(
                     'There is no default build configured: please pass an argument to getEntrypointLookup().'
                 );

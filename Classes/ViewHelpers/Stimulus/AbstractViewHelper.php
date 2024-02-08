@@ -39,7 +39,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                 E_USER_DEPRECATED
             );
 
-            if ([] !== $controllerValues || [] !== $controllerClasses) {
+            if ($controllerValues !== [] || $controllerClasses !== []) {
                 throw new \InvalidArgumentException(
                     'You cannot pass an array to the first and second/third argument of stimulus_controller(): check the documentation.'
                 );
@@ -79,7 +79,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                 E_USER_DEPRECATED
             );
 
-            if (null !== $actionName || null !== $eventName || [] !== $parameters) {
+            if ($actionName !== null || $eventName !== null || $parameters !== []) {
                 throw new \InvalidArgumentException(
                     'You cannot pass a string to the second or third argument nor an array to the fourth argument while passing an array to the first argument of stimulus_action(): check the documentation.'
                 );
@@ -156,7 +156,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
                 E_USER_DEPRECATED
             );
 
-            if (null !== $targetNames) {
+            if ($targetNames !== null) {
                 throw new \InvalidArgumentException(
                     'You cannot pass a string to the second argument while passing an array to the first argument of stimulus_target(): check the documentation.'
                 );

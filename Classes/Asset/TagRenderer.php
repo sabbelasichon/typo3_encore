@@ -78,7 +78,7 @@ final class TagRenderer implements TagRendererInterface
         }
 
         // We do not want to replace null values in $attributes
-        $parameters = array_filter($parameters, static fn ($param) => null !== $param);
+        $parameters = array_filter($parameters, static fn ($param) => $param !== null);
 
         foreach ($files as $index => $file) {
             $this->addAdditionalAbsRefPrefixDirectories($file);
@@ -108,7 +108,7 @@ final class TagRenderer implements TagRendererInterface
 
             $attributes = array_values($attributes);
 
-            $pageRendererMethodName = 'addJS' . (self::POSITION_FOOTER === $scriptTag->getPosition() ? 'Footer' : '');
+            $pageRendererMethodName = 'addJS' . ($scriptTag->getPosition() === self::POSITION_FOOTER ? 'Footer' : '');
 
             if ($scriptTag->isLibrary()) {
                 $pageRendererMethodName .= 'Library';
@@ -119,7 +119,7 @@ final class TagRenderer implements TagRendererInterface
                 $pageRenderer->{$pageRendererMethodName}(...$attributes);
             }
 
-            if (true === $scriptTag->isRegisterFile()) {
+            if ($scriptTag->isRegisterFile() === true) {
                 $this->assetRegistry->registerFile(new File($file, FileType::createScript(), [
                     'integrity' => $integrityHashes[$file] ?? false,
                 ]));
@@ -181,7 +181,7 @@ final class TagRenderer implements TagRendererInterface
 
             $pageRenderer->addCssFile(...$attributes);
 
-            if (true === $linkTag->isRegisterFile()) {
+            if ($linkTag->isRegisterFile() === true) {
                 $this->assetRegistry->registerFile(new File($file, FileType::createStyle()));
             }
         }
@@ -205,7 +205,7 @@ final class TagRenderer implements TagRendererInterface
 
             $newDir = basename(dirname($file)) . '/';
 
-            if (false === in_array($newDir, $directories, true)) {
+            if (in_array($newDir, $directories, true) === false) {
                 $GLOBALS['TYPO3_CONF_VARS']['FE']['additionalAbsRefPrefixDirectories'] .= ',' . $newDir;
             }
         }
@@ -217,7 +217,7 @@ final class TagRenderer implements TagRendererInterface
             return true;
         }
 
-        if (null === $this->applicationType) {
+        if ($this->applicationType === null) {
             return false;
         }
 
@@ -225,11 +225,11 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if ('' === $this->getTypoScriptFrontendController()->absRefPrefix) {
+        if ($this->getTypoScriptFrontendController()->absRefPrefix === '') {
             return false;
         }
 
-        if ('/' === $this->getTypoScriptFrontendController()->absRefPrefix) {
+        if ($this->getTypoScriptFrontendController()->absRefPrefix === '/') {
             return true;
         }
 
@@ -251,7 +251,7 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if (null === $this->applicationType) {
+        if ($this->applicationType === null) {
             return false;
         }
 
@@ -259,7 +259,7 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if (! isset($this->getTypoScriptFrontendController()->config['config']['doctype']) || 'html5' !== $this->getTypoScriptFrontendController()->config['config']['doctype']) {
+        if (! isset($this->getTypoScriptFrontendController()->config['config']['doctype']) || $this->getTypoScriptFrontendController()->config['config']['doctype'] !== 'html5') {
             return false;
         }
 

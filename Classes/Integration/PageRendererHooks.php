@@ -46,7 +46,7 @@ final class PageRendererHooks
             }
 
             // Is the include type 'jsLibs' and should be treated as a library
-            $isLibrary = TagRendererInterface::POSITION_JS_LIBRARY === $includeType;
+            $isLibrary = $includeType === TagRendererInterface::POSITION_JS_LIBRARY;
 
             foreach ($params[$includeType] as $key => $jsFile) {
                 if (! $this->isEncoreEntryName($jsFile['file'])) {
@@ -56,7 +56,7 @@ final class PageRendererHooks
                 $buildAndEntryName = $this->createBuildAndEntryName($jsFile['file']);
                 $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
 
-                if (2 === count($buildAndEntryName)) {
+                if (count($buildAndEntryName) === 2) {
                     [$buildName, $entryName] = $buildAndEntryName;
                 } else {
                     $entryName = $buildAndEntryName[0];
@@ -85,7 +85,7 @@ final class PageRendererHooks
                 $buildAndEntryName = $this->createBuildAndEntryName($cssFile['file']);
                 $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
 
-                if (2 === count($buildAndEntryName)) {
+                if (count($buildAndEntryName) === 2) {
                     [$buildName, $entryName] = $buildAndEntryName;
                 } else {
                     $entryName = $buildAndEntryName[0];

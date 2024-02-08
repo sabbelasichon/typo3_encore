@@ -134,12 +134,12 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             $icon = $iconNodeList
                 ->item(0);
 
-            if (null !== $icon) {
+            if ($icon !== null) {
                 if ($icon instanceof DOMElement && $icon->hasAttribute('viewBox')) {
                     $this->tag->addAttribute('viewBox', $icon->getAttribute('viewBox'));
                 }
                 foreach ($icon->childNodes as $node) {
-                    if (null === $node->ownerDocument) {
+                    if ($node->ownerDocument === null) {
                         continue;
                     }
                     $content[] = $node->ownerDocument->saveXML($node);

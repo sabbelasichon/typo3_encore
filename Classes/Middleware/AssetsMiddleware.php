@@ -58,12 +58,12 @@ final class AssetsMiddleware implements MiddlewareInterface
 
         $registeredFiles = $this->collectRegisteredFiles();
 
-        if ([] === $registeredFiles) {
+        if ($registeredFiles === []) {
             return $response;
         }
 
         $linkProvider = $request->getAttribute('_links');
-        if (null === $linkProvider) {
+        if ($linkProvider === null) {
             $request = $request->withAttribute('_links', new GenericLinkProvider());
         }
 
@@ -74,7 +74,7 @@ final class AssetsMiddleware implements MiddlewareInterface
 
         foreach ($registeredFiles as $rel => $relFiles) {
             // You can disable or enable one of the resource hints via typoscript simply by adding something like that preload.enable = 1, dns-prefetch.enable = 1
-            if (false === $this->getBooleanConfigByPath(sprintf('%s.enable', $rel))) {
+            if ($this->getBooleanConfigByPath(sprintf('%s.enable', $rel)) === false) {
                 continue;
             }
 
@@ -99,7 +99,7 @@ final class AssetsMiddleware implements MiddlewareInterface
         /** @var GenericLinkProvider $linkProvider */
         $linkProvider = $request->getAttribute('_links');
 
-        if ([] !== $linkProvider->getLinks()) {
+        if ($linkProvider->getLinks() !== []) {
             /** @var LinkInterface[]|Traversable $links */
             $links = $linkProvider->getLinks();
             $serializedLinks = (new HttpHeaderSerializer())->serialize($links);
@@ -116,7 +116,7 @@ final class AssetsMiddleware implements MiddlewareInterface
 
     private function canAddCrossOriginAttribute(bool $crossOrigin, string $rel): bool
     {
-        return false !== $crossOrigin && '' !== (string) $crossOrigin && in_array(
+        return $crossOrigin !== false && (string) $crossOrigin !== '' && in_array(
             $rel,
             self::$crossOriginAllowed,
             true
@@ -141,7 +141,7 @@ final class AssetsMiddleware implements MiddlewareInterface
 
     private function getBooleanConfigByPath(string $path): bool
     {
-        if ([] !== $this->settingsService->getSettings()) {
+        if ($this->settingsService->getSettings() !== []) {
             return $this->settingsService->getBooleanByPath($path);
         }
 
