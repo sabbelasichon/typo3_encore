@@ -8,8 +8,8 @@ parameters:
     - Tests
 
   inferPrivatePropertyTypeFromConstructor: true
-  checkMissingIterableValueType: false
-  checkGenericClassInNonGenericObjectType: false
+  ignoreErrors:
+    - identifier: missingType.iterableValue
   typo3:
     requestGetAttributeMapping:
         _links: array
