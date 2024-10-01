@@ -26,7 +26,7 @@ parameters:
 			path: Classes/Form/FormDataProvider/RichtextEncoreConfiguration.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between '' and '1' will always evaluate to true\\.$#"
+			message: "#^Strict comparison using \\!\\=\\= between '1' and '' will always evaluate to true\\.$#"
 			count: 1
 			path: Classes/Middleware/AssetsMiddleware.php
 
