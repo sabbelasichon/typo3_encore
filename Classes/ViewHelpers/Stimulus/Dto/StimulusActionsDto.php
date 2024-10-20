@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\ViewHelpers\Stimulus\Dto;
 
-final class StimulusActionsDto extends AbstractStimulusDto
+final class StimulusActionsDto extends AbstractStimulusDto implements \Stringable
 {
     private array $actions = [];
 

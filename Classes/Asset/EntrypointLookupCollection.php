@@ -15,19 +15,15 @@ use Ssch\Typo3Encore\Integration\EntryLookupFactoryInterface;
 
 class EntrypointLookupCollection implements EntrypointLookupCollectionInterface
 {
-    private EntryLookupFactoryInterface $entryLookupFactory;
-
     /**
      * @var array|EntrypointLookupInterface[]
      */
     private ?array $buildEntrypoints = null;
 
-    private ?string $defaultBuildName;
-
-    public function __construct(EntryLookupFactoryInterface $entryLookupFactory, string $defaultBuildName = null)
-    {
-        $this->entryLookupFactory = $entryLookupFactory;
-        $this->defaultBuildName = $defaultBuildName;
+    public function __construct(
+        private readonly EntryLookupFactoryInterface $entryLookupFactory,
+        private readonly ?string $defaultBuildName = null
+    ) {
     }
 
     public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface

@@ -33,21 +33,12 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
      */
     protected $tagName = 'svg';
 
-    private IdGeneratorInterface $idGenerator;
-
-    private FilesystemInterface $filesystem;
-
-    private ImageService $imageService;
-
     public function __construct(
-        FilesystemInterface $filesystem,
-        IdGeneratorInterface $idGenerator,
-        ImageService $imageService
+        private readonly FilesystemInterface $filesystem,
+        private readonly IdGeneratorInterface $idGenerator,
+        private readonly ImageService $imageService
     ) {
         parent::__construct();
-        $this->filesystem = $filesystem;
-        $this->idGenerator = $idGenerator;
-        $this->imageService = $imageService;
     }
 
     public function initializeArguments(): void
@@ -83,7 +74,7 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
             $imageUri = $this->imageService->getImageUri($image, (bool) $this->arguments['absolute']);
             $imageUri = GeneralUtility::createVersionNumberedFilename($imageUri);
             $imageContents = $image->getContents();
-        } catch (FolderDoesNotExistException $folderDoesNotExistException) {
+        } catch (FolderDoesNotExistException) {
             $imageUri = $this->arguments['src'];
             $imageContents = $this->filesystem->get($imageUri);
         }

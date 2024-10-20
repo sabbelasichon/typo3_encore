@@ -30,13 +30,12 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider provideRteConfigurationWithEncoreFiles
-     *
-     * @param string|string[] $contentsCss
+     * @param string|string[] $contentCss
      */
-    public function testFormConfiguration($contentsCss, array $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideRteConfigurationWithEncoreFiles')]
+    public function testFormConfiguration(array|string $contentCss, array $expected): void
     {
-        $data = $this->createFormData($contentsCss);
+        $data = $this->createFormData($contentCss);
 
         $data = $this->subject->addData($data);
         $valueAfterProcessing = $data['processedTca']['columns']['testColumn']['config']['richtextConfiguration']['editor']['config']['contentsCss'];
@@ -55,7 +54,7 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
         ];
     }
 
-    public function provideRteConfigurationWithEncoreFiles(): Iterator
+    public static function provideRteConfigurationWithEncoreFiles(): Iterator
     {
         yield [
             'contentCss' => 'typo3_encore:entryPoint',

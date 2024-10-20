@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\ViewHelpers\Stimulus\Dto;
 
-class StimulusControllersDto extends AbstractStimulusDto
+class StimulusControllersDto extends AbstractStimulusDto implements \Stringable
 {
     private array $controllers = [];
 

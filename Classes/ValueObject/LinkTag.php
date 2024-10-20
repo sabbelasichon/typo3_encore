@@ -16,32 +16,14 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 
 final class LinkTag
 {
-    private string $entryName;
-
-    private string $media;
-
-    private string $buildName;
-
-    private ?PageRenderer $pageRenderer;
-
-    private array $parameters;
-
-    private bool $registerFile;
-
     public function __construct(
-        string $entryName,
-        string $media = 'all',
-        string $buildName = EntrypointLookupInterface::DEFAULT_BUILD,
-        PageRenderer $pageRenderer = null,
-        array $parameters = [],
-        bool $registerFile = true
+        private readonly string $entryName,
+        private readonly string $media = 'all',
+        private readonly string $buildName = EntrypointLookupInterface::DEFAULT_BUILD,
+        private readonly ?PageRenderer $pageRenderer = null,
+        private readonly array $parameters = [],
+        private readonly bool $registerFile = true
     ) {
-        $this->entryName = $entryName;
-        $this->media = $media;
-        $this->buildName = $buildName;
-        $this->pageRenderer = $pageRenderer;
-        $this->parameters = $parameters;
-        $this->registerFile = $registerFile;
     }
 
     public function getEntryName(): string

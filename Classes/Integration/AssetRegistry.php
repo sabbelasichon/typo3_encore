@@ -20,11 +20,9 @@ final class AssetRegistry implements AssetRegistryInterface
 
     private array $defaultAttributes = [];
 
-    private SettingsServiceInterface $settingsService;
-
-    public function __construct(SettingsServiceInterface $settingsService)
-    {
-        $this->settingsService = $settingsService;
+    public function __construct(
+        private readonly SettingsServiceInterface $settingsService
+    ) {
         $this->reset();
     }
 

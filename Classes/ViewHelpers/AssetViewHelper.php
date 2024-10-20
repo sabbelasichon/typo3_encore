@@ -20,14 +20,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class AssetViewHelper extends AbstractViewHelper
 {
-    private PackageFactoryInterface $packageFactory;
-
-    private FilesystemInterface $filesystem;
-
-    public function __construct(PackageFactoryInterface $packageFactory, FilesystemInterface $filesystem)
-    {
-        $this->packageFactory = $packageFactory;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private readonly PackageFactoryInterface $packageFactory,
+        private readonly FilesystemInterface $filesystem
+    ) {
     }
 
     public function initializeArguments(): void

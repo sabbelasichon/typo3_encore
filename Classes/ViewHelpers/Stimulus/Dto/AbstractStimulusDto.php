@@ -20,10 +20,7 @@ abstract class AbstractStimulusDto
         return $this->escapeAsHtmlAttr($this->normalizeControllerName($controllerName));
     }
 
-    /**
-     * @param mixed $value
-     */
-    protected function getFormattedValue($value): string
+    protected function getFormattedValue(mixed $value): string
     {
         if ((\is_object($value) && \is_callable([$value, '__toString']))) {
             $value = (string) $value;

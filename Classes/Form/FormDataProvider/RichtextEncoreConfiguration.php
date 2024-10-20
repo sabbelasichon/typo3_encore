@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class RichtextEncoreConfiguration implements FormDataProviderInterface
 {
-    private EntrypointLookupCollectionInterface $entrypointLookupCollection;
+    private readonly EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
     public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
     {

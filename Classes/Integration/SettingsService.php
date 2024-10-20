@@ -18,11 +18,9 @@ final class SettingsService implements SettingsServiceInterface
 {
     private ?array $settings = null;
 
-    private ConfigurationManagerInterface $configurationManager;
-
-    public function __construct(ConfigurationManagerInterface $configurationManager)
-    {
-        $this->configurationManager = $configurationManager;
+    public function __construct(
+        private readonly ConfigurationManagerInterface $configurationManager
+    ) {
     }
 
     public function getSettings(): array

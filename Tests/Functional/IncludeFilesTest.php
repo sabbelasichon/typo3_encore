@@ -21,17 +21,19 @@ final class IncludeFilesTest extends FunctionalTestCase
      */
     private const ROOT_PAGE_UID = 1;
 
+    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
+
+    protected array $pathsToLinkInTestInstance = [
+        'typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/sites' => 'typo3conf/sites',
+    ];
+
     protected function setUp(): void
     {
-        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
-        $this->pathsToLinkInTestInstance['typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/sites'] = 'typo3conf/sites';
         parent::setUp();
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testAddFiles(): void
     {
         $this->setUpFrontendRootPage(
@@ -51,9 +53,7 @@ final class IncludeFilesTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testAddFilesWithAbsRefPrefix(): void
     {
         $this->setUpFrontendRootPage(
@@ -78,9 +78,7 @@ final class IncludeFilesTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testAddFilesWithHtml5DocType(): void
     {
         $this->setUpFrontendRootPage(

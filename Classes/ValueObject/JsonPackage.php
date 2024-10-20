@@ -15,14 +15,10 @@ use Symfony\Component\Asset\PackageInterface;
 
 final class JsonPackage
 {
-    private string $manifestJsonPath;
-
-    private PackageInterface $package;
-
-    public function __construct(string $manifestJsonPath, PackageInterface $package)
-    {
-        $this->manifestJsonPath = $manifestJsonPath;
-        $this->package = $package;
+    public function __construct(
+        private readonly string $manifestJsonPath,
+        private readonly PackageInterface $package
+    ) {
     }
 
     public function getManifestJsonPath(): string

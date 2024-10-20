@@ -37,15 +37,11 @@ final class AssetsMiddleware implements MiddlewareInterface
      */
     private $controller;
 
-    private AssetRegistryInterface $assetRegistry;
-
-    private SettingsServiceInterface $settingsService;
-
-    public function __construct(AssetRegistryInterface $assetRegistry, SettingsServiceInterface $settingsService)
-    {
+    public function __construct(
+        private readonly AssetRegistryInterface $assetRegistry,
+        private readonly SettingsServiceInterface $settingsService
+    ) {
         $this->controller = $GLOBALS['TSFE'];
-        $this->settingsService = $settingsService;
-        $this->assetRegistry = $assetRegistry;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

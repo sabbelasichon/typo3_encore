@@ -25,15 +25,11 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class TagRenderer implements TagRendererInterface
 {
-    private EntrypointLookupCollectionInterface $entrypointLookupCollection;
-
-    private AssetRegistryInterface $assetRegistry;
-
     private ?ApplicationType $applicationType = null;
 
     public function __construct(
-        EntrypointLookupCollectionInterface $entrypointLookupCollection,
-        AssetRegistryInterface $assetRegistry
+        private readonly EntrypointLookupCollectionInterface $entrypointLookupCollection,
+        private readonly AssetRegistryInterface $assetRegistry
     ) {
         try {
             $this->applicationType = array_key_exists(
@@ -42,12 +38,9 @@ final class TagRenderer implements TagRendererInterface
             ) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface ? ApplicationType::fromRequest(
                 $GLOBALS['TYPO3_REQUEST']
             ) : null;
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException) {
             $this->applicationType = null;
         }
-
-        $this->entrypointLookupCollection = $entrypointLookupCollection;
-        $this->assetRegistry = $assetRegistry;
     }
 
     public function renderWebpackScriptTags(ScriptTag $scriptTag): void
@@ -71,7 +64,7 @@ final class TagRenderer implements TagRendererInterface
             // To do this, it's split up into two parts. The first part wraps the first file
             // and the second part wraps the last file.
             $splitChar = ! empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
-            $wrapArr = explode($splitChar, $parameters['allWrap'], 2);
+            $wrapArr = explode($splitChar, (string) $parameters['allWrap'], 2);
             $wrapFirst = $wrapArr[0] . $splitChar;
             $wrapLast = $splitChar . $wrapArr[1];
             unset($parameters['allWrap']);
@@ -93,7 +86,7 @@ final class TagRenderer implements TagRendererInterface
             }
 
             $attributes = array_replace([
-                'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
+                'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim((string) $file, '/') : $file,
                 'type' => $this->removeType($parameters) ? '' : 'text/javascript',
                 'compress' => false,
                 'forceOnTop' => false,
@@ -112,7 +105,7 @@ final class TagRenderer implements TagRendererInterface
 
             if ($scriptTag->isLibrary()) {
                 $pageRendererMethodName .= 'Library';
-                $filename = basename($file);
+                $filename = basename((string) $file);
                 $pageRenderer->{$pageRendererMethodName}($filename, ...$attributes);
             } else {
                 $pageRendererMethodName .= 'File';
@@ -146,7 +139,7 @@ final class TagRenderer implements TagRendererInterface
             // To do this, it's split up into two parts. The first part wraps the first file
             // and the second part wraps the last file.
             $splitChar = ! empty($parameters['splitChar']) ? $parameters['splitChar'] : '|';
-            $wrapArr = explode($splitChar, $parameters['allWrap'], 2);
+            $wrapArr = explode($splitChar, (string) $parameters['allWrap'], 2);
             $wrapFirst = $wrapArr[0] . $splitChar;
             $wrapLast = $splitChar . $wrapArr[1];
             unset($parameters['allWrap']);
@@ -165,7 +158,7 @@ final class TagRenderer implements TagRendererInterface
             }
 
             $attributes = array_replace([
-                'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim($file, '/') : $file,
+                'file' => $this->removeLeadingSlash($file, $parameters) ? ltrim((string) $file, '/') : $file,
                 'rel' => 'stylesheet',
                 'media' => $linkTag->getMedia(),
                 'title' => '',

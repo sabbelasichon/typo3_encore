@@ -30,7 +30,7 @@ final class FileType
      */
     private const FONT = 'font';
 
-    private string $type;
+    private readonly string $type;
 
     private function __construct(string $type)
     {
