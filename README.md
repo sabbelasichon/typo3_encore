@@ -286,6 +286,17 @@ Encore
 module.exports = Encore.getWebpackConfig();
 ```
 
+### Working with Watcher & TYPO3 with Content Security Policy
+
+If you encounter problems with Content Security Policy and watcher add the following to your additional.php
+
+```php
+// disable CSP if "npm run watch" is used
+if (strpos(file_get_contents(\TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/build/entrypoints.json'), 'build/vendors-node_modules') !== false) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['security.frontend.enforceContentSecurityPolicy'] = false;
+}
+```
+
 ### Working with typo3/cms-composer-installers 4+ or TYPO3 12
 
 The `typo3/cms-composer-installers` library takes care of moving TYPO3-specific assets in the right place
