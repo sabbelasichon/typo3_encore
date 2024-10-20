@@ -12,9 +12,11 @@ declare(strict_types=1);
 use Ssch\Typo3Encore\Integration\FixedIdGenerator;
 use Ssch\Typo3Encore\Integration\IdGenerator;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
+use Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerEventListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent;
 
 return static function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void {
     $services = $containerConfigurator->services();
@@ -29,8 +31,10 @@ return static function (ContainerConfigurator $containerConfigurator, ContainerB
     ]);
 
     $services->alias(IdGeneratorInterface::class, IdGenerator::class);
-
     $services->set(FixedIdGenerator::class)->args(['fixed']);
+    $services->set(TypoScriptFrontendControllerEventListener::class)->tag('event.listener', [
+        'event' => AfterCacheableContentIsGeneratedEvent::class,
+    ]);
 
     if (Environment::getContext()->isTesting()) {
         $services->alias(IdGeneratorInterface::class, FixedIdGenerator::class);

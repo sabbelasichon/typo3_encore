@@ -18,11 +18,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class PreconnectViewHelper extends AbstractViewHelper
 {
-    private AssetRegistryInterface $assetRegistry;
-
-    public function __construct(AssetRegistryInterface $assetRegistry)
-    {
-        $this->assetRegistry = $assetRegistry;
+    public function __construct(
+        private readonly AssetRegistryInterface $assetRegistry
+    ) {
     }
 
     public function initializeArguments(): void

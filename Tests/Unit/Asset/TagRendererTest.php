@@ -95,9 +95,7 @@ final class TagRendererTest extends UnitTestCase
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
-    /**
-     * @dataProvider scriptTagsWithPosition
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scriptTagsWithPosition')]
     public function testRenderWebpackScriptTagsWithDefaultBuildInPosition(
         string $position,
         bool $isLibrary,
@@ -125,7 +123,7 @@ final class TagRendererTest extends UnitTestCase
         $this->subject->renderWebpackScriptTags($scriptTag);
     }
 
-    public function scriptTagsWithPosition(): array
+    public static function scriptTagsWithPosition(): array
     {
         return [
             // $position, $isLibrary, $expectedPageRendererCall

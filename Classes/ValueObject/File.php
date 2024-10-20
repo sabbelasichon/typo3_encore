@@ -13,20 +13,12 @@ namespace Ssch\Typo3Encore\ValueObject;
 
 final class File
 {
-    private string $file;
-
-    private array $attributes;
-
-    private string $rel;
-
-    private FileType $fileType;
-
-    public function __construct(string $file, FileType $fileType, array $attributes = [], string $rel = 'preload')
-    {
-        $this->file = $file;
-        $this->attributes = $attributes;
-        $this->rel = $rel;
-        $this->fileType = $fileType;
+    public function __construct(
+        private readonly string $file,
+        private readonly FileType $fileType,
+        private readonly array $attributes = [],
+        private readonly string $rel = 'preload'
+    ) {
     }
 
     public function getFile(): string

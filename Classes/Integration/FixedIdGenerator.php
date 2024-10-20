@@ -13,11 +13,9 @@ namespace Ssch\Typo3Encore\Integration;
 
 final class FixedIdGenerator implements IdGeneratorInterface
 {
-    private string $id;
-
-    public function __construct(string $id)
-    {
-        $this->id = $id;
+    public function __construct(
+        private readonly string $id
+    ) {
     }
 
     public function generate(): string

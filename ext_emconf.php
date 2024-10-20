@@ -7,10 +7,10 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Sebastian Schreiber',
     'author_email' => 'breakpoint@schreibersebastian.de',
     'state' => 'stable',
-    'version' => '5.0.6',
+    'version' => '6.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.2-12.4.99',
+            'typo3' => '12.4.0-13.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],

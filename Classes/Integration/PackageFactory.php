@@ -18,14 +18,10 @@ use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 
 final class PackageFactory implements PackageFactoryInterface
 {
-    private SettingsServiceInterface $settingsService;
-
-    private FilesystemInterface $filesystem;
-
-    public function __construct(SettingsServiceInterface $settingsService, FilesystemInterface $filesystem)
-    {
-        $this->settingsService = $settingsService;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private readonly SettingsServiceInterface $settingsService,
+        private readonly FilesystemInterface $filesystem
+    ) {
     }
 
     public function getPackage(string $package): JsonPackage

@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -24,17 +23,19 @@ final class SvgViewHelperTest extends FunctionalTestCase
 
     protected StandaloneView $view;
 
+    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
+
+    protected array $pathsToLinkInTestInstance = [
+        'typo3conf/ext/typo3_encore/Tests/Functional/ViewHelpers/Fixtures/fileadmin/user_upload' => 'fileadmin/user_upload',
+    ];
+
     protected function setUp(): void
     {
-        $this->pathsToLinkInTestInstance['typo3conf/ext/typo3_encore/Tests/Functional/ViewHelpers/Fixtures/fileadmin/user_upload'] = 'fileadmin/user_upload';
-        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
         parent::setUp();
-        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->view = $this->get(StandaloneView::class);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender(array $arguments, string $expected): void
     {
         $arguments['src'] = 'fileadmin/user_upload/sprite.svg';
@@ -54,16 +55,14 @@ final class SvgViewHelperTest extends FunctionalTestCase
         self::assertSame($expected, $this->view->render());
     }
 
-    public function renderDataProvider(): array
+    public static function renderDataProvider(): array
     {
         return [
             [
                 [
                     'name' => 'name',
                 ],
-                sprintf(
-                    '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><use xlink:href="fileadmin/user_upload/sprite.svg#name" /></svg>'
-                ),
+                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><use xlink:href="fileadmin/user_upload/sprite.svg#name" /></svg>',
             ],
             [
                 [

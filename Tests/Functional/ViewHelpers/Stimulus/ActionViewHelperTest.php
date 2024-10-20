@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -20,20 +19,19 @@ final class ActionViewHelperTest extends FunctionalTestCase
 {
     protected StandaloneView $view;
 
+    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
+
+    protected bool $initializeDatabase = false;
+
     protected function setUp(): void
     {
-        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
-        $this->initializeDatabase = false;
         parent::setUp();
-        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->view = $this->get(StandaloneView::class);
     }
 
-    /**
-     * @param array|string $controllerName
-     * @dataProvider provideRenderStimulusAction
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideRenderStimulusAction')]
     public function testRenderData(
-        $controllerName,
+        array|string $controllerName,
         ?string $actionName,
         ?string $eventName,
         string $expected
@@ -52,7 +50,7 @@ final class ActionViewHelperTest extends FunctionalTestCase
         self::assertSame($expected, $this->view->render());
     }
 
-    public function provideRenderStimulusAction(): Generator
+    public static function provideRenderStimulusAction(): Generator
     {
         yield 'with default event' => [
             'controllerName' => 'my-controller',

@@ -30,11 +30,9 @@ final class PageRendererHooks
      */
     private const PART_FOOTER = 2;
 
-    private TagRendererInterface $tagRenderer;
-
-    public function __construct(TagRendererInterface $tagRenderer)
-    {
-        $this->tagRenderer = $tagRenderer;
+    public function __construct(
+        private readonly TagRendererInterface $tagRenderer
+    ) {
     }
 
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void

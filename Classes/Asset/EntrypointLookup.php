@@ -20,26 +20,20 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
 {
     private ?array $entriesData = null;
 
-    private string $entrypointJsonPath;
+    private readonly string $entrypointJsonPath;
 
     private array $returnedFiles = [];
 
-    private JsonDecoderInterface $jsonDecoder;
-
-    private FilesystemInterface $filesystem;
-
-    private bool $strictMode;
+    private readonly FilesystemInterface $filesystem;
 
     public function __construct(
         string $entrypointJsonPath,
-        bool $strictMode,
-        JsonDecoderInterface $jsonDecoder,
+        private readonly bool $strictMode,
+        private readonly JsonDecoderInterface $jsonDecoder,
         FilesystemInterface $filesystem
     ) {
         $this->entrypointJsonPath = $filesystem->getFileAbsFileName($entrypointJsonPath);
-        $this->jsonDecoder = $jsonDecoder;
         $this->filesystem = $filesystem;
-        $this->strictMode = $strictMode;
     }
 
     public function getJavaScriptFiles(string $entryName): array
@@ -127,7 +121,7 @@ final class EntrypointLookup implements EntrypointLookupInterface, IntegrityData
 
         try {
             $this->entriesData = $this->jsonDecoder->decode($this->filesystem->get($this->entrypointJsonPath));
-        } catch (JsonDecodeException $e) {
+        } catch (JsonDecodeException) {
             throw new InvalidArgumentException(sprintf(
                 'There was a problem JSON decoding the "%s" file',
                 $this->entrypointJsonPath

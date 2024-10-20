@@ -16,25 +16,16 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 
 final class EntryLookupFactory implements EntryLookupFactoryInterface
 {
-    private SettingsServiceInterface $settingsService;
-
-    private FilesystemInterface $filesystem;
-
     /**
      * @var array|EntrypointLookupInterface[]
      */
     private static ?array $collection = null;
 
-    private JsonDecoderInterface $jsonDecoder;
-
     public function __construct(
-        SettingsServiceInterface $settingsService,
-        FilesystemInterface $filesystem,
-        JsonDecoderInterface $jsonDecoder
+        private readonly SettingsServiceInterface $settingsService,
+        private readonly FilesystemInterface $filesystem,
+        private readonly JsonDecoderInterface $jsonDecoder
     ) {
-        $this->settingsService = $settingsService;
-        $this->filesystem = $filesystem;
-        $this->jsonDecoder = $jsonDecoder;
     }
 
     /**

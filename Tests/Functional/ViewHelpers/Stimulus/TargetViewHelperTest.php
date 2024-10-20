@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -20,19 +19,18 @@ final class TargetViewHelperTest extends FunctionalTestCase
 {
     protected StandaloneView $view;
 
+    protected bool $initializeDatabase = false;
+
+    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
+
     protected function setUp(): void
     {
-        $this->testExtensionsToLoad[] = 'typo3conf/ext/typo3_encore';
-        $this->initializeDatabase = false;
         parent::setUp();
-        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->view = $this->get(StandaloneView::class);
     }
 
-    /**
-     * @param mixed $controllerName
-     * @dataProvider provideRenderStimulusTarget
-     */
-    public function testRenderData($controllerName, ?string $targetName, string $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideRenderStimulusTarget')]
+    public function testRenderData(mixed $controllerName, ?string $targetName, string $expected): void
     {
         $this->view->assignMultiple([
             'controllerName' => $controllerName,
@@ -47,7 +45,7 @@ final class TargetViewHelperTest extends FunctionalTestCase
         self::assertSame($expected, $this->view->render());
     }
 
-    public function provideRenderStimulusTarget(): Generator
+    public static function provideRenderStimulusTarget(): Generator
     {
         yield 'simple' => [
             'controllerName' => 'my-controller',
