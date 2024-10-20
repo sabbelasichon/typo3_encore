@@ -21,9 +21,12 @@ final class StimulusTargetsDto extends AbstractStimulusDto
             return '';
         }
 
-        return implode(' ', array_map(function (string $attribute, string $value): string {
-            return $attribute . '="' . $this->escapeAsHtmlAttr($value) . '"';
-        }, array_keys($this->targets), $this->targets));
+        return implode(
+            ' ',
+            array_map(fn (string $attribute, string $value): string => $attribute . '="' . $this->escapeAsHtmlAttr(
+                $value
+            ) . '"', array_keys($this->targets), $this->targets)
+        );
     }
 
     /**
