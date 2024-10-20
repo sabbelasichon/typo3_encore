@@ -11,3 +11,7 @@ call_user_func(static function ($packageKey) {
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][\Ssch\Typo3Encore\Form\FormDataProvider\RichtextEncoreConfiguration::class] = [
     'depends' => [\TYPO3\CMS\Backend\Form\FormDataProvider\TcaText::class],
 ];
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['flexFormSegment'][\Ssch\Typo3Encore\Form\FormDataProvider\RichtextEncoreConfiguration::class] = [
+    'depends' => [\TYPO3\CMS\Backend\Form\FormDataProvider\TcaText::class],
+];
