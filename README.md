@@ -125,49 +125,48 @@ This way of using the AssetViewHelper is similar to the `asset` function used in
 
 1. If you are in production mode and set enableVersioning(true) then you should set the option
 
-```php
-$GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
-```
+   ```php
+   $GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] = ''
+   ```
 
 2. Defining Multiple Webpack Configurations ([see](https://symfony.com/doc/current/frontend/encore/advanced-config.html#defining-multiple-webpack-configurations))
 
-Then you have to define your builds in your TypoScript-Setup:
+   Then you have to define your builds in your TypoScript-Setup:
 
-```php
-plugin.tx_typo3encore {
-    settings {
-        builds {
-            firstBuild = EXT:typo3_encore/Resources/Public/FirstBuild
-            secondBuild = EXT:typo3_encore/Resources/Public/SecondBuild
+   ```php
+    plugin.tx_typo3encore {
+        settings {
+            builds {
+                firstBuild = EXT:typo3_encore/Resources/Public/FirstBuild
+                secondBuild = EXT:typo3_encore/Resources/Public/SecondBuild
+            }
         }
     }
-}
-```
+   ```
 
-Finally, you can specify which build to use:
+   Finally, you can specify which build to use:
 
-```php
-page.includeCSS {
-    # Pattern typo3_encore:buildName:entryName
-    app = typo3_encore:firstBuild:app
-}
-```
+   ```php
+    page.includeCSS {
+        # Pattern typo3_encore:buildName:entryName
+        app = typo3_encore:firstBuild:app
+    }
+   ```
 
-```html
-{namespace encore = Ssch\Typo3Encore\ViewHelpers}
+   ```html
+    {namespace encore = Ssch\Typo3Encore\ViewHelpers}
 
-<encore:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
-```
+    <encore:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
+   ```
 
-3. **Important Note on Development Context**
+3. **Important note on TYPO3 JS/CSS concatenation and compression while working with encore dev-server mode**
 
    If you are using the Encore dev server (`encore dev-server`), ensure that TYPO3's asset concatenation and compression
-   are disabled in your `Development` application context.
+   are disabled.
 
-   Enabling `config.concatenateCss = 1`, `config.concatenateJs = 1`, `config.compressCss = 1`, or `config.compressJs = 1`
-   in the Development context will prevent the dev server's hot module replacement (HMR) from working correctly, as TYPO3
-   will serve concatenated/compressed files instead of the live assets from the dev server. Additionally, lot of temporary
-   merged files will be produced (like GBs) making the performance of docker development slow.
+   Enabling these options (`config.concatenateCss = 1`, `config.concatenateJs = 1`, `config.compressCss = 1`, or `config.compressJs = 1`)
+   will prevent the dev server's hot module replacement (HMR) from working correctly. Additionally, TYPO3 may produce
+   a large volume of temporary files (potentially gigabytes), significantly slowing down Docker-based development environments.
 
    See [Issue #234](https://github.com/sabbelasichon/typo3_encore/issues/234) for more details.
 
