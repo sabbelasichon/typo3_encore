@@ -33,7 +33,7 @@ final class StimulusTargetsDto extends AbstractStimulusDto implements \Stringabl
      * @param string      $controllerName the Stimulus controller name
      * @param string|null $targetNames    The space-separated list of target names if a string is passed to the 1st argument. Optional.
      */
-    public function addTarget(string $controllerName, string $targetNames = null): void
+    public function addTarget(string $controllerName, ?string $targetNames = null): void
     {
         $controllerName = $this->getFormattedControllerName($controllerName);
 

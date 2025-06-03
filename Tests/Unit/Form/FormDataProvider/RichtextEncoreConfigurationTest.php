@@ -90,7 +90,7 @@ final class RichtextEncoreConfigurationTest extends UnitTestCase
     private function createEntrypointLookUpCollection(): EntrypointLookupCollectionInterface
     {
         return new class() implements EntrypointLookupCollectionInterface {
-            public function getEntrypointLookup(string $buildName = null): EntrypointLookupInterface
+            public function getEntrypointLookup(?string $buildName = null): EntrypointLookupInterface
             {
                 if ($buildName !== '_default') {
                     throw new Exception('Invalid buildName in test case', 1_645_708_934);

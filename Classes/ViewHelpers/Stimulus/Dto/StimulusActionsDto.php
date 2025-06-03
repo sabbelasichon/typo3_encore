@@ -40,7 +40,7 @@ final class StimulusActionsDto extends AbstractStimulusDto implements \Stringabl
     public function addAction(
         string $controllerName,
         string $actionName,
-        string $eventName = null,
+        ?string $eventName = null,
         array $parameters = []
     ): void {
         $controllerName = $this->getFormattedControllerName($controllerName);
