@@ -21,7 +21,7 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
 {
     private readonly EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
-    public function __construct(EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
+    public function __construct(?EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
     {
         $this->entrypointLookupCollection = $entrypointLookupCollection ?? GeneralUtility::makeInstance(
             EntrypointLookupCollection::class

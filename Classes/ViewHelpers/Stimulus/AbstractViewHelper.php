@@ -65,8 +65,8 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
      */
     public function renderStimulusAction(
         $controllerName,
-        string $actionName = null,
-        string $eventName = null,
+        ?string $actionName = null,
+        ?string $eventName = null,
         array $parameters = []
     ): StimulusActionsDto {
         $dto = new StimulusActionsDto();
@@ -133,7 +133,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
         StimulusActionsDto $dto,
         string $controllerName,
         string $actionName,
-        string $eventName = null,
+        ?string $eventName = null,
         array $parameters = []
     ): StimulusActionsDto {
         $dto->addAction($controllerName, $actionName, $eventName, $parameters);
@@ -145,7 +145,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
      * @param string|array $controllerName the Stimulus controller name
      * @param string|null $targetNames The space-separated list of target names if a string is passed to the 1st argument. Optional.
      */
-    public function renderStimulusTarget($controllerName, string $targetNames = null): StimulusTargetsDto
+    public function renderStimulusTarget($controllerName, ?string $targetNames = null): StimulusTargetsDto
     {
         $dto = new StimulusTargetsDto();
         if (\is_array($controllerName)) {
@@ -183,7 +183,7 @@ abstract class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
     public function appendStimulusTarget(
         StimulusTargetsDto $dto,
         string $controllerName,
-        string $targetNames = null
+        ?string $targetNames = null
     ): StimulusTargetsDto {
         $dto->addTarget($controllerName, $targetNames);
 
