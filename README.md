@@ -35,18 +35,30 @@ plugin.tx_typo3encore {
 
 4. In your Page templates/layout you can then use the ViewHelpers to integrate the CSS- and JS-Files in your website
 ```html
-{namespace encore = Ssch\Typo3Encore\ViewHelpers}
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:encore="http://typo3.org/ns/Ssch/Typo3Encore/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
 
 <encore:renderWebpackLinkTags entryName="app"/>
 <encore:renderWebpackScriptTags entryName="app"/>
+
+</html>
 ```
 
 If you have defined multiple entries you can define the desired entryName in the ViewHelpers
 ```html
-{namespace encore = Ssch\Typo3Encore\ViewHelpers}
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:encore="http://typo3.org/ns/Ssch/Typo3Encore/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
 
 <encore:renderWebpackLinkTags entryName="secondEntryName"/>
 <encore:renderWebpackScriptTags entryName="secondEntryName"/>
+
+</html>
 ```
 
 
@@ -96,9 +108,15 @@ Technically this is done by a PSR-15 Middleware.
 If you want to add additional files to the AssetRegistry you can use the PreloadViewHelper:
 
 ```html
-{namespace encore = Ssch\Typo3Encore\ViewHelpers}
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:encore="http://typo3.org/ns/Ssch/Typo3Encore/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
 
 <encore:preload attributes="{type: 'font/woff2', crossOrigin: 'anonymous'}" as="font" uri="{encore:asset(pathToFile: 'EXT:typo3_encore/Resources/fonts/webfont.woff2')}" />
+
+</html>
 ```
 
 Watch out, the example also uses the AssetViewHelper. The AssetViewHelper behind the scenes makes a look up to the manifest.json file.
@@ -113,10 +131,15 @@ To reference a static asset file from a fluid template, you can then use the Ass
 Note that the AssetViewHelper does not render anything but just returns the path to the file, so you will probably use inline notation to, e.g., display an image:
 
 ```
-{namespace encore = Ssch\Typo3Encore\ViewHelpers}
-
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:encore="http://typo3.org/ns/Ssch/Typo3Encore/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
 
 <img class="my-image" src="{encore:asset(pathToFile: 'EXT:my_extension/Resources/Public/Build/images/my_image.jpg')}" alt="My image" />
+
+</html>
 ```
 
 This way of using the AssetViewHelper is similar to the `asset` function used in Twig templates with Symfony.
@@ -154,9 +177,15 @@ This way of using the AssetViewHelper is similar to the `asset` function used in
    ```
 
    ```html
-    {namespace encore = Ssch\Typo3Encore\ViewHelpers}
+   <html
+       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+       xmlns:encore="http://typo3.org/ns/Ssch/Typo3Encore/ViewHelpers"
+       data-namespace-typo3-fluid="true"
+   >
 
-    <encore:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
+   <encore:renderWebpackLinkTags entryName="app" buildName="firstBuild"/>
+
+   </html>
    ```
 
 3. **Important note on TYPO3 JS/CSS concatenation and compression while working with encore dev-server mode**
@@ -439,7 +468,13 @@ requireAll(require.context('./relative-path-to-svg-folder/svg-sprite/', true, /\
 The extension ships with a SvgViewHelper in order to simplify the usage of svg in fluid.
 
 ```html
-{namespace encore = Ssch\Typo3Encore\ViewHelpers}
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:encore="http://typo3.org/ns/Ssch/Typo3Encore/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
 
 <encore:svg title="Title" description="Description" src="EXT:typo3_encore/Resources/Public/sprite.svg" name="icon-fax-contact"/>
+
+</html>
 ```
