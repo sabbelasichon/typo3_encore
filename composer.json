@@ -37,7 +37,7 @@
     "jangregor/phpstan-prophecy": "^1.0",
     "phpstan/extension-installer": "^1.1",
     "saschaegerer/phpstan-typo3": "^1.8.0",
-    "symplify/easy-coding-standard": "^12.1",
+    "symplify/easy-coding-standard": "^13.0",
     "phpstan/phpstan-strict-rules": "^1.4.4",
     "typo3/cms-rte-ckeditor": "^12.4 || ^13.4",
     "typo3/cms-install": "^12.4 || ^13.4"
