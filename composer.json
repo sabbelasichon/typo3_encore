@@ -23,7 +23,7 @@
     "symfony/asset": "^6.0 || ^7.0",
     "ext-dom": "*",
     "typo3/cms-tstemplate": "^12.4 || ^13.4",
-    "webmozart/assert": "^1.10"
+    "webmozart/assert": "^2.1"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.0",
