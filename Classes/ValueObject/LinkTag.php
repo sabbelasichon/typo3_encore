@@ -14,15 +14,15 @@ namespace Ssch\Typo3Encore\ValueObject;
 use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
-final class LinkTag
+final readonly class LinkTag
 {
     public function __construct(
-        private readonly string $entryName,
-        private readonly string $media = 'all',
-        private readonly string $buildName = EntrypointLookupInterface::DEFAULT_BUILD,
-        private readonly ?PageRenderer $pageRenderer = null,
-        private readonly array $parameters = [],
-        private readonly bool $registerFile = true
+        private string $entryName,
+        private string $media = 'all',
+        private string $buildName = EntrypointLookupInterface::DEFAULT_BUILD,
+        private ?PageRenderer $pageRenderer = null,
+        private array $parameters = [],
+        private bool $registerFile = true
     ) {
     }
 

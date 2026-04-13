@@ -13,11 +13,11 @@ namespace Ssch\Typo3Encore\ValueObject;
 
 use Symfony\Component\Asset\PackageInterface;
 
-final class JsonPackage
+final readonly class JsonPackage
 {
     public function __construct(
-        private readonly string $manifestJsonPath,
-        private readonly PackageInterface $package
+        private string $manifestJsonPath,
+        private PackageInterface $package
     ) {
     }
 

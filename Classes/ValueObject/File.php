@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\ValueObject;
 
-final class File
+final readonly class File
 {
     public function __construct(
-        private readonly string $file,
-        private readonly FileType $fileType,
-        private readonly array $attributes = [],
-        private readonly string $rel = 'preload'
+        private string $file,
+        private FileType $fileType,
+        private array $attributes = [],
+        private string $rel = 'preload'
     ) {
     }
 

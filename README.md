@@ -365,8 +365,8 @@ would be modified as follows:
 var Encore = require('@symfony/webpack-encore');
 
 Encore
-    .setOutputPath('../../public/build')
-    .setPublicPath('/build')
+    .setOutputPath('../../public/_assets/build')
+    .setPublicPath('/_assets/build')
     ...
 ```
 

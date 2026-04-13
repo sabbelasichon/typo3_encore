@@ -13,7 +13,7 @@ namespace Ssch\Typo3Encore\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-final class FileType
+final readonly class FileType
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ final class FileType
      */
     private const FONT = 'font';
 
-    private readonly string $type;
+    private string $type;
 
     private function __construct(string $type)
     {

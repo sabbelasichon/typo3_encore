@@ -18,7 +18,7 @@ use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-final class PageRendererHooks
+final readonly class PageRendererHooks
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ final class PageRendererHooks
     private const PART_FOOTER = 2;
 
     public function __construct(
-        private readonly TagRendererInterface $tagRenderer
+        private TagRendererInterface $tagRenderer
     ) {
     }
 

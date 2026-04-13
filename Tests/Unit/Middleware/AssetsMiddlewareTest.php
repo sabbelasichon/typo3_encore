@@ -21,17 +21,11 @@ use Ssch\Typo3Encore\Middleware\AssetsMiddleware;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class AssetsMiddlewareTest extends UnitTestCase
 {
     protected AssetsMiddleware $subject;
-
-    /**
-     * @var MockObject|TypoScriptFrontendController
-     */
-    protected $typoScriptFrontendController;
 
     /**
      * @var MockObject|SettingsServiceInterface
@@ -43,17 +37,39 @@ final class AssetsMiddlewareTest extends UnitTestCase
      */
     protected $assetRegistry;
 
+    /**
+     * @var ServerRequestInterface|MockObject
+     */
+    protected $request;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->typoScriptFrontendController = $this->getMockBuilder(
-            TypoScriptFrontendController::class
-        )->disableOriginalConstructor()
-            ->getMock();
         $this->settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
-        $GLOBALS['TSFE'] = $this->typoScriptFrontendController;
-        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService);
+        $this->request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
+
+        // Create a simple test double for FrontendTypoScript
+        $frontendTypoScript = new class() {
+            private array $config = [];
+
+            public function getConfigArray(): array
+            {
+                return $this->config;
+            }
+
+            public function setConfigArray(array $config): void
+            {
+                $this->config = $config;
+            }
+        };
+
+        $this->request->expects($this->any())
+            ->method('getAttribute')
+            ->with('frontend.typoscript')
+            ->willReturn($frontendTypoScript);
+
+        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService, $this->request);
     }
 
     public function testPreloadingIsDisabled(): void

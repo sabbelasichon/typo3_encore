@@ -11,10 +11,10 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
-final class FixedIdGenerator implements IdGeneratorInterface
+final readonly class FixedIdGenerator implements IdGeneratorInterface
 {
     public function __construct(
-        private readonly string $id
+        private string $id
     ) {
     }
 

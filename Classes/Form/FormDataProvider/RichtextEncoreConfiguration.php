@@ -17,9 +17,9 @@ use Ssch\Typo3Encore\Asset\EntrypointLookupInterface;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-final class RichtextEncoreConfiguration implements FormDataProviderInterface
+final readonly class RichtextEncoreConfiguration implements FormDataProviderInterface
 {
-    private readonly EntrypointLookupCollectionInterface $entrypointLookupCollection;
+    private EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
     public function __construct(?EntrypointLookupCollectionInterface $entrypointLookupCollection = null)
     {
@@ -50,7 +50,7 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
             $updatedContentCss = [];
             foreach ($contentsCss as $cssFile) {
                 $updatedContent = $this->getContentCss($cssFile);
-                $updatedContentCss[] = is_array($updatedContent) ? $updatedContent : [$updatedContent];
+                $updatedContentCss[] = $updatedContent;
             }
             $contentsCss = array_merge(...$updatedContentCss);
 
