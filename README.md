@@ -61,30 +61,6 @@ If you have defined multiple entries you can define the desired entryName in the
 </html>
 ```
 
-
-Alternatively you can also include the files via TypoScript
-
-```php
-page.includeCSS {
-    # Pattern typo3_encore:entryName
-    app = typo3_encore:app
-    # If you want to ensure that this file is loaded first uncomment the next line
-    # app.forceOnTop = 1
-}
-
-page.includeJS {
-    # Pattern typo3_encore:entryName
-    app = typo3_encore:app
-    # If you want to ensure that this file is loaded first uncomment the next line
-    # app.forceOnTop = 1
-}
-
-page.includeJSFooter {
-    # Pattern typo3_encore:entryName
-    app = typo3_encore:app
-}
-```
-
 Note the prefix typo3_encore: This is important in order to render the files correctly.
 You can then use all other known settings to include your files.
 
