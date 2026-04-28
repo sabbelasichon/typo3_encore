@@ -12,42 +12,34 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use PHPUnit\Framework\Attributes\DataProvider;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 final class ActionViewHelperTest extends FunctionalTestCase
 {
-    protected StandaloneView $view;
-
     protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 
     protected bool $initializeDatabase = false;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->view = $this->get(StandaloneView::class);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideRenderStimulusAction')]
+    #[DataProvider('provideRenderStimulusAction')]
     public function testRenderData(
         array|string $controllerName,
         ?string $actionName,
         ?string $eventName,
         string $expected
     ): void {
-        $this->view->assignMultiple([
-            'controllerName' => $controllerName,
-            'actionName' => $actionName,
-            'eventName' => $eventName,
-        ]);
-        $this->view->getRenderingContext()
-            ->getViewHelperResolver()
-            ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
-        $this->view->setTemplateSource(
-            '{encore:stimulus.action(actionName: actionName, eventName: eventName, controllerName: controllerName)}'
-        );
-        self::assertSame($expected, $this->view->render());
+        /** @var RenderingContext $context */
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getViewHelperResolver()->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
+        $context->getVariableProvider()->add('controllerName', $controllerName);
+        $context->getVariableProvider()->add('actionName', $actionName);
+        $context->getVariableProvider()->add('eventName', $eventName);
+        $context->getTemplatePaths()->setTemplateSource('{encore:stimulus.action(actionName: actionName, eventName: eventName, controllerName: controllerName)}');
+
+        self::assertSame($expected, (new TemplateView($context))->render());
     }
 
     public static function provideRenderStimulusAction(): Generator

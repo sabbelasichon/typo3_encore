@@ -206,6 +206,22 @@ editor:
     contentsCss: "typo3_encore:rte"
 ```
 
+3. Add encore basic configuration to global TypoScript in `ext_localconf.php`
+
+See https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Breaking-105728-ExtbaseBackendModulesDoNotGuessPageIdForTypoScriptAnymore.html
+
+```php
+ExtensionManagementUtility::addTypoScriptConstants(
+    "@import 'EXT:typo3_encore/Configuration/TypoScript/constants.typoscript'
+    @import 'EXT:site_package/Configuration/TypoScript/Constants/plugin.tx_typo3encore.typoscript'",
+    false
+);
+ExtensionManagementUtility::addTypoScriptSetup(
+    "@import 'EXT:typo3_encore/Configuration/TypoScript/setup.typoscript'",
+    false
+);
+```
+
 ## Getting Started with Webpack Encore
 
 Although the documentation of Webpack Encore is awesome, i am going to provide a minimalistic how to install the frontend related things.
