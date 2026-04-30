@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Frontend\Event\BeforePageCacheIdentifierIsHashedEvent;
@@ -20,6 +19,7 @@ use TYPO3\CMS\Frontend\Event\BeforePageCacheIdentifierIsHashedEvent;
 final readonly class CacheService
 {
     private const CACHE_KEY_IDENTIFER = 'typo3-encore-page-cache-identifier';
+
     private const CACHE_KEY_SUFFIX = '-typo3-encore';
 
     public function __construct(
@@ -47,7 +47,7 @@ final readonly class CacheService
         } else {
             $entryIdentifier = (string) $this->runtimeCache->get(self::CACHE_KEY_IDENTIFER);
         }
-        if ($entryIdentifier === '') {
+        if ('' === $entryIdentifier) {
             return;
         }
         $this->pageCache->set($entryIdentifier . self::CACHE_KEY_SUFFIX, $data, $tags, $lifetime);
@@ -60,11 +60,11 @@ final readonly class CacheService
         } else {
             $entryIdentifier = (string) $this->runtimeCache->get(self::CACHE_KEY_IDENTIFER);
         }
-        if ($entryIdentifier === '') {
+        if ('' === $entryIdentifier) {
             return [];
         }
         $entry = $this->pageCache->get($entryIdentifier . self::CACHE_KEY_SUFFIX);
-        if (!is_array($entry)) {
+        if (! is_array($entry)) {
             $entry = [];
         }
         return $entry;

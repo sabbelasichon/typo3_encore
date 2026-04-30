@@ -19,7 +19,6 @@ use Psr\Link\LinkProviderInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Ssch\Typo3Encore\Service\CacheService;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\WebLink\GenericLinkProvider;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use Symfony\Component\WebLink\Link;
@@ -47,7 +46,10 @@ final class AssetsMiddleware implements MiddlewareInterface
         if (($response instanceof NullResponse)) {
             return $response;
         }
-        $cacheData = $this->cacheService->get($request->getAttribute('frontend.cache.collector'));
+        $cacheDataCollector = $request->getAttribute('frontend.cache.collector');
+        $cacheData = $cacheDataCollector instanceof CacheDataCollector ? $this->cacheService->get(
+            $cacheDataCollector
+        ) : [];
 
         $registeredFiles = $this->collectRegisteredFiles($cacheData);
 

@@ -40,12 +40,15 @@ final class SvgViewHelperTest extends FunctionalTestCase
         $templateSourceArguments = [];
         foreach ($arguments as $key => $argument) {
             $templateSourceArguments[] = sprintf('%s="{%s}"', $key, $key);
-            $context->getVariableProvider()->add($key, $argument);
+            $context->getVariableProvider()
+                ->add($key, $argument);
         }
         $templateSource = sprintf('<encore:svg %s />', implode(' ', $templateSourceArguments));
 
-        $context->getViewHelperResolver()->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
-        $context->getTemplatePaths()->setTemplateSource($templateSource);
+        $context->getViewHelperResolver()
+            ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
+        $context->getTemplatePaths()
+            ->setTemplateSource($templateSource);
         self::assertSame($expected, (new TemplateView($context))->render());
     }
 

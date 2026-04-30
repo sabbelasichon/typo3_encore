@@ -33,11 +33,18 @@ final class ActionViewHelperTest extends FunctionalTestCase
     ): void {
         /** @var RenderingContext $context */
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getViewHelperResolver()->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
-        $context->getVariableProvider()->add('controllerName', $controllerName);
-        $context->getVariableProvider()->add('actionName', $actionName);
-        $context->getVariableProvider()->add('eventName', $eventName);
-        $context->getTemplatePaths()->setTemplateSource('{encore:stimulus.action(actionName: actionName, eventName: eventName, controllerName: controllerName)}');
+        $context->getViewHelperResolver()
+            ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
+        $context->getVariableProvider()
+            ->add('controllerName', $controllerName);
+        $context->getVariableProvider()
+            ->add('actionName', $actionName);
+        $context->getVariableProvider()
+            ->add('eventName', $eventName);
+        $context->getTemplatePaths()
+            ->setTemplateSource(
+                '{encore:stimulus.action(actionName: actionName, eventName: eventName, controllerName: controllerName)}'
+            );
 
         self::assertSame($expected, (new TemplateView($context))->render());
     }

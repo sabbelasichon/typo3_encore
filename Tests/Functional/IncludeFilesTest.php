@@ -69,14 +69,8 @@ final class IncludeFilesTest extends FunctionalTestCase
 
         $content = $response->getBody()
             ->__toString();
-        self::assertStringContainsString(
-            'https://www.domain.com/foo/_assets/build/main.css',
-            $content
-        );
-        self::assertStringContainsString(
-            'https://www.domain.com/foo/_assets/build/main.js',
-            $content
-        );
+        self::assertStringContainsString('https://www.domain.com/foo/_assets/build/main.css', $content);
+        self::assertStringContainsString('https://www.domain.com/foo/_assets/build/main.js', $content);
         self::assertStringContainsString(
             'sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0',
             $content

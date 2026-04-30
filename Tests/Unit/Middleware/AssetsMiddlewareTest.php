@@ -23,7 +23,6 @@ use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class AssetsMiddlewareTest extends UnitTestCase
@@ -63,9 +62,11 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $this->request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
 
         $pageCache = $this->getMockBuilder(FrontendInterface::class)->getMock();
-        $pageCache->method('get')->willReturn([]);
+        $pageCache->method('get')
+            ->willReturn([]);
         $runtimeCache = $this->getMockBuilder(FrontendInterface::class)->getMock();
-        $runtimeCache->method('get')->willReturn('');
+        $runtimeCache->method('get')
+            ->willReturn('');
 
         $this->cacheService = new CacheService($pageCache, $runtimeCache);
 
@@ -77,8 +78,8 @@ final class AssetsMiddlewareTest extends UnitTestCase
 
         // Setup request mock to return different values for different attributes
         $this->request->method('getAttribute')
-            ->willReturnCallback(function($attributeName) use ($cacheDataCollector) {
-                if ($attributeName === 'frontend.cache.collector') {
+            ->willReturnCallback(function ($attributeName) use ($cacheDataCollector) {
+                if ('frontend.cache.collector' === $attributeName) {
                     return $cacheDataCollector;
                 }
                 return null;

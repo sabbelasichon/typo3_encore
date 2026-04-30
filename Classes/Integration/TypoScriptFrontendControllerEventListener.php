@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Integration;
 
 use Ssch\Typo3Encore\Service\CacheService;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Frontend\Event\AfterCachedPageIsPersistedEvent;
 
 final readonly class TypoScriptFrontendControllerEventListener
@@ -35,11 +36,15 @@ final readonly class TypoScriptFrontendControllerEventListener
             'default_attributes' => $this->assetRegistry->getDefaultAttributes(),
             'settings' => $this->settingsService->getSettings(),
         ];
-        $this->cacheService->set(
-            $event->getRequest()->getAttribute('frontend.cache.collector'),
-            $cacheEntry,
-            $event->getCacheData()['tags'] ?? [],
-            $event->getCacheLifetime()
-        );
+        $cacheDataCollector = $event->getRequest()
+            ->getAttribute('frontend.cache.collector');
+        if ($cacheDataCollector instanceof CacheDataCollector) {
+            $this->cacheService->set(
+                $cacheDataCollector,
+                $cacheEntry,
+                $event->getCacheData()['tags'] ?? [],
+                $event->getCacheLifetime()
+            );
+        }
     }
 }

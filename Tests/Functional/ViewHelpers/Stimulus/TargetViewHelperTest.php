@@ -25,17 +25,18 @@ final class TargetViewHelperTest extends FunctionalTestCase
     protected bool $initializeDatabase = false;
 
     #[DataProvider('provideRenderStimulusTarget')]
-    public function testRenderData(
-        mixed $controllerName,
-        ?string $targetName,
-        string $expected
-    ): void {
+    public function testRenderData(mixed $controllerName, ?string $targetName, string $expected): void
+    {
         /** @var RenderingContext $context */
         $context = $this->get(RenderingContextFactory::class)->create();
-        $context->getViewHelperResolver()->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
-        $context->getVariableProvider()->add('controllerName', $controllerName);
-        $context->getVariableProvider()->add('targetNames', $targetName);
-        $context->getTemplatePaths()->setTemplateSource('{encore:stimulus.target(controllerName: controllerName, targetNames: targetNames)}');
+        $context->getViewHelperResolver()
+            ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
+        $context->getVariableProvider()
+            ->add('controllerName', $controllerName);
+        $context->getVariableProvider()
+            ->add('targetNames', $targetName);
+        $context->getTemplatePaths()
+            ->setTemplateSource('{encore:stimulus.target(controllerName: controllerName, targetNames: targetNames)}');
 
         self::assertSame($expected, (new TemplateView($context))->render());
     }
