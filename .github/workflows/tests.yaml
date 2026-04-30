@@ -15,18 +15,21 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                typo3-php-versions:
-                    - { typo3: 13, php: 8.2 }
-                    - { typo3: 14, php: 8.3 }
-                    - { typo3: 14, php: 8.4 }
+              php-versions:
+                - "8.2"
+                - "8.3"
+                - "8.4"
+              dependencies:
+                - "lowest"
+                - "highest"
 
-        name: "Run tests with PHP ${{ matrix.typo3-php-versions.php }} using TYPO3 ${{ matrix.typo3-php-versions.typo3 }}"
+        name: "Run tests with PHP ${{ matrix.php-versions }} using composer dependencies ${{ matrix.dependencies }}"
         steps:
             -   uses: actions/checkout@v6
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: "${{ matrix.typo3-php-versions.php }}"
+                    php-version: "${{ matrix.php-versions }}"
                     extensions: intl, mbstring, pdo_sqlite, pdo_mysql
                     coverage: none
                 env:
@@ -36,7 +39,9 @@ jobs:
               run: sudo /etc/init.d/mysql start
 
             # see https://github.com/ramsey/composer-install
-            -   uses: "ramsey/composer-install@v3"
+            - uses: "ramsey/composer-install@v3"
+              with:
+                dependency-versions: "${{ matrix.dependencies }}"
 
             - name: "Run Unit tests"
               run: composer test-unit

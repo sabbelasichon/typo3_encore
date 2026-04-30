@@ -13,17 +13,30 @@ env:
 jobs:
     rector:
         runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            php-versions:
+              - "8.2"
+              - "8.3"
+              - "8.4"
+            dependencies:
+              - "lowest"
+              - "highest"
+
+        name: "Run phpstan with PHP ${{ matrix.php-versions }} using composer dependencies ${{ matrix.dependencies }}"
         steps:
             -   uses: actions/checkout@v6
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.2
+                    php-version: "${{ matrix.php-versions }}"
                     coverage: none
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             # see https://github.com/ramsey/composer-install
-            -   uses: "ramsey/composer-install@v3"
+            - uses: "ramsey/composer-install@v3"
+              with:
+                dependency-versions: "${{ matrix.dependencies }}"
 
             -   run: composer analyze
