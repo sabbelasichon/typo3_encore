@@ -143,15 +143,6 @@ This way of using the AssetViewHelper is similar to the `asset` function used in
     }
    ```
 
-   Finally, you can specify which build to use:
-
-   ```php
-    page.includeCSS {
-        # Pattern typo3_encore:buildName:entryName
-        app = typo3_encore:firstBuild:app
-    }
-   ```
-
    ```html
    <html
        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"

@@ -18,9 +18,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Link\LinkProviderInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
+use Ssch\Typo3Encore\Service\CacheService;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\WebLink\GenericLinkProvider;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use Symfony\Component\WebLink\Link;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -33,7 +36,7 @@ final class AssetsMiddleware implements MiddlewareInterface
     public function __construct(
         private readonly AssetRegistryInterface $assetRegistry,
         private readonly SettingsServiceInterface $settingsService,
-        private readonly ?ServerRequestInterface $request = null
+        private CacheService $cacheService,
     ) {
     }
 
@@ -44,8 +47,9 @@ final class AssetsMiddleware implements MiddlewareInterface
         if (($response instanceof NullResponse)) {
             return $response;
         }
+        $cacheData = $this->cacheService->get($request->getAttribute('frontend.cache.collector'));
 
-        $registeredFiles = $this->collectRegisteredFiles();
+        $registeredFiles = $this->collectRegisteredFiles($cacheData);
 
         if ([] === $registeredFiles) {
             return $response;
@@ -56,12 +60,12 @@ final class AssetsMiddleware implements MiddlewareInterface
             $linkProvider = new GenericLinkProvider();
         }
 
-        $defaultAttributes = $this->collectDefaultAttributes();
+        $defaultAttributes = $this->collectDefaultAttributes($cacheData);
         $crossOrigin = (bool) ($defaultAttributes['crossorigin'] ?? false);
 
         foreach ($registeredFiles as $rel => $relFiles) {
             // You can disable or enable one of the resource hints via typoscript simply by adding something like that preload.enable = 1, dns-prefetch.enable = 1
-            if (false === $this->getBooleanConfigByPath(sprintf('%s.enable', $rel))) {
+            if (false === $this->getBooleanConfigByPath(sprintf('%s.enable', $rel), $cacheData)) {
                 continue;
             }
 
@@ -101,50 +105,24 @@ final class AssetsMiddleware implements MiddlewareInterface
         return false !== $crossOrigin && in_array($rel, self::$crossOriginAllowed, true);
     }
 
-    private function getFrontendTypoScript(): ?object
+    private function collectRegisteredFiles(array $cacheData): array
     {
-        $request = $this->request ?? ($GLOBALS['TYPO3_REQUEST'] ?? null);
-        if (! $request instanceof ServerRequestInterface) {
-            return null;
-        }
-
-        return $request->getAttribute('frontend.typoscript');
-    }
-
-    private function collectRegisteredFiles(): array
-    {
-        $typoScript = $this->getFrontendTypoScript();
-        if (! is_object($typoScript) || ! method_exists($typoScript, 'getConfigArray')) {
-            return $this->assetRegistry->getRegisteredFiles();
-        }
-
-        $registeredFiles = $typoScript->getConfigArray()['encore_asset_registry']['registered_files'] ?? [];
+        $registeredFiles = $cacheData['registered_files'] ?? [];
         return array_replace($registeredFiles, $this->assetRegistry->getRegisteredFiles());
     }
 
-    private function collectDefaultAttributes(): array
+    private function collectDefaultAttributes(array $cacheData): array
     {
-        $typoScript = $this->getFrontendTypoScript();
-        if (! is_object($typoScript) || ! method_exists($typoScript, 'getConfigArray')) {
-            return $this->assetRegistry->getDefaultAttributes();
-        }
-
-        $defaultAttributes = $typoScript->getConfigArray()['encore_asset_registry']['default_attributes'] ?? [];
+        $defaultAttributes = $cacheData['default_attributes'] ?? [];
         return array_replace($defaultAttributes, $this->assetRegistry->getDefaultAttributes());
     }
 
-    private function getBooleanConfigByPath(string $path): bool
+    private function getBooleanConfigByPath(string $path, array $cacheData): bool
     {
         if ([] !== $this->settingsService->getSettings()) {
             return $this->settingsService->getBooleanByPath($path);
         }
-
-        $typoScript = $this->getFrontendTypoScript();
-        if (! is_object($typoScript) || ! method_exists($typoScript, 'getConfigArray')) {
-            return false;
-        }
-
-        $cachedSettings = $typoScript->getConfigArray()['encore_asset_registry']['settings'] ?? [];
+        $cachedSettings = $cacheData['settings'] ?? [];
         return (bool) ObjectAccess::getPropertyPath($cachedSettings, $path);
     }
 }

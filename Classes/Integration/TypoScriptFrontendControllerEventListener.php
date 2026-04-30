@@ -11,36 +11,35 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
-use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
-use TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent;
+use Ssch\Typo3Encore\Service\CacheService;
+use TYPO3\CMS\Frontend\Event\AfterCachedPageIsPersistedEvent;
 
 final readonly class TypoScriptFrontendControllerEventListener
 {
     public function __construct(
         private AssetRegistryInterface $assetRegistry,
-        private SettingsServiceInterface $settingsService
+        private SettingsServiceInterface $settingsService,
+        private CacheService $cacheService,
     ) {
     }
 
-    public function __invoke(AfterCacheableContentIsGeneratedEvent $event): void
+    public function __invoke(AfterCachedPageIsPersistedEvent $event): void
     {
         $registeredFiles = $this->assetRegistry->getRegisteredFiles();
         if ([] === $registeredFiles) {
             return;
         }
 
-        $request = $event->getRequest();
-        $typoScript = $request->getAttribute('frontend.typoscript');
-        if (! $typoScript instanceof FrontendTypoScript) {
-            return;
-        }
-
-        $configArray = $typoScript->getConfigArray();
-        $configArray['encore_asset_registry'] = [
+        $cacheEntry = [
             'registered_files' => $this->assetRegistry->getRegisteredFiles(),
             'default_attributes' => $this->assetRegistry->getDefaultAttributes(),
             'settings' => $this->settingsService->getSettings(),
         ];
-        $typoScript->setConfigArray($configArray);
+        $this->cacheService->set(
+            $event->getRequest()->getAttribute('frontend.cache.collector'),
+            $cacheEntry,
+            $event->getCacheData()['tags'] ?? [],
+            $event->getCacheLifetime()
+        );
     }
 }

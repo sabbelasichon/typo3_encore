@@ -18,6 +18,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
 use Ssch\Typo3Encore\Middleware\AssetsMiddleware;
+use Ssch\Typo3Encore\Service\CacheService;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -42,6 +45,16 @@ final class AssetsMiddlewareTest extends UnitTestCase
      */
     protected $request;
 
+    /**
+     * @var CacheService|MockObject
+     */
+    protected $cacheService;
+
+    /**
+     * @var object
+     */
+    protected $cacheDataCollector;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,27 +62,29 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $this->assetRegistry = $this->getMockBuilder(AssetRegistryInterface::class)->getMock();
         $this->request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
 
-        // Create a simple test double for FrontendTypoScript
-        $frontendTypoScript = new class() {
-            private array $config = [];
+        $pageCache = $this->getMockBuilder(FrontendInterface::class)->getMock();
+        $pageCache->method('get')->willReturn([]);
+        $runtimeCache = $this->getMockBuilder(FrontendInterface::class)->getMock();
+        $runtimeCache->method('get')->willReturn('');
 
-            public function getConfigArray(): array
-            {
-                return $this->config;
-            }
+        $this->cacheService = new CacheService($pageCache, $runtimeCache);
 
-            public function setConfigArray(array $config): void
-            {
-                $this->config = $config;
-            }
-        };
+        $cacheDataCollector = new CacheDataCollector();
+        // Set a page cache identifier to avoid LogicException
+        if (is_callable([$cacheDataCollector, 'setPageCacheIdentifier'])) {
+            $cacheDataCollector->setPageCacheIdentifier('test-cache-identifier');
+        }
 
-        $this->request->expects($this->any())
-            ->method('getAttribute')
-            ->with('frontend.typoscript')
-            ->willReturn($frontendTypoScript);
+        // Setup request mock to return different values for different attributes
+        $this->request->method('getAttribute')
+            ->willReturnCallback(function($attributeName) use ($cacheDataCollector) {
+                if ($attributeName === 'frontend.cache.collector') {
+                    return $cacheDataCollector;
+                }
+                return null;
+            });
 
-        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService, $this->request);
+        $this->subject = new AssetsMiddleware($this->assetRegistry, $this->settingsService, $this->cacheService);
     }
 
     public function testPreloadingIsDisabled(): void
@@ -91,7 +106,6 @@ final class AssetsMiddlewareTest extends UnitTestCase
             ],
         ];
 
-        $request = new ServerRequest();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')
@@ -104,7 +118,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         ];
         $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
-        $returnedResponse = $this->subject->process($request, $handler);
+        $returnedResponse = $this->subject->process($this->request, $handler);
 
         $links = $returnedResponse->getHeader('Link');
         self::assertCount(0, $links);
@@ -112,21 +126,19 @@ final class AssetsMiddlewareTest extends UnitTestCase
 
     public function testNullResponseAndControllerIsNotOutputting(): void
     {
-        $request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(NullResponse::class)->getMock();
         $handler->method('handle')
             ->willReturn($response);
         $this->assetRegistry->expects(self::never())->method('getRegisteredFiles');
 
-        $returnedResponse = $this->subject->process($request, $handler);
+        $returnedResponse = $this->subject->process($this->request, $handler);
 
         self::assertEquals($response, $returnedResponse);
     }
 
     public function testNoAssetsRegistered(): void
     {
-        $request = $this->getMockBuilder(ServerRequestInterface::class)->getMock();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $handler->method('handle')
@@ -134,7 +146,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         $this->assetRegistry->expects(self::once())->method('getRegisteredFiles')->willReturn([]);
         $this->assetRegistry->expects(self::never())->method('getDefaultAttributes');
 
-        $returnedResponse = $this->subject->process($request, $handler);
+        $returnedResponse = $this->subject->process($this->request, $handler);
 
         self::assertEquals($response, $returnedResponse);
     }
@@ -176,7 +188,6 @@ final class AssetsMiddlewareTest extends UnitTestCase
             ],
         ];
 
-        $request = new ServerRequest();
         $handler = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $response = new Response();
         $handler->method('handle')
@@ -194,7 +205,7 @@ final class AssetsMiddlewareTest extends UnitTestCase
         ];
         $this->assetRegistry->expects(self::once())->method('getDefaultAttributes')->willReturn($defaultAttributes);
 
-        $returnedResponse = $this->subject->process($request, $handler);
+        $returnedResponse = $this->subject->process($this->request, $handler);
 
         $links = $returnedResponse->getHeader('Link');
         self::assertCount(1, $links);
