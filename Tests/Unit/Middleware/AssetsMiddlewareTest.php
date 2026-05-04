@@ -72,7 +72,8 @@ final class AssetsMiddlewareTest extends UnitTestCase
 
         $cacheDataCollector = new CacheDataCollector();
         // Set a page cache identifier to avoid LogicException
-        if (is_callable([$cacheDataCollector, 'setPageCacheIdentifier'])) {
+        // @phpstan-ignore-next-line - method exists in TYPO3 14 but not in TYPO3 13
+        if (method_exists($cacheDataCollector, 'setPageCacheIdentifier')) {
             $cacheDataCollector->setPageCacheIdentifier('test-cache-identifier');
         }
 

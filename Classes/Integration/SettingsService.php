@@ -26,10 +26,16 @@ final class SettingsService implements SettingsServiceInterface
     public function getSettings(): array
     {
         if (null === $this->settings) {
-            $this->settings = $this->configurationManager->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Typo3Encore'
-            );
+            try {
+                $this->settings = $this->configurationManager->getConfiguration(
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    'Typo3Encore'
+                );
+                // @phpstan-ignore catch.neverThrown
+            } catch (\RuntimeException $exception) {
+                // TypoScript not available. See \TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager::getTypoScriptSetup
+                $this->settings = [];
+            }
         }
 
         return $this->settings;

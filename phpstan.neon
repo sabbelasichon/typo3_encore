@@ -9,6 +9,7 @@ parameters:
 
   inferPrivatePropertyTypeFromConstructor: true
   treatPhpDocTypesAsCertain: false
+  reportUnmatchedIgnoredErrors: false
   ignoreErrors:
     - identifier: missingType.iterableValue
     - identifier: method.nameCase

@@ -42,11 +42,7 @@ final readonly class CacheService
 
     public function set(CacheDataCollector $cacheDataCollector, array $data, array $tags, int $lifetime): void
     {
-        if (is_callable([$cacheDataCollector, 'getPageCacheIdentifier'])) {
-            $entryIdentifier = $cacheDataCollector->getPageCacheIdentifier();
-        } else {
-            $entryIdentifier = (string) $this->runtimeCache->get(self::CACHE_KEY_IDENTIFER);
-        }
+        $entryIdentifier = $this->getPageCacheIdentifier($cacheDataCollector);
         if ('' === $entryIdentifier) {
             return;
         }
@@ -55,11 +51,7 @@ final readonly class CacheService
 
     public function get(CacheDataCollector $cacheDataCollector): array
     {
-        if (is_callable([$cacheDataCollector, 'getPageCacheIdentifier'])) {
-            $entryIdentifier = $cacheDataCollector->getPageCacheIdentifier();
-        } else {
-            $entryIdentifier = (string) $this->runtimeCache->get(self::CACHE_KEY_IDENTIFER);
-        }
+        $entryIdentifier = $this->getPageCacheIdentifier($cacheDataCollector);
         if ('' === $entryIdentifier) {
             return [];
         }
@@ -68,5 +60,14 @@ final readonly class CacheService
             $entry = [];
         }
         return $entry;
+    }
+
+    private function getPageCacheIdentifier(CacheDataCollector $cacheDataCollector): string
+    {
+        // @phpstan-ignore-next-line - method exists in TYPO3 14 but not in TYPO3 13
+        if (method_exists($cacheDataCollector, 'getPageCacheIdentifier')) {
+            return $cacheDataCollector->getPageCacheIdentifier();
+        }
+        return (string) $this->runtimeCache->get(self::CACHE_KEY_IDENTIFER);
     }
 }
