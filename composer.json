@@ -22,7 +22,6 @@
     "symfony/web-link": "^6.0 || ^7.0",
     "symfony/asset": "^6.0 || ^7.0",
     "ext-dom": "*",
-    "typo3/cms-tstemplate": "^13.4 || ^14.3",
     "webmozart/assert": "^1.10"
   },
   "require-dev": {
@@ -94,7 +93,11 @@
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",
-      "web-dir": ".Build/Web"
+      "web-dir": ".Build/Web",
+      "version": "6.0.0",
+      "Package": {
+        "providesPackages": {}
+      }
     }
   }
 }
