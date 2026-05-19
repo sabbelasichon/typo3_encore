@@ -41,8 +41,10 @@ class EntrypointLookupCollection implements EntrypointLookupCollectionInterface
             $buildName = $this->defaultBuildName;
         }
 
-        if (! isset($this->buildEntrypoints[$buildName])) {
-            throw new UndefinedBuildException(sprintf('The build "%s" is not configured', $buildName));
+        if (!isset($this->buildEntrypoints[$buildName])) {
+            throw new UndefinedBuildException(sprintf('The build "%s" is not configured. '
+                . 'More info: https://github.com/sabbelasichon/typo3_encore/discussions/242',
+                $buildName));
         }
 
         return $this->buildEntrypoints[$buildName];
