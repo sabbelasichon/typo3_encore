@@ -89,12 +89,12 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "6.x-dev"
+      "dev-master": "7.x-dev"
     },
     "typo3/cms": {
       "extension-key": "typo3_encore",
       "web-dir": ".Build/Web",
-      "version": "6.0.0",
+      "version": "7.0.0",
       "Package": {
         "providesPackages": {}
       }
