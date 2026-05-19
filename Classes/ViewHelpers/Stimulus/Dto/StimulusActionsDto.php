@@ -19,7 +19,7 @@ final class StimulusActionsDto extends AbstractStimulusDto implements \Stringabl
 
     public function __toString(): string
     {
-        if (\count($this->actions) === 0) {
+        if (0 === \count($this->actions)) {
             return '';
         }
 
@@ -46,7 +46,7 @@ final class StimulusActionsDto extends AbstractStimulusDto implements \Stringabl
         $controllerName = $this->getFormattedControllerName($controllerName);
         $action = $controllerName . '#' . $this->escapeAsHtmlAttr($actionName);
 
-        if ($eventName !== null) {
+        if (null !== $eventName) {
             $action = $eventName . '->' . $action;
         }
 

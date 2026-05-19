@@ -31,11 +31,11 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
     public function addData(array $result): array
     {
         foreach ($result['processedTca']['columns'] as $fieldName => $fieldConfig) {
-            if (! isset($fieldConfig['config']['type']) || $fieldConfig['config']['type'] !== 'text') {
+            if (! isset($fieldConfig['config']['type']) || 'text' !== $fieldConfig['config']['type']) {
                 continue;
             }
 
-            if (! isset($fieldConfig['config']['enableRichtext']) || (bool) $fieldConfig['config']['enableRichtext'] !== true) {
+            if (! isset($fieldConfig['config']['enableRichtext']) || true !== (bool) $fieldConfig['config']['enableRichtext']) {
                 continue;
             }
 
@@ -72,7 +72,7 @@ final class RichtextEncoreConfiguration implements FormDataProviderInterface
         $buildAndEntryName = GeneralUtility::trimExplode(':', $cssFile, true, 2);
         $buildName = EntrypointLookupInterface::DEFAULT_BUILD;
 
-        if (count($buildAndEntryName) === 2) {
+        if (2 === count($buildAndEntryName)) {
             [$buildName, $entryName] = $buildAndEntryName;
         } else {
             $entryName = $buildAndEntryName[0];

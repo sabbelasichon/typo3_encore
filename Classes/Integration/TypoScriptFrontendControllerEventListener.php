@@ -24,7 +24,7 @@ final class TypoScriptFrontendControllerEventListener
     public function __invoke(AfterCacheableContentIsGeneratedEvent $event): void
     {
         $registeredFiles = $this->assetRegistry->getRegisteredFiles();
-        if ($registeredFiles === []) {
+        if ([] === $registeredFiles) {
             return;
         }
 

@@ -25,7 +25,7 @@ final class SettingsService implements SettingsServiceInterface
 
     public function getSettings(): array
     {
-        if ($this->settings === null) {
+        if (null === $this->settings) {
             $this->settings = $this->configurationManager->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
                 'Typo3Encore'

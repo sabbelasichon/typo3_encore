@@ -20,7 +20,7 @@ final class Filesystem implements FilesystemInterface
     {
         $data = GeneralUtility::getUrl($pathToFile);
 
-        if ($data === false) {
+        if (false === $data) {
             throw new UnexpectedValueException(sprintf('Data could not be read from file %s', $pathToFile));
         }
 
@@ -47,7 +47,7 @@ final class Filesystem implements FilesystemInterface
     {
         $md5HashOfFile = md5_file($entrypointJsonPath);
 
-        if ($md5HashOfFile === false) {
+        if (false === $md5HashOfFile) {
             $message = sprintf('File "%s" could not be md5Hashed', $entrypointJsonPath);
             throw new UnexpectedValueException($message);
         }

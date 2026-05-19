@@ -26,7 +26,7 @@ final class PackageFactory implements PackageFactoryInterface
 
     public function getPackage(string $package): JsonPackage
     {
-        $manifestJsonPath = $package === EntrypointLookupInterface::DEFAULT_BUILD ? 'manifestJsonPath' : sprintf(
+        $manifestJsonPath = EntrypointLookupInterface::DEFAULT_BUILD === $package ? 'manifestJsonPath' : sprintf(
             'packages.%s.manifestJsonPath',
             $package
         );

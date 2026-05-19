@@ -21,7 +21,7 @@ class StimulusControllersDto extends AbstractStimulusDto implements \Stringable
 
     public function __toString(): string
     {
-        if (\count($this->controllers) === 0) {
+        if (0 === \count($this->controllers)) {
             return '';
         }
 
@@ -52,7 +52,7 @@ class StimulusControllersDto extends AbstractStimulusDto implements \Stringable
         $this->controllers[] = $controllerName;
 
         foreach ($controllerValues as $key => $value) {
-            if ($value === null) {
+            if (null === $value) {
                 continue;
             }
 
@@ -71,7 +71,7 @@ class StimulusControllersDto extends AbstractStimulusDto implements \Stringable
 
     public function toArray(): array
     {
-        if (\count($this->controllers) === 0) {
+        if (0 === \count($this->controllers)) {
             return [];
         }
 

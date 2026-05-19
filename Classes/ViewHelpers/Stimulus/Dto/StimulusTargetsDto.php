@@ -17,7 +17,7 @@ final class StimulusTargetsDto extends AbstractStimulusDto implements \Stringabl
 
     public function __toString(): string
     {
-        if (\count($this->targets) === 0) {
+        if (0 === \count($this->targets)) {
             return '';
         }
 
