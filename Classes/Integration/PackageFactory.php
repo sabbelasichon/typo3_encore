@@ -16,11 +16,11 @@ use Ssch\Typo3Encore\ValueObject\JsonPackage;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 
-final class PackageFactory implements PackageFactoryInterface
+final readonly class PackageFactory implements PackageFactoryInterface
 {
     public function __construct(
-        private readonly SettingsServiceInterface $settingsService,
-        private readonly FilesystemInterface $filesystem
+        private SettingsServiceInterface $settingsService,
+        private FilesystemInterface $filesystem
     ) {
     }
 

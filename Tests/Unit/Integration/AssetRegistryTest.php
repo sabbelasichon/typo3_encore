@@ -25,9 +25,11 @@ final class AssetRegistryTest extends UnitTestCase
     {
         parent::setUp();
         $settingsService = $this->getMockBuilder(SettingsServiceInterface::class)->getMock();
-        $settingsService->method('getStringByPath')
+        $settingsService->expects(self::any())->method('getStringByPath')
             ->with('preload.crossorigin')
             ->willReturn('anonymus');
+        $settingsService->expects(self::any())->method('getSettings')
+            ->willReturn([]);
         $this->subject = new AssetRegistry($settingsService);
     }
 

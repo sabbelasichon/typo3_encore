@@ -15,33 +15,28 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Link\LinkInterface;
+use Psr\Link\LinkProviderInterface;
 use Ssch\Typo3Encore\Integration\AssetRegistryInterface;
 use Ssch\Typo3Encore\Integration\SettingsServiceInterface;
+use Ssch\Typo3Encore\Service\CacheService;
 use Symfony\Component\WebLink\GenericLinkProvider;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use Symfony\Component\WebLink\Link;
-use Traversable;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use UnexpectedValueException;
 
 final class AssetsMiddleware implements MiddlewareInterface
 {
     private static array $crossOriginAllowed = ['preload', 'preconnect'];
 
-    /**
-     * @var TypoScriptFrontendController
-     */
-    private $controller;
-
     public function __construct(
         private readonly AssetRegistryInterface $assetRegistry,
-        private readonly SettingsServiceInterface $settingsService
+        private readonly SettingsServiceInterface $settingsService,
+        private CacheService $cacheService,
     ) {
-        $this->controller = $GLOBALS['TSFE'];
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -51,26 +46,28 @@ final class AssetsMiddleware implements MiddlewareInterface
         if (($response instanceof NullResponse)) {
             return $response;
         }
+        $cacheDataCollector = $request->getAttribute('frontend.cache.collector');
+        $cacheData = $cacheDataCollector instanceof CacheDataCollector ? $this->cacheService->get(
+            $cacheDataCollector
+        ) : [];
 
-        $registeredFiles = $this->collectRegisteredFiles();
+        $registeredFiles = $this->collectRegisteredFiles($cacheData);
 
         if ([] === $registeredFiles) {
             return $response;
         }
 
         $linkProvider = $request->getAttribute('_links');
-        if (null === $linkProvider) {
-            $request = $request->withAttribute('_links', new GenericLinkProvider());
+        if (! $linkProvider instanceof LinkProviderInterface) {
+            $linkProvider = new GenericLinkProvider();
         }
 
-        /** @var GenericLinkProvider $linkProvider */
-        $linkProvider = $request->getAttribute('_links');
-        $defaultAttributes = $this->collectDefaultAttributes();
-        $crossOrigin = $defaultAttributes['crossorigin'] ? (bool) $defaultAttributes['crossorigin'] : false;
+        $defaultAttributes = $this->collectDefaultAttributes($cacheData);
+        $crossOrigin = (bool) ($defaultAttributes['crossorigin'] ?? false);
 
         foreach ($registeredFiles as $rel => $relFiles) {
             // You can disable or enable one of the resource hints via typoscript simply by adding something like that preload.enable = 1, dns-prefetch.enable = 1
-            if (false === $this->getBooleanConfigByPath(sprintf('%s.enable', $rel))) {
+            if (false === $this->getBooleanConfigByPath(sprintf('%s.enable', $rel), $cacheData)) {
                 continue;
             }
 
@@ -90,14 +87,9 @@ final class AssetsMiddleware implements MiddlewareInterface
             }
         }
 
-        $request = $request->withAttribute('_links', $linkProvider);
-
-        /** @var GenericLinkProvider $linkProvider */
-        $linkProvider = $request->getAttribute('_links');
-
         if ([] !== $linkProvider->getLinks()) {
-            /** @var LinkInterface[]|Traversable $links */
             $links = $linkProvider->getLinks();
+            /** @phpstan-ignore argument.type */
             $serializedLinks = (new HttpHeaderSerializer())->serialize($links);
 
             if (! is_string($serializedLinks)) {
@@ -112,37 +104,27 @@ final class AssetsMiddleware implements MiddlewareInterface
 
     private function canAddCrossOriginAttribute(bool $crossOrigin, string $rel): bool
     {
-        return false !== $crossOrigin && '' !== (string) $crossOrigin && in_array(
-            $rel,
-            self::$crossOriginAllowed,
-            true
-        );
+        return false !== $crossOrigin && in_array($rel, self::$crossOriginAllowed, true);
     }
 
-    private function collectRegisteredFiles(): array
+    private function collectRegisteredFiles(array $cacheData): array
     {
-        return array_replace(
-            $this->controller->config['encore_asset_registry']['registered_files'] ?? [],
-            $this->assetRegistry->getRegisteredFiles()
-        );
+        $registeredFiles = $cacheData['registered_files'] ?? [];
+        return array_replace($registeredFiles, $this->assetRegistry->getRegisteredFiles());
     }
 
-    private function collectDefaultAttributes(): array
+    private function collectDefaultAttributes(array $cacheData): array
     {
-        return array_replace(
-            $this->controller->config['encore_asset_registry']['default_attributes'] ?? [],
-            $this->assetRegistry->getDefaultAttributes()
-        );
+        $defaultAttributes = $cacheData['default_attributes'] ?? [];
+        return array_replace($defaultAttributes, $this->assetRegistry->getDefaultAttributes());
     }
 
-    private function getBooleanConfigByPath(string $path): bool
+    private function getBooleanConfigByPath(string $path, array $cacheData): bool
     {
         if ([] !== $this->settingsService->getSettings()) {
             return $this->settingsService->getBooleanByPath($path);
         }
-
-        $cachedSettings = $this->controller->config['encore_asset_registry']['settings'] ?? [];
-
+        $cachedSettings = $cacheData['settings'] ?? [];
         return (bool) ObjectAccess::getPropertyPath($cachedSettings, $path);
     }
 }

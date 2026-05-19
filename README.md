@@ -61,30 +61,6 @@ If you have defined multiple entries you can define the desired entryName in the
 </html>
 ```
 
-
-Alternatively you can also include the files via TypoScript
-
-```php
-page.includeCSS {
-    # Pattern typo3_encore:entryName
-    app = typo3_encore:app
-    # If you want to ensure that this file is loaded first uncomment the next line
-    # app.forceOnTop = 1
-}
-
-page.includeJS {
-    # Pattern typo3_encore:entryName
-    app = typo3_encore:app
-    # If you want to ensure that this file is loaded first uncomment the next line
-    # app.forceOnTop = 1
-}
-
-page.includeJSFooter {
-    # Pattern typo3_encore:entryName
-    app = typo3_encore:app
-}
-```
-
 Note the prefix typo3_encore: This is important in order to render the files correctly.
 You can then use all other known settings to include your files.
 
@@ -167,15 +143,6 @@ This way of using the AssetViewHelper is similar to the `asset` function used in
     }
    ```
 
-   Finally, you can specify which build to use:
-
-   ```php
-    page.includeCSS {
-        # Pattern typo3_encore:buildName:entryName
-        app = typo3_encore:firstBuild:app
-    }
-   ```
-
    ```html
    <html
        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
@@ -228,6 +195,22 @@ Encore
 editor:
   config:
     contentsCss: "typo3_encore:rte"
+```
+
+3. Add encore basic configuration to global TypoScript in `ext_localconf.php`
+
+See https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Breaking-105728-ExtbaseBackendModulesDoNotGuessPageIdForTypoScriptAnymore.html
+
+```php
+ExtensionManagementUtility::addTypoScriptConstants(
+    "@import 'EXT:typo3_encore/Configuration/TypoScript/constants.typoscript'
+    @import 'EXT:site_package/Configuration/TypoScript/Constants/plugin.tx_typo3encore.typoscript'",
+    false
+);
+ExtensionManagementUtility::addTypoScriptSetup(
+    "@import 'EXT:typo3_encore/Configuration/TypoScript/setup.typoscript'",
+    false
+);
 ```
 
 ## Getting Started with Webpack Encore
@@ -365,8 +348,8 @@ would be modified as follows:
 var Encore = require('@symfony/webpack-encore');
 
 Encore
-    .setOutputPath('../../public/build')
-    .setPublicPath('/build')
+    .setOutputPath('../../public/_assets/build')
+    .setPublicPath('/_assets/build')
     ...
 ```
 

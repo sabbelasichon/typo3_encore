@@ -11,28 +11,40 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Integration;
 
-use TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent;
+use Ssch\Typo3Encore\Service\CacheService;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
+use TYPO3\CMS\Frontend\Event\AfterCachedPageIsPersistedEvent;
 
-final class TypoScriptFrontendControllerEventListener
+final readonly class TypoScriptFrontendControllerEventListener
 {
     public function __construct(
-        private readonly AssetRegistryInterface $assetRegistry,
-        private readonly SettingsServiceInterface $settingsService
+        private AssetRegistryInterface $assetRegistry,
+        private SettingsServiceInterface $settingsService,
+        private CacheService $cacheService,
     ) {
     }
 
-    public function __invoke(AfterCacheableContentIsGeneratedEvent $event): void
+    public function __invoke(AfterCachedPageIsPersistedEvent $event): void
     {
         $registeredFiles = $this->assetRegistry->getRegisteredFiles();
         if ([] === $registeredFiles) {
             return;
         }
 
-        $event->getController()
-            ->config['encore_asset_registry'] = [
-                'registered_files' => $this->assetRegistry->getRegisteredFiles(),
-                'default_attributes' => $this->assetRegistry->getDefaultAttributes(),
-                'settings' => $this->settingsService->getSettings(),
-            ];
+        $cacheEntry = [
+            'registered_files' => $this->assetRegistry->getRegisteredFiles(),
+            'default_attributes' => $this->assetRegistry->getDefaultAttributes(),
+            'settings' => $this->settingsService->getSettings(),
+        ];
+        $cacheDataCollector = $event->getRequest()
+            ->getAttribute('frontend.cache.collector');
+        if ($cacheDataCollector instanceof CacheDataCollector) {
+            $this->cacheService->set(
+                $cacheDataCollector,
+                $cacheEntry,
+                $event->getCacheData()['tags'] ?? [],
+                $event->getCacheLifetime()
+            );
+        }
     }
 }

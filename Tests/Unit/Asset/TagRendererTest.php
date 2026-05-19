@@ -31,17 +31,17 @@ final class TagRendererTest extends UnitTestCase
     protected TagRenderer $subject;
 
     /**
-     * @var ObjectProphecy|PageRenderer
+     * @var ObjectProphecy<PageRenderer>
      */
     protected ObjectProphecy $pageRenderer;
 
     /**
-     * @var ObjectProphecy|EntrypointLookupCollectionInterface
+     * @var ObjectProphecy<EntrypointLookupCollectionInterface>
      */
     protected ObjectProphecy $entryLookupCollection;
 
     /**
-     * @var ObjectProphecy|AssetRegistryInterface
+     * @var ObjectProphecy<AssetRegistryInterface>
      */
     protected ObjectProphecy $assetRegistry;
 

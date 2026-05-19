@@ -2,23 +2,15 @@
 
 plugin.tx_typo3encore {
     settings {
-        entrypointJsonPath = EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/entrypoints.json
-        manifestJsonPath = EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/manifest.json
+        entrypointJsonPath = _assets/build/entrypoints.json
+        manifestJsonPath = _assets/build/manifest.json
     }
 }
 
 page = PAGE
 page {
-    10 = TEXT
+    10 = FLUIDTEMPLATE
     10 {
-        value = TYPO3 Webpack Encore - Modern Frontend Development
-    }
-
-    includeCSS {
-        custom = typo3_encore:main
-    }
-
-    includeJSFooter {
-        custom = typo3_encore:main
+        file = EXT:typo3_encore/Tests/Functional/Fixtures/Frontend/Template.html
     }
 }

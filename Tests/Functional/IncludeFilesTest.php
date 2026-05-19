@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -27,13 +28,17 @@ final class IncludeFilesTest extends FunctionalTestCase
         'typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/sites' => 'typo3conf/sites',
     ];
 
+    protected array $pathsToProvideInTestInstance = [
+        'typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public' => '_assets/build',
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
     }
 
-    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    #[RunInSeparateProcess]
     public function testAddFiles(): void
     {
         $this->setUpFrontendRootPage(
@@ -53,7 +58,7 @@ final class IncludeFilesTest extends FunctionalTestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    #[RunInSeparateProcess]
     public function testAddFilesWithAbsRefPrefix(): void
     {
         $this->setUpFrontendRootPage(
@@ -64,21 +69,15 @@ final class IncludeFilesTest extends FunctionalTestCase
 
         $content = $response->getBody()
             ->__toString();
-        self::assertStringContainsString(
-            'https://www.domain.com/foo/typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.css',
-            $content
-        );
-        self::assertStringContainsString(
-            'https://www.domain.com/foo/typo3conf/ext/typo3_encore/Tests/Functional/Fixtures/Frontend/Resources/Public/main.js',
-            $content
-        );
+        self::assertStringContainsString('https://www.domain.com/foo/_assets/build/main.css', $content);
+        self::assertStringContainsString('https://www.domain.com/foo/_assets/build/main.js', $content);
         self::assertStringContainsString(
             'sha384-ysKW+jP4sNH9UfX9+fqN4iC/RB3L9jmWUd8ABJrBbAHFwL6wNmvNT5x178Fx6Xh0',
             $content
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    #[RunInSeparateProcess]
     public function testAddFilesWithHtml5DocType(): void
     {
         $this->setUpFrontendRootPage(

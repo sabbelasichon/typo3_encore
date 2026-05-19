@@ -11,8 +11,11 @@ declare(strict_types=1);
 
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers;
 
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use PHPUnit\Framework\Attributes\DataProvider;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 final class SvgViewHelperTest extends FunctionalTestCase
 {
@@ -21,54 +24,49 @@ final class SvgViewHelperTest extends FunctionalTestCase
      */
     private const ID = 'fixed';
 
-    protected StandaloneView $view;
-
     protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 
     protected array $pathsToLinkInTestInstance = [
         'typo3conf/ext/typo3_encore/Tests/Functional/ViewHelpers/Fixtures/fileadmin/user_upload' => 'fileadmin/user_upload',
     ];
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->view = $this->get(StandaloneView::class);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    #[DataProvider('renderDataProvider')]
     public function testRender(array $arguments, string $expected): void
     {
         $arguments['src'] = 'fileadmin/user_upload/sprite.svg';
+        /** @var RenderingContext $context */
+        $context = $this->get(RenderingContextFactory::class)->create();
 
         $templateSourceArguments = [];
-        foreach (array_keys($arguments) as $key) {
+        foreach ($arguments as $key => $argument) {
             $templateSourceArguments[] = sprintf('%s="{%s}"', $key, $key);
+            $context->getVariableProvider()
+                ->add($key, $argument);
         }
-
         $templateSource = sprintf('<encore:svg %s />', implode(' ', $templateSourceArguments));
 
-        $this->view->assignMultiple($arguments);
-        $this->view->getRenderingContext()
-            ->getViewHelperResolver()
+        $context->getViewHelperResolver()
             ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
-        $this->view->setTemplateSource($templateSource);
-        self::assertSame($expected, $this->view->render());
+        $context->getTemplatePaths()
+            ->setTemplateSource($templateSource);
+        self::assertSame($expected, (new TemplateView($context))->render());
     }
 
     public static function renderDataProvider(): array
     {
+        $filemtime = filemtime(__DIR__ . '/Fixtures/fileadmin/user_upload/sprite.svg');
         return [
             [
                 [
                     'name' => 'name',
                 ],
-                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><use xlink:href="fileadmin/user_upload/sprite.svg#name" /></svg>',
+                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><use xlink:href="fileadmin/user_upload/sprite.svg?' . $filemtime . '#name" /></svg>',
             ],
             [
                 [
                     'name' => 1420,
                 ],
-                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><use xlink:href="fileadmin/user_upload/sprite.svg#1420" /></svg>',
+                '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><use xlink:href="fileadmin/user_upload/sprite.svg?' . $filemtime . '#1420" /></svg>',
             ],
             [
                 [
@@ -77,7 +75,7 @@ final class SvgViewHelperTest extends FunctionalTestCase
                     'description' => 1420,
                 ],
                 sprintf(
-                    '<svg aria-labelledby="title-%1$s description-%1$s" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><title id="title-%1$s">1222</title><desc id="description-%1$s">1420</desc><use xlink:href="fileadmin/user_upload/sprite.svg#3333" /></svg>',
+                    '<svg aria-labelledby="title-%1$s description-%1$s" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"><title id="title-%1$s">1222</title><desc id="description-%1$s">1420</desc><use xlink:href="fileadmin/user_upload/sprite.svg?' . $filemtime . '#3333" /></svg>',
                     self::ID
                 ),
             ],
@@ -91,7 +89,7 @@ final class SvgViewHelperTest extends FunctionalTestCase
                     'role' => 'foo',
                 ],
                 sprintf(
-                    '<svg aria-labelledby="title-%1$s description-%1$s" width="100" height="100" xmlns="http://www.w3.org/2000/svg" focusable="false" role="foo"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><use xlink:href="fileadmin/user_upload/sprite.svg#name" /></svg>',
+                    '<svg aria-labelledby="title-%1$s description-%1$s" width="100" height="100" xmlns="http://www.w3.org/2000/svg" focusable="false" role="foo"><title id="title-%1$s">Title</title><desc id="description-%1$s">Description</desc><use xlink:href="fileadmin/user_upload/sprite.svg?' . $filemtime . '#name" /></svg>',
                     self::ID
                 ),
             ],

@@ -13,16 +13,16 @@ namespace Ssch\Typo3Encore\ValueObject;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 
-final class ScriptTag
+final readonly class ScriptTag
 {
     public function __construct(
-        private readonly string $entryName,
-        private readonly string $position,
-        private readonly string $buildName,
-        private readonly ?PageRenderer $pageRenderer = null,
-        private readonly array $parameters = [],
-        private readonly bool $registerFile = true,
-        private readonly bool $isLibrary = false
+        private string $entryName,
+        private string $position,
+        private string $buildName,
+        private ?PageRenderer $pageRenderer = null,
+        private array $parameters = [],
+        private bool $registerFile = true,
+        private bool $isLibrary = false
     ) {
     }
 

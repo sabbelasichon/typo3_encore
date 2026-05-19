@@ -20,8 +20,8 @@ use Ssch\Typo3Encore\ValueObject\LinkTag;
 use Ssch\Typo3Encore\ValueObject\ScriptTag;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class TagRenderer implements TagRendererInterface
 {
@@ -218,24 +218,31 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if ('' === $this->getTypoScriptFrontendController()->absRefPrefix) {
+        $typoScriptConfigArray = $this->getFrontendTypoScript()?->getConfigArray();
+        $absRefPrefix = trim($typoScriptConfigArray['absRefPrefix'] ?? '');
+
+        if ('' === $absRefPrefix) {
             return false;
         }
 
-        if ('/' === $this->getTypoScriptFrontendController()->absRefPrefix) {
+        if ('/' === $absRefPrefix) {
             return true;
         }
 
-        if (str_starts_with($file, $this->getTypoScriptFrontendController()->absRefPrefix)) {
+        if (str_starts_with($file, $absRefPrefix)) {
             return false;
         }
 
         return ! GeneralUtility::isValidUrl($file);
     }
 
-    private function getTypoScriptFrontendController(): TypoScriptFrontendController
+    private function getFrontendTypoScript(): ?FrontendTypoScript
     {
-        return $GLOBALS['TSFE'];
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (! $request instanceof ServerRequestInterface) {
+            return null;
+        }
+        return $request->getAttribute('frontend.typoscript');
     }
 
     private function removeType(array $parameters): bool
@@ -252,7 +259,8 @@ final class TagRenderer implements TagRendererInterface
             return false;
         }
 
-        if (! isset($this->getTypoScriptFrontendController()->config['config']['doctype']) || 'html5' !== $this->getTypoScriptFrontendController()->config['config']['doctype']) {
+        $typoScriptConfigArray = $this->getFrontendTypoScript()?->getConfigArray();
+        if (! isset($typoScriptConfigArray['doctype']) || 'html5' !== $typoScriptConfigArray['doctype']) {
             return false;
         }
 

@@ -13,10 +13,14 @@ use Ssch\Typo3Encore\Integration\FixedIdGenerator;
 use Ssch\Typo3Encore\Integration\IdGenerator;
 use Ssch\Typo3Encore\Integration\IdGeneratorInterface;
 use Ssch\Typo3Encore\Integration\TypoScriptFrontendControllerEventListener;
+use Ssch\Typo3Encore\Service\CacheService;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Event\AfterCachedPageIsPersistedEvent;
+use TYPO3\CMS\Frontend\Event\BeforePageCacheIdentifierIsHashedEvent;
 
 return static function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void {
     $services = $containerConfigurator->services();
@@ -33,8 +37,16 @@ return static function (ContainerConfigurator $containerConfigurator, ContainerB
     $services->alias(IdGeneratorInterface::class, IdGenerator::class);
     $services->set(FixedIdGenerator::class)->args(['fixed']);
     $services->set(TypoScriptFrontendControllerEventListener::class)->tag('event.listener', [
-        'event' => AfterCacheableContentIsGeneratedEvent::class,
+        'event' => AfterCachedPageIsPersistedEvent::class,
     ]);
+
+    $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+    if ($typo3Version->getMajorVersion() < 14) {
+        $services->set(CacheService::class)->tag('event.listener', [
+            'event' => BeforePageCacheIdentifierIsHashedEvent::class,
+            'method' => 'storePageCacheIdentifier',
+        ]);
+    }
 
     if (Environment::getContext()->isTesting()) {
         $services->alias(IdGeneratorInterface::class, FixedIdGenerator::class);

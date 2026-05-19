@@ -12,37 +12,35 @@ declare(strict_types=1);
 namespace Ssch\Typo3Encore\Tests\Functional\ViewHelpers\Stimulus;
 
 use Generator;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use PHPUnit\Framework\Attributes\DataProvider;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 final class ControllerViewHelperTest extends FunctionalTestCase
 {
-    protected StandaloneView $view;
+    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
 
     protected bool $initializeDatabase = false;
 
-    protected array $testExtensionsToLoad = ['typo3conf/ext/typo3_encore'];
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->view = $this->get(StandaloneView::class);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideRenderStimulusController')]
+    #[DataProvider('provideRenderStimulusController')]
     public function testRenderData(mixed $controllerName, array $controllerValues, string $expected): void
     {
-        $this->view->assignMultiple([
-            'controllerName' => $controllerName,
-            'controllerValues' => $controllerValues,
-        ]);
-        $this->view->getRenderingContext()
-            ->getViewHelperResolver()
+        /** @var RenderingContext $context */
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getViewHelperResolver()
             ->addNamespace('encore', 'Ssch\\Typo3Encore\\ViewHelpers');
-        $this->view->setTemplateSource(
-            '{encore:stimulus.controller(controllerName: controllerName, controllerValues: controllerValues)}'
-        );
-        self::assertSame($expected, $this->view->render());
+        $context->getVariableProvider()
+            ->add('controllerName', $controllerName);
+        $context->getVariableProvider()
+            ->add('controllerValues', $controllerValues);
+        $context->getTemplatePaths()
+            ->setTemplateSource(
+                '{encore:stimulus.controller(controllerName: controllerName, controllerValues: controllerValues)}'
+            );
+
+        self::assertSame($expected, (new TemplateView($context))->render());
     }
 
     public static function provideRenderStimulusController(): Generator

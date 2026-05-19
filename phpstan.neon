@@ -8,8 +8,11 @@ parameters:
     - Tests
 
   inferPrivatePropertyTypeFromConstructor: true
+  treatPhpDocTypesAsCertain: false
+  reportUnmatchedIgnoredErrors: false
   ignoreErrors:
     - identifier: missingType.iterableValue
+    - identifier: method.nameCase
   typo3:
     requestGetAttributeMapping:
         _links: array

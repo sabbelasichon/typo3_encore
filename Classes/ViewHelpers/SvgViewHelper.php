@@ -44,18 +44,6 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerTagAttribute('class', 'string', 'CSS class(es) for this element');
-        $this->registerTagAttribute('id', 'string', 'Unique (in this file) identifier for this HTML element.');
-        $this->registerTagAttribute(
-            'lang',
-            'string',
-            'Language for this element. Use short names specified in RFC 1766'
-        );
-        $this->registerTagAttribute('style', 'string', 'Individual CSS styles for this element');
-        $this->registerTagAttribute('accesskey', 'string', 'Keyboard shortcut to access this element');
-        $this->registerTagAttribute('tabindex', 'integer', 'Specifies the tab order of this element');
-        $this->registerTagAttribute('onclick', 'string', 'JavaScript evaluated for the onclick event');
-
         $this->registerArgument('title', 'string', 'Title', false);
         $this->registerArgument('description', 'string', 'Description', false);
         $this->registerArgument('src', 'string', 'Path to the svg file', true);
@@ -129,11 +117,13 @@ class SvgViewHelper extends AbstractTagBasedViewHelper
                 if ($icon instanceof DOMElement && $icon->hasAttribute('viewBox')) {
                     $this->tag->addAttribute('viewBox', $icon->getAttribute('viewBox'));
                 }
-                foreach ($icon->childNodes as $node) {
-                    if (null === $node->ownerDocument) {
-                        continue;
+                if ($icon instanceof \DOMNode) {
+                    foreach ($icon->childNodes as $node) {
+                        if (! ($node instanceof \DOMNode) || null === $node->ownerDocument) {
+                            continue;
+                        }
+                        $content[] = $node->ownerDocument->saveXML($node);
                     }
-                    $content[] = $node->ownerDocument->saveXML($node);
                 }
             }
         } else {
