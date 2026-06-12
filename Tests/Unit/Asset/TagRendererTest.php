@@ -151,7 +151,10 @@ final class TagRendererTest extends UnitTestCase
             '',
             true,
             '|',
-            false
+            false,
+            [],
+            '',
+            ''
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any())->shouldBeCalledOnce();
@@ -180,7 +183,10 @@ final class TagRendererTest extends UnitTestCase
             '',
             true,
             '|',
-            false
+            false,
+            [],
+            '',
+            ''
         )->shouldBeCalledOnce();
 
         $this->assetRegistry->registerFile(Argument::any())->shouldNotBeCalled();
