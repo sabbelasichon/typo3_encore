@@ -95,8 +95,7 @@ final class ActionViewHelperTest extends FunctionalTestCase
                 ],
             ],
             'actionName' => null,
-            'eventName' =>
- null,
+            'eventName' => null,
             'expected' => 'data-action="click->my-controller#onClick click->my-second-controller#onClick change->my-second-controller#onSomethingElse resize@window->resize-controller#onWindowResize click->foo--bar-controller#onClick"',
         ];
 
@@ -109,20 +108,17 @@ final class ActionViewHelperTest extends FunctionalTestCase
                     'onClick', [
                         'click' => 'onAnotherClick',
                     ], [
-                        'change' =>
-                         'onSomethingElse',
+                        'change' => 'onSomethingElse',
                     ], ],
                 'resize-controller' => [
                     'resize@window' => 'onWindowResize',
                 ],
-                'foo/bar-controller' =>
- [
-     'click' => 'onClick',
- ],
+                'foo/bar-controller' => [
+                    'click' => 'onClick',
+                ],
             ],
             'actionName' => null,
-            'eventName'
- => null,
+            'eventName' => null,
             'expected' => 'data-action="click->my-controller#onClick my-second-controller#onClick click->my-second-controller#onAnotherClick change->my-second-controller#onSomethingElse resize@window->resize-controller#onWindowResize click->foo--bar-controller#onClick"',
         ];
 

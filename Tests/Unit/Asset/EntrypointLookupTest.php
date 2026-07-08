@@ -75,8 +75,7 @@ final class EntrypointLookupTest extends UnitTestCase
                 'entrypoints' => [
                     'app' => [],
                 ],
-                'integrity' =>
-                 $integrity,
+                'integrity' => $integrity,
             ]);
         self::assertEquals($integrity, $this->subject->getIntegrityData());
     }
