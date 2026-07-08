@@ -61,7 +61,31 @@ If you have defined multiple entries you can define the desired entryName in the
 </html>
 ```
 
-Note the prefix typo3_encore: This is important in order to render the files correctly.
+
+Alternatively you can also include the files via TypoScript
+
+```php
+page.includeCSS {
+    # Pattern PKG:typo3_encore:entryName
+    app = PKG:typo3_encore:app
+    # If you want to ensure that this file is loaded first uncomment the next line
+    # app.forceOnTop = 1
+}
+
+page.includeJS {
+    # Pattern PKG:typo3_encore:entryName
+    app = PKG:typo3_encore:app
+    # If you want to ensure that this file is loaded first uncomment the next line
+    # app.forceOnTop = 1
+}
+
+page.includeJSFooter {
+    # Pattern PKG:typo3_encore:entryName
+    app = PKG:typo3_encore:app
+}
+```
+
+Note the prefix PKG:typo3_encore: This is important in order to render the files correctly.
 You can then use all other known settings to include your files.
 
 You don´t have to care about including it only once. This will not happen during one request cycle unless you want to.
@@ -140,6 +164,15 @@ This way of using the AssetViewHelper is similar to the `asset` function used in
                 secondBuild = EXT:typo3_encore/Resources/Public/SecondBuild
             }
         }
+    }
+   ```
+
+   Finally, you can specify which build to use:
+
+   ```php
+    page.includeCSS {
+        # Pattern PKG:typo3_encore:buildName:entryName
+        app = PKG:typo3_encore:firstBuild:app
     }
    ```
 

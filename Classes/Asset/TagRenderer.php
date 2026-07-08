@@ -168,6 +168,9 @@ final class TagRenderer implements TagRendererInterface
                 'excludeFromConcatenation' => true,
                 'splitChar' => '|',
                 'inline' => false,
+                'tagAttributes' => [],
+                'integrity' => '',
+                'crossorigin' => '',
             ], $parameters);
 
             $attributes = array_values($attributes);
