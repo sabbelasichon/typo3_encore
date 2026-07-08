@@ -25,6 +25,6 @@ jobs:
                     coverage: none
 
             # see https://github.com/ramsey/composer-install
-            -   uses: "ramsey/composer-install@v3"
+            -   uses: "ramsey/composer-install@v4"
 
             -   run: composer lint
