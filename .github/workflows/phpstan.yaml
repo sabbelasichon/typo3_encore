@@ -25,7 +25,7 @@ jobs:
 
         name: "Run phpstan with PHP ${{ matrix.php-versions }} using composer dependencies ${{ matrix.dependencies }}"
         steps:
-            -   uses: actions/checkout@v6
+            -   uses: actions/checkout@v7
 
             -   uses: shivammathur/setup-php@v2
                 with:
