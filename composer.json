@@ -20,7 +20,7 @@
     "php": ">=8.2",
     "typo3/cms-core": "^13.4 || ^14.3",
     "symfony/web-link": "^6.0 || ^7.0",
-    "symfony/asset": "^6.0 || ^7.0",
+    "symfony/asset": "^8.1.0",
     "ext-dom": "*",
     "webmozart/assert": "^1.10 || ^2.0"
   },
